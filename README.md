@@ -1,4 +1,4 @@
-# gulp-eslint [![Build status][travis-image]][travis-url]
+# gulp-eslint
 > A [Gulp](https://github.com/wearefractal/gulp) plugin for identifying and reporting on patterns found in ECMAScript/JavaScript code.
 
 ## Usage
@@ -73,10 +73,10 @@ Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-
 
 ```javascript
 {
-	“rules”:{
-		“camelcase”: 1,
-		“no-comma-dangle”: 2,
-		“quotes”: 0
+	"rules":{
+		"camelcase": 1,
+		"no-comma-dangle": 2,
+		"quotes": 0
 	}
 }
 ```
@@ -90,9 +90,9 @@ Inline `globals` configuration. The keys will be considered global variables, an
 
 ```javascript
 {
-	“globals”:{
-		“jQuery”: false,
-		“$”: true
+	"globals":{
+		"jQuery": false,
+		"$": true
 	}
 }
 ```
@@ -114,25 +114,25 @@ Format all linted files once. This should be used in the stream after piping thr
 The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/nzakas/eslint/tree/master/lib/formatters). If `undefined`, the eslint “compact” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
-// use the default “compact” eslint formatter
+// use the default "compact" eslint formatter
 eslint.format()
 
-// use the “checkstyle” eslint formatter
-eslint.format(‘checkstyle’)
+// use the "checkstyle" eslint formatter
+eslint.format('checkstyle')
 
-// use the “eslint-path-formatter” module formatter
+// use the "eslint-path-formatter" module formatter
 // (@see https://github.com/Bartvds/eslint-path-formatter)
-eslint.format(‘eslint-path-formatter’)
+eslint.format('eslint-path-formatter')
 ```
 
 The `output` argument may be a `WritableStream`, `Function`, or `undefined`. As a `WritableStream`, the formatter results will be written to the stream. If `undefined`, the formatter results will be written to [gulp’s log](https://github.com/wearefractal/gulp-util#logmsg). A `Function` will be called with the formatter results as the only parameter.
 
 ```javascript
-// write to gulp’s log (default)
+// write to gulp's log (default)
 eslint.format();
 
 // write messages to stdout
-eslint.format(‘junit’, process.stdout)
+eslint.format('junit', process.stdout)
 
 ``` 
 
@@ -146,7 +146,3 @@ The arguments for `formatEach` are the same as the arguments for `format`.
 ##Configuration
 
 Eslint may be configured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, eslint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached. Any configuration will expand upon the [default eslint configuration](https://github.com/nzakas/eslint/wiki/Rules).
-
-
-[travis-url]: http://travis-ci.org/adametry/gulp-eslint
-[travis-image]: https://secure.travis-ci.org/adametry/gulp-eslint.png?branch=master
