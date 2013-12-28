@@ -1,0 +1,52 @@
+{
+  "name": "gulp-eslint",
+  "version": "0.1.0",
+  "description": "A gulp plugin for processing files with eslint",
+  "main": "index.js",
+  "repository":"none",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "gulp":"gulp"
+  },
+  "keywords": [
+    "gulpplugin",
+    "eslint",
+    "gulp",
+    "errors",
+    "warnings",
+    "check",
+    "source",
+    "code",
+    "formatter",
+    "js",
+    "javascript",
+    "task",
+    "lint",
+    "plugin"
+  ],
+  "engines": {
+    "node": ">=0.8.19"
+  },
+  "files": [
+    "index.js",
+    "util.js"
+  ],
+  "author": "Adametry",
+  "license": "MIT",
+  "dependencies": {
+    "event-stream": "~3.0.20",
+    "eslint": "~0.1.4",
+    "gulp-util": "~2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "~2.1.1"
+  },
+  "peerDependencies": {
+    "gulp": "~3.2"
+  }
+}
