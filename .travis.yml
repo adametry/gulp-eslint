@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - '0.8'
+  - '0.10'
+before_install:
+  - currentfolder=${PWD##*/}
+  - if [ "$currentfolder" != 'gulp-eslint' ]; then cd .. && eval "mv $currentfolder gulp-eslint" && cd gulp-eslint; fi
