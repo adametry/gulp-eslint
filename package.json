@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "description": "A gulp plugin for processing files with eslint",
   "main": "index.js",
-  "repository":"none",
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/adametry/gulp-eslint"
+  },
+  "homepage":"http://github.com/adametry/gulp-eslint",
+  "bugs":"https://github.com/adametry/gulp-eslint/issues",
   "directories": {
     "example": "example",
     "test": "test"
