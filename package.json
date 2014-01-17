@@ -43,15 +43,15 @@
   "author": "Adametry",
   "license": "MIT",
   "dependencies": {
-    "event-stream": "~3.0.20",
-    "eslint": "~0.1.4",
-    "gulp-util": "~2.2.0"
+    "event-stream": "~3.1.0",
+    "eslint": "~0.2.0",
+    "gulp-util": "~2.2.12"
   },
   "devDependencies": {
     "mocha": "*",
     "should": "~2.1.1"
   },
   "peerDependencies": {
-    "gulp": "~3.2"
+    "gulp": "*"
   }
 }
