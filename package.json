@@ -1,6 +1,6 @@
 {
   "name": "gulp-eslint",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A gulp plugin for processing files with eslint",
   "main": "index.js",
   "repository":{
@@ -44,7 +44,7 @@
   "license": "MIT",
   "dependencies": {
     "event-stream": "~3.1.0",
-    "eslint": "~0.2.0",
+    "eslint": "~0.3.0",
     "gulp-util": "~2.2.12"
   },
   "devDependencies": {
