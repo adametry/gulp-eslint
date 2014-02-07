@@ -71,7 +71,7 @@ exports.readOptions = function (options) {
 exports.resolveFormatter = function (formatter) {
 	if (!formatter) {
 		// default formatter
-		formatter = 'compact';
+		formatter = 'stylish';
 	}
 
 	if (typeof formatter === 'string') {
