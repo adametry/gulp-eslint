@@ -1,6 +1,7 @@
 'use strict';
 
-var esutil  = require('eslint/lib/util'),
+var path = require('path'),
+	esutil  = require('eslint/lib/util'),
 	estream = require('event-stream'),
 	Config  = require('eslint/lib/config');
 
@@ -28,6 +29,30 @@ exports.wait = function (cb) {
 		this.queue(null);
 		cb.call(this, content);
 	}).pause();
+};
+
+/**
+ * Check if file should be excluded from eslint processing
+ */
+exports.checkForExclusion = function (file, config) {
+	// Ignore null and non-js files
+	var exclude;
+
+	if (file.isDirectory()) {
+		exclude = true;
+		config.cacheExclusions(file.path);
+
+	} else {
+		exclude = file.isNull()
+			|| path.extname(file.path).toLowerCase() !== '.js';
+	}
+
+	if (!exclude) {
+		// Support for .eslintignore (https://github.com/eslint/eslint/commit/cdcba8941b51176e6f998eb07fca1cb93dabe391)
+		exclude = config.checkForExclusion(file.path);
+	}
+
+	return exclude;
 };
 
 /**
@@ -87,7 +112,7 @@ exports.resolveFormatter = function (formatter) {
 	}
 
 	if (typeof formatter !== 'function') {
-		throw new TypeError('gulp-eslint: invalid formatter');
+		throw new TypeError('Invalid Formatter');
 	}
 
 	return formatter;

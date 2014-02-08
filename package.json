@@ -1,21 +1,21 @@
 {
   "name": "gulp-eslint",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A gulp plugin for processing files with eslint",
   "main": "index.js",
-  "repository":{
+  "repository": {
     "type": "git",
     "url": "https://github.com/adametry/gulp-eslint"
   },
-  "homepage":"http://github.com/adametry/gulp-eslint",
-  "bugs":"https://github.com/adametry/gulp-eslint/issues",
+  "homepage": "http://github.com/adametry/gulp-eslint",
+  "bugs": "https://github.com/adametry/gulp-eslint/issues",
   "directories": {
     "example": "example",
     "test": "test"
   },
   "scripts": {
     "test": "mocha",
-    "gulp":"gulp"
+    "gulp": "gulp"
   },
   "keywords": [
     "gulpplugin",
@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "~2.1.1"
+    "should": "~3.1.2"
   },
   "peerDependencies": {
     "gulp": "*"
