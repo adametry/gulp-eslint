@@ -111,10 +111,10 @@ Shorthand for defining `options.config`.
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
 
-The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/nzakas/eslint/tree/master/lib/formatters). If `undefined`, the eslint “compact” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
+The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/nzakas/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
-// use the default "compact" eslint formatter
+// use the default "stylish" eslint formatter
 eslint.format()
 
 // use the "checkstyle" eslint formatter
