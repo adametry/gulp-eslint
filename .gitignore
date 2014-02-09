@@ -1,6 +1,7 @@
 node_modules/*
 npm-debug.log
 .*
+!test/fixtures/**/*
 !.gitignore
 !.travis.yml
 !.gitattributes
