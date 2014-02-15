@@ -56,7 +56,7 @@ gulpEslint.failOnError = function () {
 			error = null;
 
 		messages.some(function (message) {
-			var level = message.fatal ? 2: config.rules[message.ruleId];
+			var level = message.fatal ? 2 : config.rules[message.ruleId];
 			if (Array.isArray(level)) {
 				level = level[0];
 			}
