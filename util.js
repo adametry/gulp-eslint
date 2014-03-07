@@ -143,8 +143,8 @@ exports.writeResults = function (results, formatter, writable) {
 		config = result && result.config;
 		return config;
 	});
-	// formatters typically receive a list of results. We have but one
-	var message = formatter(results, config);
+
+	var message = formatter(results, config || {});
 	if (writable && message != null && message !== '') {
 		writable(message);
 	}

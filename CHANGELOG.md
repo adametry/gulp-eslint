@@ -25,3 +25,8 @@
 ## 0.1.4
 
 * Update eslint version to 0.4.0
+
+## 0.1.5
+
+* Do not format when there are no eslint'd files 
+

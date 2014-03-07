@@ -93,7 +93,10 @@ gulpEslint.format = function (formatter, writable) {
 		output(null, file);
 
 	}).once('end', function () {
-		util.writeResults(results, formatter, writable);
+		// Only format results if files has been lint'd
+		if (results.length) {
+			util.writeResults(results, formatter, writable);
+		}
 		// reset buffered results
 		results = [];
 	});
