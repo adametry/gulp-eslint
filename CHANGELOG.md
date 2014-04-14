@@ -28,5 +28,12 @@
 
 ## 0.1.5
 
-* Do not format when there are no eslint'd files 
+* Do not format when there are no eslint'd files
+
+## 0.1.6
+
+* Update dependencies, include eslint 0.5.0
+* Integrate eslint cli-config changes
+  * Accept string array of environments to enable
+  * Accept string array of globals ('key:boolean' or 'key')
 

@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path'),
+	util  = require('util'),
 	esutil  = require('eslint/lib/util'),
 	estream = require('event-stream'),
 	Config  = require('eslint/lib/config');
@@ -59,23 +60,53 @@ exports.checkForExclusion = function (file, config) {
  * Create config helper to merge various config sources
  */
 exports.readOptions = function (options) {
+	var configOptions = {};
+	/*
+	Config.options = {
+		reset:false,
+		format:'formatter-reference',
+		eslintrc:boolean,
+		env:['key'],
+		global:[
+			'key:true',
+			'key'//:false - implied
+		],
+		config:{}
+	}
+	*/
 
-	if (!options || typeof options === 'string') {
-		// load external config data (if a string)
-		options = {
-			config: options
-		};
+	if (options == null) {
+		options = {};
+	} else if (typeof options === 'string') {
+		configOptions.config = options;
 	}
 
-	var helper = new Config(options);
+	// accommodate cli format
+	if (util.isArray(options.env)) {
+		configOptions.env = options.env;
+		options.env = null;
+	}
 
-	if (options.rules || options.globals || options.env) {
+	// accommodate cli format: [ 'key:true', 'key' ]
+	if (util.isArray(options.globals)) {
+		configOptions.globals = options.globals;
+		options.globals = null;
+	}
+
+	// create helper with overrides
+	var helper = new Config(configOptions);
+
+	// overwrite config.global
+	if (options.globals) {
+		helper.globals = options.globals;
+	}
+
+	if (options.rules || options.env) {
 		// inline definitions
 		helper.useSpecificConfig = esutil.mergeConfigs(
 			helper.useSpecificConfig || {},
 			{
 				rules: options.rules || {},
-				globals: options.globals || {},
 				env: options.env || {}
 			}
 		);
