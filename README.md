@@ -102,6 +102,22 @@ Type: `Object`
 
 Inline [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (true) or not (false).
 
+#### options.eslint
+Type: `Object`
+
+Pass through to gulp-eslint your own version of the eslint lib to use.
+
+```javascript
+var eslintLib = require('eslint');
+var eslint = require('gulp-eslint');
+
+gulp.src('js/**/*.js')
+	.pipe(eslint({
+		eslint: eslintLib
+	}))
+	...
+```
+
 ### eslint(configPath)
 Type: `String`  
 
