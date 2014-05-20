@@ -11,6 +11,10 @@ var estream = require('event-stream'),
 function gulpEslint(options) {
 	var configHelper = util.readOptions(options);
 
+	if(options && options.eslint){
+		eslint = options.eslint.linter;
+	}
+
 	function verify(filePath, contents) {
 		var config = configHelper.getConfig(filePath);
 
