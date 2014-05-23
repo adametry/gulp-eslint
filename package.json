@@ -44,14 +44,16 @@
   "license": "MIT",
   "dependencies": {
     "event-stream": "~3.1.0",
-    "eslint": "~0.5.0",
     "gulp-util": "~2.2.12"
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "~3.3.0"
+    "should": "~3.3.0",
+    "eslint": ">=0.6.0",
+    "gulp": "*"
   },
   "peerDependencies": {
-    "gulp": "*"
+    "gulp": "*",
+    "eslint": ">=0.6.0"
   }
 }
