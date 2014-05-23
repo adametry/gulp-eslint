@@ -34,7 +34,7 @@
     "plugin"
   ],
   "engines": {
-    "node": ">=0.8.19"
+    "node": ">=0.9"
   },
   "files": [
     "index.js",
@@ -43,8 +43,9 @@
   "author": "Adametry",
   "license": "MIT",
   "dependencies": {
-    "event-stream": "~3.1.0",
-    "gulp-util": "~2.2.12"
+    "gulp-util": "~2.2.12",
+    "map-stream": "^0.1.0",
+    "through": "^2.3.4"
   },
   "devDependencies": {
     "mocha": "*",

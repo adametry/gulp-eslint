@@ -2,8 +2,9 @@
 
 var path = require('path'),
 	util  = require('util'),
+	gutil = require('gulp-util'),
 	esutil  = require('eslint/lib/util'),
-	estream = require('event-stream'),
+	through = require('through'),
 	Config  = require('eslint/lib/config');
 
 /**
@@ -22,14 +23,13 @@ function optional(path) {
  */
 exports.wait = function (cb) {
 	var content = '';
-	return estream.through(function (data) {
+	return through(function (data) {
 		content += data;
 		this.queue(data);
 	}, function () {
-		process.nextTick(this.resume);
-		this.queue(null);
-		cb.call(this, content);
-	}).pause();
+		cb(content);
+		this.emit('end');
+	});
 };
 
 /**
@@ -48,7 +48,7 @@ exports.checkForExclusion = function (file, config) {
 			|| path.extname(file.path).toLowerCase() !== '.js';
 	}
 
-	if (!exclude) {
+	if (!exclude && typeof config.checkForExclusion === 'function') {
 		// Support for .eslintignore (https://github.com/eslint/eslint/commit/cdcba8941b51176e6f998eb07fca1cb93dabe391)
 		exclude = config.checkForExclusion(file.path);
 	}
@@ -143,7 +143,12 @@ exports.resolveFormatter = function (formatter) {
 	}
 
 	if (typeof formatter !== 'function') {
-		throw new TypeError('Invalid Formatter');
+		if (arguments[0] == null) {
+			// eslint@<0.3.0 default
+			return exports.resolveFormatter('compact');
+		} else {
+			throw new TypeError('Invalid Formatter');
+		}
 	}
 
 	return formatter;
@@ -154,7 +159,7 @@ exports.resolveFormatter = function (formatter) {
  */
 exports.resolveWritable = function (writable) {
 	if (!writable) {
-		writable = require('gulp-util').log;
+		writable = gutil.log;
 	} else if (typeof writable.write === 'function') {
 		writable = writable.write.bind(writable);
 	}

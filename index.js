@@ -1,6 +1,6 @@
 'use strict';
 
-var estream = require('event-stream'),
+var map = require('map-stream'),
 	PluginError = require('gulp-util').PluginError,
 	eslint = require('eslint').linter,
 	util = require('./util');
@@ -19,11 +19,11 @@ function gulpEslint(options) {
 		return {
 			config: config,
 			filePath: filePath,
-			messages: eslint.verify(contents.replace(/^#![^\r\n]+[\r\n]/, ""), config, false)
+			messages: gulpEslint.linter.verify(contents.replace(/^#![^\r\n]+[\r\n]/, ""), config, false)
 		};
 	}
 
-	return estream.map(function (file, output) {
+	return map(function (file, output) {
 
 		if (util.checkForExclusion(file, configHelper)) {
 			output(null, file);
@@ -50,7 +50,7 @@ function gulpEslint(options) {
  */
 gulpEslint.failOnError = function () {
 
-	return estream.map(function (file, output) {
+	return map(function (file, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			config = file.eslint && file.eslint.config || {},
 			error = null;
@@ -86,7 +86,7 @@ gulpEslint.format = function (formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return estream.map(function (file, output) {
+	return map(function (file, output) {
 		if (file.eslint) {
 			results.push(file.eslint);
 		}
@@ -109,7 +109,7 @@ gulpEslint.formatEach = function (formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return estream.map(function (file, output) {
+	return map(function (file, output) {
 		var error = null;
 		if (file.eslint) {
 			try {

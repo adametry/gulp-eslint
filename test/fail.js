@@ -1,10 +1,7 @@
 /*global describe, it, beforeEach */
 'use strict';
 
-var fs = require('fs'),
-	es = require('event-stream'),
-	should = require('should'),
-	path = require('path'),
+var should = require('should'),
 	gutil = require('gulp-util'),
 	eslint = require('../');
 
@@ -15,30 +12,36 @@ describe('gulp-eslint failOnError', function () {
 	var files;
 
 	/**
-	 * Create gutil.Files from file paths
+	 * Create gutil.Files
 	 */
-	function readFiles(filePaths) {
-		return filePaths.map(function (filePath) {
-			var stat = fs.statSync(filePath);
-			return new gutil.File({
-				cwd:  'test/',
-				base: path.dirname(filePath),
-				path: path.resolve(filePath),
-				stat: stat,
-				contents: stat.isDirectory() ? null: fs.readFileSync(filePath)
-			});
-		});
-	}
-
 	beforeEach(function () {
-		files = readFiles([
-			'test',
-			'test/fixtures',
-			'test/fixtures/ignored.js',
-			'test/fixtures/passing.js',
-			'test/fixtures/undeclared.js',
-			'test/fixtures/use-strict.js'
-		]);
+		files = [
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures',
+				contents: null,
+				isDirectory: true
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/passing.js',
+				contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/undeclared.js',
+				contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/use-strict.js',
+				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
+			})
+		];
 	});
 
 	it('should fail if an error is found', function (done) {

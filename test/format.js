@@ -1,10 +1,7 @@
 /*global describe, it, beforeEach */
 "use strict";
 
-var fs = require("fs"),
-	es = require("event-stream"),
-	should = require("should"),
-	path = require("path"),
+var should = require("should"),
 	gutil = require("gulp-util"),
 	eslint = require("../");
 
@@ -17,20 +14,34 @@ describe("gulp-eslint format", function () {
 	/**
 	 * Create gutil.Files from file paths
 	 */
-	function readFiles(filePaths, buffer) {
-		return filePaths.map(function (filePath) {
-			var stat = fs.statSync(filePath);
-			return new gutil.File({
+	function getFiles() {
+		return [
+			new gutil.File({
 				cwd:  'test/',
-				base: path.dirname(filePath),
-				path: filePath,
-				stat: stat,
-				contents: stat.isDirectory() ? null:
-					buffer !== false ?
-						fs.readFileSync(filePath):
-						fs.createFileStream(filePath)
-			});
-		});
+				base: 'test/fixtures',
+				path: 'test/fixtures',
+				contents: null,
+				isDirectory: true
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/use-strict.js',
+				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/undeclared.js',
+				contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
+			}),
+			new gutil.File({
+				cwd:  'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/passing.js',
+				contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
+			}),
+		];
 	}
 
 	/**
@@ -70,12 +81,7 @@ describe("gulp-eslint format", function () {
 		});
 
 		it("should format all eslint results at once", function (done) {
-			files = readFiles([
-				'test/fixtures',
-				'test/fixtures/use-strict.js',
-				'test/fixtures/undeclared.js',
-				'test/fixtures/passing.js'
-			]);
+			files = getFiles();
 
 			lintStream.on("error", function(error) {
 				should.exist(error);
@@ -129,12 +135,7 @@ describe("gulp-eslint format", function () {
 
 		it("should format individual eslint results", function (done) {
 
-			files = readFiles([
-				'test/fixtures',
-				'test/fixtures/use-strict.js',
-				'test/fixtures/undeclared.js',
-				'test/fixtures/passing.js'
-			]);
+			files = getFiles();
 
 			lintStream.on("error", function(error) {
 				should.exist(error);

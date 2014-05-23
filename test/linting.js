@@ -2,10 +2,11 @@
 "use strict";
 
 var fs = require("fs"),
-	es = require("event-stream"),
+	through = require("through"),
 	should = require("should"),
 	gutil = require("gulp-util"),
-	eslint = require("../");
+	eslint = require("../"),
+	noop = function () {};
 
 require("mocha");
 
@@ -17,7 +18,7 @@ describe("Gulp eslint plugin", function () {
 				cwd:  "test/",
 				base: "test/fixtures",
 				path: "test/fixtures/use-strict.js",
-				contents: fs.readFileSync("test/fixtures/use-strict.js")
+				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
 			});
 
 		var stream = eslint();
@@ -72,7 +73,7 @@ describe("Gulp eslint plugin", function () {
 			should.exist(file.contents);
 			should.exist(file.contents.pipe);
 
-			file.contents.pipe(es.wait(function(err, data) {
+			file.contents.pipe(through(noop, function(err) {
 				should.not.exist(err);
 				should.exist(file.eslint);
 
@@ -120,7 +121,7 @@ describe("Gulp eslint plugin", function () {
 			should.exist(file.contents);
 			should.exist(file.contents.pipe);
 
-			file.contents.pipe(es.wait(function(err, data) {
+			file.contents.pipe(through(noop, function() {
 				should.exist(file.eslint);
 				should.exist(file.eslint.config);
 				file.eslint.config.should.have.properties('rules','globals','env');
