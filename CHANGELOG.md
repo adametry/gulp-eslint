@@ -37,3 +37,10 @@
   * Accept string array of environments to enable
   * Accept string array of globals ('key:boolean' or 'key')
 
+## 0.1.7
+
+* Open eslint dependency to future versions
+* Cut out several unnecessary dependencies
+* Declare eslint as a peer dependency to support variation in version
+* Fix support for nodejs 0.11
+
