@@ -23,7 +23,8 @@
 		"no-caller": 1,
 		"semi": 1,
 		"quotes": 0,
-		"no-unreachable":2
+		"no-unreachable":2,
+		"eol-last":0
 	},
 	"globals": {
 		"angular": false,
