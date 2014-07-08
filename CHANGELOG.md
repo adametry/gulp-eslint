@@ -44,3 +44,9 @@
 * Declare eslint as a peer dependency to support variation in version
 * Fix support for nodejs 0.11
 
+## 0.1.8
+
+* Use "dependencies" instead of "peerDependencies"
+* Update .eslintrc to account for new eol-last rule in eslint 0.7.1
+* Check for message.severity when evaluating messages in failOnError
+
