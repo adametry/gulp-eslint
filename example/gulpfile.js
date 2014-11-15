@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp'),
+	gulpUtil = require('gulp-util'),
 	eslint = require('../index');
 
 var scriptsGlobs = ['../test/fixtures/**/*.js'];
@@ -96,7 +97,11 @@ gulp.task('eslint-formatter', function() {
 gulp.task('stream', function() {
 	return gulp.src(scriptsGlobs, { buffer:false })
 		.pipe(eslint())
-		.pipe(eslint.format());
+		.pipe(eslint.format())
+		.pipe(eslint.failOnError())
+		.on('error', function(error) {
+			gulpUtil.log('Stream Exiting With Error');
+		});
 });
 
 /**

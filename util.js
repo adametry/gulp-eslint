@@ -1,18 +1,16 @@
 'use strict';
 
 var path = require('path'),
-	util  = require('util'),
 	gutil = require('gulp-util'),
-	esutil  = require('eslint/lib/util'),
 	through = require('through'),
-	Config  = require('eslint/lib/config');
+	Config = require('eslint/lib/config');
 
 /**
  * Optional import, if not found, returns null.
  */
-function optional(path) {
+function optional(name) {
 	try {
-		return require(path);
+		return require(name);
 	} catch (error) {
 		return null;
 	}
@@ -21,103 +19,51 @@ function optional(path) {
 /**
  * Variation on event-stream's "wait" method that returns a "reset" stream.
  */
-exports.wait = function (cb) {
-	var content = '';
-	return through(function (data) {
-		content += data;
+exports.wait = function wait(cb) {
+	var content = new Buffer([]);
+	return through(function bufferData(data) {
+		content = Buffer.concat([content, data]);
 		this.queue(data);
-	}, function () {
-		cb(content);
+	}, function releaseData() {
+		cb(content.toString());
 		this.emit('end');
 	});
 };
 
 /**
- * Check if file should be excluded from eslint processing
- */
-exports.checkForExclusion = function (file, config) {
-	// Ignore null and non-js files
-	var exclude;
-
-	if (file.isDirectory()) {
-		exclude = true;
-		config.cacheExclusions(file.path);
-
-	} else {
-		exclude = file.isNull()
-			|| path.extname(file.path).toLowerCase() !== '.js';
-	}
-
-	if (!exclude && typeof config.checkForExclusion === 'function') {
-		// Support for .eslintignore (https://github.com/eslint/eslint/commit/cdcba8941b51176e6f998eb07fca1cb93dabe391)
-		exclude = config.checkForExclusion(file.path);
-	}
-
-	return exclude;
-};
-
-/**
  * Create config helper to merge various config sources
  */
-exports.readOptions = function (options) {
-	var configOptions = {};
-	/*
-	Config.options = {
-		reset:false,
-		format:'formatter-reference',
-		eslintrc:boolean,
-		env:['key'],
-		global:[
-			'key:true',
-			'key'//:false - implied
-		],
-		config:{}
+exports.migrateOptions = function migrateOptions(from) {
+	var globals, envs;
+	if (typeof from === 'string') {
+		from = {
+			configFile: from
+		};
 	}
-	*/
-
-	if (options == null) {
-		options = {};
-	} else if (typeof options === 'string') {
-		configOptions.config = options;
+	from = Object.create(from || null);
+	if (from.rulesdir != null) {
+		from.rulesPaths = (typeof from.rulesdir === 'string') ? [from.rulesdir] : from.rulesdir;
 	}
-
-	// accommodate cli format
-	if (util.isArray(options.env)) {
-		configOptions.env = options.env;
-		options.env = null;
+	globals = from.globals || from.global;
+	if (globals != null) {
+		from.globals = Array.isArray(globals) ?
+			globals :
+			Object.keys(globals).map(function cliGlobal(key) {
+				return globals[key] ? key + ':true' : key;
+			});
 	}
-
-	// accommodate cli format: [ 'key:true', 'key' ]
-	if (util.isArray(options.globals)) {
-		configOptions.globals = options.globals;
-		options.globals = null;
+	envs = from.envs || from.env;
+	if (envs) {
+		from.envs = Array.isArray(envs) ?
+			envs :
+			Object.keys(envs).filter(function cliEnv(key) {
+				return envs[key];
+			});
 	}
-
-	// create helper with overrides
-	var helper = new Config(configOptions);
-
-	// overwrite config.global
-	if (options.globals) {
-		helper.globals = options.globals;
+	if (from.eslintrc != null) {
+		from.useEslintrc = from.eslintrc;
 	}
-
-	if (options.rules || options.env) {
-		// inline definitions
-		helper.useSpecificConfig = esutil.mergeConfigs(
-			helper.useSpecificConfig || {},
-			{
-				rules: options.rules || {},
-				env: options.env || {}
-			}
-		);
-	}
-
-	if (options.rulesdir) {
-		// rulesdir: Load additional rules from this directory
-		require('eslint/lib/rules').load(options.rulesdir);
-	}
-
-	return helper;
+	return from;
 };
 
 /**
@@ -133,7 +79,7 @@ exports.resolveFormatter = function (formatter) {
 	if (typeof formatter === 'string') {
 		// load formatter (module, relative to cwd, eslint formatter)
 		formatter =	optional(formatter)
-				||	optional(require('path').resolve(process.cwd(), formatter))
+				||	optional(path.resolve(process.cwd(), formatter))
 				||	optional('eslint/lib/formatters/' + formatter);
 
 		if (typeof formatter === 'string') {

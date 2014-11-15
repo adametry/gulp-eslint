@@ -2,30 +2,26 @@
 
 var map = require('map-stream'),
 	PluginError = require('gulp-util').PluginError,
-	eslint = require('eslint').linter,
+	EsLint = require('eslint').CLIEngine,
 	util = require('./util');
 
 /**
  * Append eslint result to each file
  */
 function gulpEslint(options) {
-	var configHelper = util.readOptions(options);
+	var linter = new EsLint(util.migrateOptions(options));
 
 	function verify(filePath, contents) {
-		var config = configHelper.getConfig(filePath);
-
-		// eslint.cli result structure (+config)
-		// remove shebangs (https://github.com/eslint/eslint/commit/109a57b2ca60bf7c195f935cddda9a90311860f3)
+		var result = linter.executeOnText(contents).results[0];
 		return {
-			config: config,
 			filePath: filePath,
-			messages: gulpEslint.linter.verify(contents.replace(/^#![^\r\n]+[\r\n]/, ""), config, false)
+			messages: result && result.messages || []
 		};
 	}
 
 	return map(function (file, output) {
 
-		if (util.checkForExclusion(file, configHelper)) {
+		if (linter.isPathIgnored(file.path)) {
 			output(null, file);
 
 		} else if (file.isStream()) {
@@ -52,14 +48,10 @@ gulpEslint.failOnError = function () {
 
 	return map(function (file, output) {
 		var messages = file.eslint && file.eslint.messages || [],
-			config = file.eslint && file.eslint.config || {},
 			error = null;
 
 		messages.some(function (message) {
-			var level = message.fatal ? 2 :
-					'severity' in message ? message.severity :// >=0.7.1
-					config ? config.rules[message.ruleId][0]// <0.7.1
-						|| config.rules[message.ruleId] : 0;
+			var level = message.fatal ? 2 : message.severity;
 			if (Array.isArray(level)) {
 				level = level[0];
 			}
@@ -67,8 +59,8 @@ gulpEslint.failOnError = function () {
 				error = new PluginError(
 					'gulp-eslint',
 					{
-						name:'ESLintError',
-						fileName:file.path,
+						name: 'ESLintError',
+						fileName: file.path,
 						message: message.message,
 						lineNumber: message.line
 					}
@@ -124,8 +116,5 @@ gulpEslint.formatEach = function (formatter, writable) {
 		output(error, file);
 	});
 };
-
-// pass linter through to simplify customization
-gulpEslint.linter = eslint;
 
 module.exports = gulpEslint;
