@@ -50,3 +50,9 @@
 * Update .eslintrc to account for new eol-last rule in eslint 0.7.1
 * Check for message.severity when evaluating messages in failOnError
 
+## 0.2.0
+
+* WAY overdue upgrade to eslint 0.9.x
+* Use eslint's CLIEngine module to do most of the configuration work (yay!)
+* Breaking Change: Remove gulpEslint.linter. Linting will occur with compatible, installed version of eslint.
+

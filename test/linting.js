@@ -34,8 +34,6 @@ describe("Gulp eslint plugin", function () {
 			should.exist(file.contents);
 			should.exist(file.eslint);
 			file.eslint.should.have.property('filePath', srcFile.path);
-			should.exist(file.eslint.config);
-			file.eslint.config.should.have.properties('rules','globals','env');
 
 			var messages = file.eslint.messages;
 			messages.should.be.instanceof(Array).and.have.lengthOf(1);
@@ -123,8 +121,6 @@ describe("Gulp eslint plugin", function () {
 
 			file.contents.pipe(through(noop, function() {
 				should.exist(file.eslint);
-				should.exist(file.eslint.config);
-				file.eslint.config.should.have.properties('rules','globals','env');
 
 				var messages = file.eslint.messages;
 				messages.should.be.instanceof(Array).and.have.lengthOf(1);

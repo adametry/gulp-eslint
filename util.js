@@ -35,35 +35,50 @@ exports.wait = function wait(cb) {
  */
 exports.migrateOptions = function migrateOptions(from) {
 	var globals, envs;
+
 	if (typeof from === 'string') {
+		// basic config path overload: gulpEslint('path/to/config.json')
 		from = {
 			configFile: from
 		};
 	}
-	from = Object.create(from || null);
-	if (from.rulesdir != null) {
-		from.rulesPaths = (typeof from.rulesdir === 'string') ? [from.rulesdir] : from.rulesdir;
+
+	var to = {};
+	for (var key in from) {
+		if (from.hasOwnProperty(key)) {
+			to[key] = from[key];
+		}
 	}
-	globals = from.globals || from.global;
+
+	globals = to.globals || to.global;
 	if (globals != null) {
-		from.globals = Array.isArray(globals) ?
+		to.globals = Array.isArray(globals) ?
 			globals :
 			Object.keys(globals).map(function cliGlobal(key) {
 				return globals[key] ? key + ':true' : key;
 			});
 	}
-	envs = from.envs || from.env;
+
+	envs = to.envs || to.env;
 	if (envs) {
-		from.envs = Array.isArray(envs) ?
+		to.envs = Array.isArray(envs) ?
 			envs :
 			Object.keys(envs).filter(function cliEnv(key) {
 				return envs[key];
 			});
 	}
-	if (from.eslintrc != null) {
-		from.useEslintrc = from.eslintrc;
+
+	if (to.rulesdir != null) {
+		// The "rulesdir" option has been deprecated. Use "rulesPaths".
+		to.rulesPaths = (typeof to.rulesdir === 'string') ? [to.rulesdir] : to.rulesdir;
 	}
-	return from;
+
+	if (to.eslintrc != null) {
+		// The "eslintrc" option has been deprecated. Use "useEslintrc".
+		to.useEslintrc = to.eslintrc;
+	}
+
+	return to;
 };
 
 /**

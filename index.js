@@ -21,7 +21,7 @@ function gulpEslint(options) {
 
 	return map(function (file, output) {
 
-		if (linter.isPathIgnored(file.path)) {
+		if (linter.isPathIgnored(file.path) || file.isNull()) {
 			output(null, file);
 
 		} else if (file.isStream()) {
@@ -55,6 +55,7 @@ gulpEslint.failOnError = function () {
 			if (Array.isArray(level)) {
 				level = level[0];
 			}
+
 			if (level > 1) {
 				error = new PluginError(
 					'gulp-eslint',
