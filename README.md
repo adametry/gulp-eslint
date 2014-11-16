@@ -41,10 +41,10 @@ gulp.src('js/**/*.js')
 			'my-custom-rule': 1,
 			'strict': 2
 		},
-		globals: [
-			'jQuery',
-			'$:true'
-		],
+		globals: {
+			'jQuery':false,
+			'$':true
+		},
 		envs: [
 			'browser'
 		]
