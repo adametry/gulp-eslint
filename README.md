@@ -63,9 +63,11 @@ gulp.src('js/**/*.js')
 #### options.rulesPaths
 
 Type: `Array`
+
 A list of rules file paths rules to import. For more information about rules, see the eslint [rules doc](https://github.com/eslint/eslint/wiki/Rules).
 
 Type: `String` *(deprecated)*
+
 Load a single rules file.
 
 Alias: `rulesdir` *(deprecated)*
@@ -73,16 +75,19 @@ Alias: `rulesdir` *(deprecated)*
 #### options.configFile
 
 Type: `String`
+
 Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). *Note:* This file must have a “.json” file extension.
 
 #### options.reset
 
 Type: `Boolean`
+
 When true, eslint will not include its default set of rules when configured.
 
 #### options.useEslintrc
 
 Type: `Boolean`
+
 When false, eslint will not load [.eslintrc](http://eslint.org/docs/configuring/).
 
 Alias: `eslintrc` *(deprecated)*
@@ -90,6 +95,7 @@ Alias: `eslintrc` *(deprecated)*
 #### options.rules
 
 Type: `Object`
+
 Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). The rule configuration keys must match available validation rules. The associated values should be:
 
 * 0 - turn the rule off
@@ -111,6 +117,7 @@ For a list of available rule IDs, see the eslint [rules wiki](https://github.com
 #### options.globals
 
 Type: `Object`
+
 Inline `globals` configuration. The keys will be considered global variables, and the value determines whether the variable may be reassigned (true) or not (false). For example:
 
 ```javascript
@@ -125,10 +132,12 @@ Inline `globals` configuration. The keys will be considered global variables, an
 #### options.envs
 
 Type: `Array`
+
 A list of env keys for [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`).
 
 
 Type: `Object`
+
 Inline [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (true) or not (false).
 
 Alias: `env` *(deprecated)*
@@ -136,6 +145,7 @@ Alias: `env` *(deprecated)*
 ### eslint(configFilePath)
 
 Type: `String`
+
 Shorthand for defining `options.configFile`.
 
 ### eslint.failOnError()
