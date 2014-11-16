@@ -116,4 +116,6 @@ gulp.task('default', [
 	'eslint-formatter',
 	'stream'
 
-], function() {});
+], function() {
+	console.log('All tasks completed successfully.');
+});

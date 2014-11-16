@@ -1,47 +1,55 @@
 # gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.png)](https://travis-ci.org/adametry/gulp-eslint)
-> A [Gulp](https://github.com/wearefractal/gulp) plugin for identifying and reporting on patterns found in ECMAScript/JavaScript code.
+> A [Gulp](https://github.com/wearefractal/gulp) plugin for [eslint](https://github.com/wearefractal/gulp).
 
 ## Usage
 
-First, install `gulp-eslint` as a development dependency:
+First, install `gulp-eslint` as a dependency:
 
 ```shell
-npm install --save-dev gulp-eslint
+npm install gulp-eslint
 ```
 
-Then, add it to your `gulpfile.js`:
+Then, add it to your *gulpfile.js*:
 
 ```javascript
-var eslint = require('gulp-eslint');
+var gulp = require('gulp'),
+    eslint = require('gulp-eslint');
 
 gulp.task('lint', function () {
-  gulp.src(['js/**/*.js'])
-    .pipe(eslint())
-    .pipe(eslint.format());
+    // Note: To have the process exit with an error code (1) on
+    //  lint error, return the stream and pipe to failOnError last.
+    return gulp.src(['js/**/*.js'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
+});
+
+gulp.task('default', ['lint'], function () {
+    // This will only run if the lint task is successful...
 });
 ```
 
 Or use the plugin API to do things like:
 
 ```javascript
-
 gulp.src('js/**/*.js')
 	.pipe(eslint({
-		rulesdir:'custom-rules/',
-		rules:{
+		rulesPaths: [
+			'custom-rules/'
+		],
+		rules: {
 			'my-custom-rule': 1,
 			'strict': 2
 		},
-		globals: {
-			'jQuery':false,
-			'$':true
-		},
-		env:{
-			browser:true
-		}
+		globals: [
+			'jQuery',
+			'$:true'
+		],
+		envs: [
+			'browser'
+		]
 	}))
 	.pipe(eslint.formatEach('compact', process.stderr));
-
 ```
 
 ## API
@@ -52,19 +60,36 @@ gulp.src('js/**/*.js')
 
 ### eslint(options)
 
-#### options.rulesdir
-Type: `String`  
+#### options.rulesPaths
 
-Load additional rules from this directory. For more information, see the eslint CLI [readdir option](https://github.com/nzakas/eslint/wiki/Command-line-interface#--rulesdir).
+Type: `Array`
+A list of rules file paths rules to import. For more information about rules, see the eslint [rules doc](https://github.com/eslint/eslint/wiki/Rules).
 
-#### options.config
-Type: `String`  
+Type: `String` *(deprecated)*
+Load a single rules file.
 
-Path to the eslint rules configuration file. For more information, see the eslint CLI [config option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [config file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). *Note:* This file must have a “.json” file extension.
+Alias: `rulesdir` *(deprecated)*
+
+#### options.configFile
+
+Type: `String`
+Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). *Note:* This file must have a “.json” file extension.
+
+#### options.reset
+
+Type: `Boolean`
+When true, eslint will not include its default set of rules when configured.
+
+#### options.useEslintrc
+
+Type: `Boolean`
+When false, eslint will not load [.eslintrc](http://eslint.org/docs/configuring/).
+
+Alias: `eslintrc` *(deprecated)*
 
 #### options.rules
-Type: `Object`  
 
+Type: `Object`
 Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). The rule configuration keys must match available validation rules. The associated values should be:
 
 * 0 - turn the rule off
@@ -84,8 +109,8 @@ Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-
 For a list of available rule IDs, see the eslint [rules wiki](https://github.com/nzakas/eslint/wiki/Rules).
 
 #### options.globals
-Type: `Object`
 
+Type: `Object`
 Inline `globals` configuration. The keys will be considered global variables, and the value determines whether the variable may be reassigned (true) or not (false). For example:
 
 ```javascript
@@ -97,15 +122,21 @@ Inline `globals` configuration. The keys will be considered global variables, an
 }
 ```
 
-#### options.env
-Type: `Object`
+#### options.envs
 
+Type: `Array`
+A list of env keys for [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`).
+
+
+Type: `Object`
 Inline [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (true) or not (false).
 
-### eslint(configPath)
-Type: `String`  
+Alias: `env` *(deprecated)*
 
-Shorthand for defining `options.config`.
+### eslint(configFilePath)
+
+Type: `String`
+Shorthand for defining `options.configFile`.
 
 ### eslint.failOnError()
 
@@ -157,7 +188,7 @@ The arguments for `formatEach` are the same as the arguments for `format`.
 
 ##Configuration
 
-Eslint may be configured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, eslint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached. Any configuration will expand upon the [default eslint configuration](https://github.com/nzakas/eslint/wiki/Rules).
+Eslint may be theured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, eslint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached. Any configuration will expand upon the [default eslint configuration](https://github.com/nzakas/eslint/wiki/Rules).
 
 ##Ignore Files
 Eslint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/wearefractal/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
