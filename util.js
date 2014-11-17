@@ -68,9 +68,9 @@ exports.migrateOptions = function migrateOptions(from) {
 			});
 	}
 
-	if (from.config != null) {
+	if (to.config != null) {
 		// The "config" option has been deprecated. Use "configFile".
-		to.configFile = from.config;
+		to.configFile = to.config;
 	}
 
 	if (to.rulesdir != null) {
