@@ -52,7 +52,7 @@
 
 ## 0.2.0
 
-* WAY overdue upgrade to eslint 0.9.x
+* WAY overdue upgrade to eslint (^0.9.2)
 * Use eslint's CLIEngine module to do most of the configuration work (yay!)
-* Breaking Change: Remove gulpEslint.linter. Linting will occur with compatible, installed version of eslint.
+* Semi-Breaking Change: Remove gulpEslint.linter. Linting will occur with compatible, installed version of eslint.
 
