@@ -1,5 +1,5 @@
 # gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.png)](https://travis-ci.org/adametry/gulp-eslint)
-> A [Gulp](https://github.com/wearefractal/gulp) plugin for [eslint](https://github.com/wearefractal/gulp).
+> A [Gulp](https://github.com/wearefractal/gulp) plugin for [eslint](http://eslint.org/).
 
 ## Usage
 
