@@ -12,7 +12,7 @@ function gulpEslint(options) {
 	var linter = new EsLint(util.migrateOptions(options));
 
 	function verify(filePath, contents) {
-		var result = linter.executeOnText(contents).results[0];
+		var result = linter.executeOnFiles([filePath]).results[0];
 		return {
 			filePath: filePath,
 			messages: result && result.messages || []
