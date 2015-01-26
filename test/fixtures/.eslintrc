@@ -1,7 +1,7 @@
 {
 	"rules": {
-		"no-alert": 0,
-		"no-bitwise": 0,
+		"no-alert": 2,
+		"no-bitwise": 1,
 		"camelcase": 1,
 		"curly": 1,
 		"eqeqeq": 0,
@@ -26,6 +26,10 @@
 		"no-unreachable":2,
 		"eol-last":0
 	},
-	"globals": { },
-	"env":{ "node": true }
+	"globals": {
+	},
+	"env":{
+		"browser": true,
+		"node": true
+	}
 }

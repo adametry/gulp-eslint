@@ -47,12 +47,12 @@ gulp.task('inline-config', function() {
 				"no-caller": 1,
 				"semi": 1,
 				"quotes": 0,
-				"no-unreachable":2
+				"no-unreachable": 2
 			},
 			"globals": {
 				"$": false
 			},
-			"env":{
+			"env": {
 				"node": true
 			}
 		}))
@@ -95,7 +95,7 @@ gulp.task('eslint-formatter', function() {
  * Using eslint with streaming files
  */
 gulp.task('stream', function() {
-	return gulp.src(scriptsGlobs, { buffer:false })
+	return gulp.src(scriptsGlobs, { buffer: false })
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.failOnError())

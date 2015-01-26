@@ -5,8 +5,9 @@ var fs = require("fs"),
 	through = require("through"),
 	should = require("should"),
 	gutil = require("gulp-util"),
-	eslint = require("../"),
-	noop = function () {};
+	eslint = require("../");
+
+var noop = function () {};
 
 require("mocha");
 
@@ -15,7 +16,7 @@ describe("Gulp eslint plugin", function () {
 	it("should produce expected message via buffer", function (done) {
 
 		var srcFile = new gutil.File({
-				cwd:  "test/",
+				cwd: "test/",
 				base: "test/fixtures",
 				path: "test/fixtures/use-strict.js",
 				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
@@ -39,7 +40,7 @@ describe("Gulp eslint plugin", function () {
 			messages.should.be.instanceof(Array).and.have.lengthOf(1);
 
 			var message = file.eslint.messages[0];
-			message.should.have.properties('message','line','column')
+			message.should.have.properties('message', 'line', 'column')
 				.and.have.property('ruleId', 'strict');
 
 			done();
@@ -52,7 +53,7 @@ describe("Gulp eslint plugin", function () {
 	it("should produce expected message upon stream completion", function (done) {
 
 		var srcFile = new gutil.File({
-				cwd:  "test/",
+				cwd: "test/",
 				base: "test/fixtures",
 				path: "test/fixtures/use-strict.js",
 				contents: fs.createReadStream("test/fixtures/use-strict.js")
@@ -79,7 +80,7 @@ describe("Gulp eslint plugin", function () {
 				messages.should.be.instanceof(Array).and.have.lengthOf(1);
 
 				var message = file.eslint.messages[0];
-				message.should.have.properties('message','line','column')
+				message.should.have.properties('message', 'line', 'column')
 					.and.have.property('ruleId', 'strict');
 
 				done();
@@ -95,13 +96,13 @@ describe("Gulp eslint plugin", function () {
 		var fileCount = 0,
 			files = [
 				new gutil.File({
-					cwd:  "test/",
+					cwd: "test/",
 					base: "test/fixtures",
 					path: "test/fixtures/use-strict.js",
 					contents: fs.createReadStream("test/fixtures/use-strict.js")
 				}),
 				new gutil.File({
-					cwd:  "test/",
+					cwd: "test/",
 					base: "test/fixtures",
 					path: "test/fixtures/use-strict.js",
 					contents: fs.createReadStream("test/fixtures/use-strict.js")
@@ -126,7 +127,7 @@ describe("Gulp eslint plugin", function () {
 				messages.should.be.instanceof(Array).and.have.lengthOf(1);
 
 				var message = file.eslint.messages[0];
-				message.should.have.properties('message','line','column')
+				message.should.have.properties('message', 'line', 'column')
 					.and.have.property('ruleId', 'strict');
 
 				fileCount++;
@@ -147,7 +148,7 @@ describe("Gulp eslint plugin", function () {
 	it("should ignore files with null content", function (done) {
 
 		var srcFile = new gutil.File({
-				cwd:  "test/",
+				cwd: "test/",
 				base: "test/fixtures",
 				path: "test/fixtures",
 				isDirectory: true
@@ -174,7 +175,7 @@ describe("Gulp eslint plugin", function () {
 	it("should throw error if file does not exist", function (done) {
 
 		var srcFile = new gutil.File({
-				cwd:  "test/",
+				cwd: "test/",
 				base: "test/fixtures",
 				path: "test/fixtures/use-strict.js",
 				contents: null

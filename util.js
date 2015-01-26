@@ -3,7 +3,11 @@
 var path = require('path'),
 	gutil = require('gulp-util'),
 	through = require('through'),
-	Config = require('eslint/lib/config');
+	EsLint = require('eslint').CLIEngine,
+	IgnoredPaths = require('eslint/lib/ignored-paths'),
+	FileFinder = require('eslint/lib/file-finder');
+
+var ignoreFileFinder = new FileFinder('.eslintignore');
 
 /**
  * Optional import, if not found, returns null.
@@ -28,6 +32,25 @@ exports.wait = function wait(cb) {
 		cb(content.toString());
 		this.emit('end');
 	});
+};
+
+/**
+ * Mimic the CLIEngine.isPathIgnored, but resolve .eslintignore based on file's directory rather than process.cwd()
+ */
+exports.isPathIgnored = function (file, options) {
+	var filePath;
+	if (!options.ignore) {
+		return false;
+	}
+	if (typeof options.ignorePath !== 'string') {
+		options = {
+			ignore: true,
+			ignorePath: ignoreFileFinder.findInDirectoryOrParents(path.dirname(file.path || ''))
+		};
+	}
+	// set file path relative to the .eslintignore directory or cwd
+	filePath = path.relative(path.dirname(options.ignorePath || '') || process.cwd(), file.path);
+	return IgnoredPaths.load(options).contains(filePath);
 };
 
 /**
@@ -87,6 +110,17 @@ exports.migrateOptions = function migrateOptions(from) {
 };
 
 /**
+ * Resolve writable
+ */
+exports.isErrorMessage = function (message) {
+	var level = message.fatal ? 2 : message.severity;
+	if (Array.isArray(level)) {
+		level = level[0];
+	}
+	return (level > 1);
+};
+
+/**
  * Resolve formatter from unknown type (accepts string or function)
  * @exception TypeError thrown if unable to resolve the formatter type
  */
@@ -97,10 +131,9 @@ exports.resolveFormatter = function (formatter) {
 	}
 
 	if (typeof formatter === 'string') {
+
 		// load formatter (module, relative to cwd, eslint formatter)
-		formatter =	optional(formatter)
-				||	optional(path.resolve(process.cwd(), formatter))
-				||	optional('eslint/lib/formatters/' + formatter);
+		formatter =	(new EsLint()).getFormatter(formatter);
 
 		if (typeof formatter === 'string') {
 			// certain formatter modules return a path to the formatter

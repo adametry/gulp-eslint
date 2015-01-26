@@ -2,26 +2,30 @@
 
 var map = require('map-stream'),
 	PluginError = require('gulp-util').PluginError,
-	EsLint = require('eslint').CLIEngine,
+	eslint = require('eslint').linter,
+	CLIEngine = require('eslint').CLIEngine,
 	util = require('./util');
 
 /**
  * Append eslint result to each file
  */
 function gulpEslint(options) {
-	var linter = new EsLint(util.migrateOptions(options));
+	options = util.migrateOptions(options);
+	var linter = new CLIEngine(options);
 
 	function verify(filePath, contents) {
-		var result = linter.executeOnText(contents).results[0];
+		var config = linter.getConfigForFile(filePath);
+		var messages = eslint.verify(contents, config, filePath);
+		//eslint.reset();
 		return {
 			filePath: filePath,
-			messages: result && result.messages || []
+			messages: messages || []
 		};
 	}
 
 	return map(function (file, output) {
-
-		if (linter.isPathIgnored(file.path) || file.isNull()) {
+		// remove base path from file path before calling isPathIgnored
+		if (util.isPathIgnored(file, linter.options) || file.isNull()) {
 			output(null, file);
 
 		} else if (file.isStream()) {
@@ -51,12 +55,7 @@ gulpEslint.failOnError = function () {
 			error = null;
 
 		messages.some(function (message) {
-			var level = message.fatal ? 2 : message.severity;
-			if (Array.isArray(level)) {
-				level = level[0];
-			}
-
-			if (level > 1) {
+			if (util.isErrorMessage(message)) {
 				error = new PluginError(
 					'gulp-eslint',
 					{
@@ -71,6 +70,35 @@ gulpEslint.failOnError = function () {
 		});
 
 		return output(error, file);
+	});
+};
+
+/**
+ * Fail when the stream ends if any eslint error(s) occurred
+ */
+gulpEslint.failAfterError = function () {
+	var errorCount = 0;
+
+	return map(function (file, output) {
+		var messages = file.eslint && file.eslint.messages || [];
+		messages.forEach(function (message) {
+			if (util.isErrorMessage(message)) {
+				errorCount++;
+			}
+		});
+		output(null, file);
+
+	}).once('end', function () {
+		// Only format results if files has been lint'd
+		if (errorCount > 0) {
+			this.emit('error', new PluginError(
+				'gulp-eslint',
+				{
+					name: 'ESLintError',
+					message: 'Failed with ' + errorCount + (errorCount === 1 ? ' error' : ' errors')
+				}
+			));
+		}
 	});
 };
 

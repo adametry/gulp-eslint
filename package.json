@@ -15,7 +15,9 @@
   },
   "scripts": {
     "test": "mocha",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "throw-on-error": "gulp throw-on-error",
+    "throw-after-error": "gulp throw-after-error"
   },
   "keywords": [
     "gulpplugin",

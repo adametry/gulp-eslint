@@ -17,30 +17,30 @@ describe("gulp-eslint format", function () {
 	function getFiles() {
 		return [
 			new gutil.File({
-				cwd:  'test/',
+				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures',
 				contents: null,
 				isDirectory: true
 			}),
 			new gutil.File({
-				cwd:  'test/',
+				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/use-strict.js',
 				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
 			}),
 			new gutil.File({
-				cwd:  'test/',
+				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/undeclared.js',
 				contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
 			}),
 			new gutil.File({
-				cwd:  'test/',
+				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/passing.js',
 				contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
-			}),
+			})
 		];
 	}
 
