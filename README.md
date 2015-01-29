@@ -56,7 +56,7 @@ gulp.src('js/**/*.js')
 
 ### eslint()
 
-*No explicit configuration.* A `.eslintrc` file my be resolved relative to each linted file.
+*No explicit configuration.* A `.eslintrc` file may be resolved relative to each linted file.
 
 ### eslint(options)
 
