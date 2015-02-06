@@ -14,7 +14,9 @@ function gulpEslint(options) {
 	var linter = new CLIEngine(options);
 
 	function verify(filePath, contents) {
+		// mimic CLIEngine::processFile
 		var config = linter.getConfigForFile(filePath);
+		util.loadPlugins(config.plugins);
 		var messages = eslint.verify(contents, config, filePath);
 		//eslint.reset();
 		return {

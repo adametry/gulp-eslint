@@ -3,7 +3,7 @@
 var path = require('path'),
 	gutil = require('gulp-util'),
 	through = require('through'),
-	EsLint = require('eslint').CLIEngine,
+	CLIEngine = require('eslint').CLIEngine,
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
 
@@ -51,6 +51,18 @@ exports.isPathIgnored = function (file, options) {
 	// set file path relative to the .eslintignore directory or cwd
 	filePath = path.relative(path.dirname(options.ignorePath || '') || process.cwd(), file.path);
 	return IgnoredPaths.load(options).contains(filePath);
+};
+
+/**
+ * Mimic the CLIEngine::loadPlugins
+ */
+exports.loadPlugins = function (pluginNames) {
+	// WARNING: HACK AHEAD!
+	// We can either process text/file, or create a new CLIEngine instance to make use of the internal plugin cache.
+	//  Creating a new CLIEngine is probably the cheapest approach.
+	return pluginNames && new CLIEngine({
+		plugins: pluginNames
+	}) && void 0;
 };
 
 /**
@@ -133,7 +145,7 @@ exports.resolveFormatter = function (formatter) {
 	if (typeof formatter === 'string') {
 
 		// load formatter (module, relative to cwd, eslint formatter)
-		formatter =	(new EsLint()).getFormatter(formatter);
+		formatter =	(new CLIEngine()).getFormatter(formatter);
 
 		if (typeof formatter === 'string') {
 			// certain formatter modules return a path to the formatter
