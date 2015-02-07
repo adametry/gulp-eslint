@@ -56,3 +56,19 @@
 * Use eslint's CLIEngine module to do most of the configuration work (yay!)
 * Semi-Breaking Change: Remove gulpEslint.linter. Linting will occur with compatible, installed version of eslint.
 
+## 0.2.1 (unreleased)
+
+* Upgraded eslint to 0.11.0
+
+## 0.2.2
+
+* Upgraded eslint to 0.13.0
+* Fix filesystem-local .eslintrc loading
+* Fix filesystem-local .eslintignore loading
+* Add failAfterError to fail at the end of the stream instead of the first error (works well with 'format' method)
+
+## 0.3.0
+
+* Import filesystem-local config plugins
+* Fix doc typo
+
