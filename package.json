@@ -12,6 +12,7 @@
     "test": "test"
   },
   "scripts": {
+    "pretest": "jscs *.js test/*.js && eslint *.js test/*.js",
     "test": "mocha",
     "gulp": "gulp",
     "throw-on-error": "gulp throw-on-error",
@@ -36,11 +37,11 @@
   "author": "Adametry",
   "contribtutor": "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)",
   "licenses": [
-      {
-        "type": "MIT",
-        "url": "https://github.com/adametry/gulp-eslint/blob/master/LICENSE"
-      }
-    ],
+    {
+      "type": "MIT",
+      "url": "https://github.com/adametry/gulp-eslint/blob/master/LICENSE"
+    }
+  ],
   "dependencies": {
     "bufferstreams": "0.0.2",
     "eslint": "^0.14.0",
@@ -49,8 +50,18 @@
   },
   "devDependencies": {
     "gulp": "*",
+    "jscs": "^1.11.0",
     "mocha": "*",
     "should": "^4.6.5",
     "through": "^2.3.6"
+  },
+  "jscsConfig": {
+    "preset": "google",
+    "validateIndentation": "\t",
+    "disallowMultipleVarDecl": null,
+    "maximumLineLength": {
+      "value": 98,
+      "allowComments": true
+    }
   }
 }

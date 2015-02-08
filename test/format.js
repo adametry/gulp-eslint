@@ -1,13 +1,13 @@
 /*global describe, it, beforeEach */
-"use strict";
+'use strict';
 
-var should = require("should"),
-	gutil = require("gulp-util"),
-	eslint = require("../");
+var should = require('should'),
+	gutil = require('gulp-util'),
+	eslint = require('../');
 
-require("mocha");
+require('mocha');
 
-describe("gulp-eslint format", function () {
+describe('gulp-eslint format', function() {
 
 	var formatCount, writeCount, files, lintStream;
 
@@ -27,7 +27,7 @@ describe("gulp-eslint format", function () {
 				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/use-strict.js',
-				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
+				contents: new Buffer('(function () {\n\n\tvoid 0;\n\n}());\n\n')
 			}),
 			new gutil.File({
 				cwd: 'test/',
@@ -54,8 +54,7 @@ describe("gulp-eslint format", function () {
 		writeCount++;
 	}
 
-
-	describe("format all results", function () {
+	describe('format all results', function() {
 
 		/**
 		 * Custom eslint result formatter for counting format passes and
@@ -67,28 +66,28 @@ describe("gulp-eslint format", function () {
 			results.should.be.instanceof(Array).with.a.lengthOf(3);
 			formatCount++;
 
-			var messageCount = results.reduce(function (sum, result) {
+			var messageCount = results.reduce(function(sum, result) {
 				return sum + result.messages.length;
 			}, 0);
 
 			return messageCount + ' messages';
 		}
 
-		beforeEach(function () {
+		beforeEach(function() {
 			lintStream = eslint();
 			formatCount = 0;
 			writeCount = 0;
 		});
 
-		it("should format all eslint results at once", function (done) {
+		it('should format all eslint results at once', function(done) {
 			files = getFiles();
 
-			lintStream.on("error", function(error) {
+			lintStream.on('error', function(error) {
 				should.exist(error);
 				done(error);
 
-			}).on('end', function () {
-				process.nextTick(function () {
+			}).on('end', function() {
+				process.nextTick(function() {
 					formatCount.should.equal(1);
 					writeCount.should.equal(1);
 					done();
@@ -97,7 +96,7 @@ describe("gulp-eslint format", function () {
 
 			var formatStream = eslint.format(formatResults, outputWriter);
 
-			formatStream.on("error", function(error) {
+			formatStream.on('error', function(error) {
 				should.exist(error);
 				done(error);
 			});
@@ -105,14 +104,14 @@ describe("gulp-eslint format", function () {
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);
 
-			files.forEach(lintStream.write);
+			files.forEach(function(file) {
+				lintStream.write(file);
+			});
 			lintStream.end();
 		});
-
 	});
 
-
-	describe("format each result", function () {
+	describe('format each result', function() {
 
 		function formatResult(results, config) {
 			should.exist(config);
@@ -120,29 +119,29 @@ describe("gulp-eslint format", function () {
 			results.should.be.instanceof(Array).with.a.lengthOf(1);
 			formatCount++;
 
-			var messageCount = results.reduce(function (sum, result) {
+			var messageCount = results.reduce(function(sum, result) {
 				return sum + result.messages.length;
 			}, 0);
 
 			return messageCount + ' messages';
 		}
 
-		beforeEach(function () {
+		beforeEach(function() {
 			lintStream = eslint();
 			formatCount = 0;
 			writeCount = 0;
 		});
 
-		it("should format individual eslint results", function (done) {
+		it('should format individual eslint results', function(done) {
 
 			files = getFiles();
 
-			lintStream.on("error", function(error) {
+			lintStream.on('error', function(error) {
 				should.exist(error);
 				done(error);
 
-			}).on('end', function () {
-				process.nextTick(function () {
+			}).on('finish', function() {
+				process.nextTick(function() {
 					var fileCount = files.length - 1;// remove directory
 					formatCount.should.equal(fileCount);
 					writeCount.should.equal(fileCount);
@@ -152,7 +151,7 @@ describe("gulp-eslint format", function () {
 
 			var formatStream = eslint.formatEach(formatResult, outputWriter);
 
-			formatStream.on("error", function(error) {
+			formatStream.on('error', function(error) {
 				should.exist(error);
 				done(error);
 			});
@@ -160,7 +159,9 @@ describe("gulp-eslint format", function () {
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);
 
-			files.forEach(lintStream.write);
+			files.forEach(function(file) {
+				lintStream.write(file);
+			});
 			lintStream.end();
 		});
 

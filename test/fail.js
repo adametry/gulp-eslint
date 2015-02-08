@@ -7,14 +7,14 @@ var should = require('should'),
 
 require('mocha');
 
-describe('gulp-eslint failOnError', function () {
+describe('gulp-eslint failOnError', function() {
 
 	var files;
 
 	/**
 	 * Create gutil.Files
 	 */
-	beforeEach(function () {
+	beforeEach(function() {
 		files = [
 			new gutil.File({
 				cwd: 'test/',
@@ -27,24 +27,24 @@ describe('gulp-eslint failOnError', function () {
 				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/passing.js',
-				contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
+				contents: new Buffer('(function() {\n\n\t"use strict";\n\n}());\n')
 			}),
 			new gutil.File({
 				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/undeclared.js',
-				contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
+				contents: new Buffer('(function() {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
 			}),
 			new gutil.File({
 				cwd: 'test/',
 				base: 'test/fixtures',
 				path: 'test/fixtures/use-strict.js',
-				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
+				contents: new Buffer('(function() {\n\n\tvoid 0;\n\n}());\n\n')
 			})
 		];
 	});
 
-	it('should fail if an error is found', function (done) {
+	it('should fail if an error is found', function(done) {
 
 		var lintStream = eslint({
 			rules: {
@@ -58,18 +58,20 @@ describe('gulp-eslint failOnError', function () {
 		failStream.on('error', function(error) {
 			should.exist(error);
 			done();
-		}).on('end', function () {
+		}).on('finish', function() {
 			done(new Error('Stream completed without failure'));
 		});
 
 		should.exist(lintStream.pipe);
 		lintStream.pipe(failStream);
 
-		files.forEach(lintStream.write);
+		files.forEach(function(file) {
+			lintStream.write(file);
+		});
 		lintStream.end();
 	});
 
-	it('should pass if only warnings are found', function (done) {
+	it('should pass if only warnings are found', function(done) {
 
 		var lintStream = eslint({
 			rules: {
@@ -83,14 +85,16 @@ describe('gulp-eslint failOnError', function () {
 		failStream.on('error', function(error) {
 			should.exist(error);
 			done(error);
-		}).on('end', function () {
+		}).on('finish', function() {
 			done();
 		});
 
 		should.exist(lintStream.pipe);
 		lintStream.pipe(failStream);
 
-		files.forEach(lintStream.write);
+		files.forEach(function(file) {
+			lintStream.write(file);
+		});
 		lintStream.end();
 	});
 
