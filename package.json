@@ -2,13 +2,11 @@
   "name": "gulp-eslint",
   "version": "0.3.0",
   "description": "A gulp plugin for processing files with eslint",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/adametry/gulp-eslint"
-  },
-  "homepage": "http://github.com/adametry/gulp-eslint",
-  "bugs": "https://github.com/adametry/gulp-eslint/issues",
+  "repository": "adametry/gulp-eslint",
+  "files": [
+    "index.js",
+    "util.js"
+  ],
   "directories": {
     "example": "example",
     "test": "test"
@@ -35,17 +33,16 @@
     "lint",
     "plugin"
   ],
-  "engines": {
-    "node": ">=0.9"
-  },
-  "files": [
-    "index.js",
-    "util.js"
-  ],
   "author": "Adametry",
-  "license": "MIT",
+  "contribtutor": "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)",
+  "licenses": [
+      {
+        "type": "MIT",
+        "url": "https://github.com/adametry/gulp-eslint/blob/master/LICENSE"
+      }
+    ],
   "dependencies": {
-    "eslint": "^0.13.0",
+    "eslint": "^0.14.0",
     "gulp-util": "^3.0.1",
     "map-stream": "^0.1.0",
     "through": "^2.3.4"
@@ -53,6 +50,6 @@
   "devDependencies": {
     "gulp": "*",
     "mocha": "*",
-    "should": "^4.0.4"
+    "should": "^4.6.5"
   }
 }
