@@ -1,35 +1,35 @@
 /*global describe, it*/
-"use strict";
+'use strict';
 
-var fs = require("fs"),
-	through = require("through"),
-	should = require("should"),
-	gutil = require("gulp-util"),
-	eslint = require("../");
+var fs = require('fs'),
+	through = require('through'),
+	should = require('should'),
+	gutil = require('gulp-util'),
+	eslint = require('../');
 
-var noop = function () {};
+var noop = function() {};
 
-require("mocha");
+require('mocha');
 
-describe("Gulp eslint plugin", function () {
+describe('Gulp eslint plugin', function() {
 
-	it("should produce expected message via buffer", function (done) {
+	it('should produce expected message via buffer', function(done) {
 
 		var srcFile = new gutil.File({
-				cwd: "test/",
-				base: "test/fixtures",
-				path: "test/fixtures/use-strict.js",
-				contents: new Buffer("(function () {\n\n\tvoid 0;\n\n}());\n\n")
+				cwd: 'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/use-strict.js',
+				contents: new Buffer('(function() {\n\n\tvoid 0;\n\n}());\n\n')
 			});
 
 		var stream = eslint();
 
-		stream.on("error", function(error) {
+		stream.on('error', function(error) {
 			should.exist(error);
 			done(error);
 		});
 
-		stream.on("data", function (file) {
+		stream.on('data', function(file) {
 
 			should.exist(file);
 			should.exist(file.contents);
@@ -50,23 +50,23 @@ describe("Gulp eslint plugin", function () {
 		stream.end();
 	});
 
-	it("should produce expected message upon stream completion", function (done) {
+	it('should produce expected message upon stream completion', function(done) {
 
 		var srcFile = new gutil.File({
-				cwd: "test/",
-				base: "test/fixtures",
-				path: "test/fixtures/use-strict.js",
-				contents: fs.createReadStream("test/fixtures/use-strict.js")
+				cwd: 'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures/use-strict.js',
+				contents: fs.createReadStream('test/fixtures/use-strict.js')
 			});
 
 		var stream = eslint();
 
-		stream.on("error", function(error) {
+		stream.on('error', function(error) {
 			should.exist(error);
 			done(error);
 		});
 
-		stream.on("data", function (file) {
+		stream.on('data', function(file) {
 
 			should.exist(file);
 			should.exist(file.contents);
@@ -91,31 +91,31 @@ describe("Gulp eslint plugin", function () {
 		stream.end();
 	});
 
-	it("should lint multiple streaming files", function (done) {
+	it('should lint multiple streaming files', function(done) {
 
 		var fileCount = 0,
 			files = [
 				new gutil.File({
-					cwd: "test/",
-					base: "test/fixtures",
-					path: "test/fixtures/use-strict.js",
-					contents: fs.createReadStream("test/fixtures/use-strict.js")
+					cwd: 'test/',
+					base: 'test/fixtures',
+					path: 'test/fixtures/use-strict.js',
+					contents: fs.createReadStream('test/fixtures/use-strict.js')
 				}),
 				new gutil.File({
-					cwd: "test/",
-					base: "test/fixtures",
-					path: "test/fixtures/use-strict.js",
-					contents: fs.createReadStream("test/fixtures/use-strict.js")
+					cwd: 'test/',
+					base: 'test/fixtures',
+					path: 'test/fixtures/use-strict.js',
+					contents: fs.createReadStream('test/fixtures/use-strict.js')
 				})
 			];
 
 		var stream = eslint();
 
-		stream.on("error", function(error) {
+		stream.on('error', function(error) {
 			should.exist(error);
 			done(error);
 
-		}).on("data", function (file) {
+		}).on('data', function(file) {
 			should.exist(file);
 			should.exist(file.contents);
 			should.exist(file.contents.pipe);
@@ -133,35 +133,37 @@ describe("Gulp eslint plugin", function () {
 				fileCount++;
 			}));
 
-		}).on('end', function () {
-			process.nextTick(function () {
+		}).on('end', function() {
+			process.nextTick(function() {
 				fileCount.should.equal(files.length);
 				done();
 			});
 
 		});
 
-		files.forEach(stream.write);
+		files.forEach(function(file) {
+			stream.write(file);
+		});
 		stream.end();
 	});
 
-	it("should ignore files with null content", function (done) {
+	it('should ignore files with null content', function(done) {
 
 		var srcFile = new gutil.File({
-				cwd: "test/",
-				base: "test/fixtures",
-				path: "test/fixtures",
+				cwd: 'test/',
+				base: 'test/fixtures',
+				path: 'test/fixtures',
 				isDirectory: true
 			});
 
 		var stream = eslint();
 
-		stream.on("error", function(error) {
+		stream.on('error', function(error) {
 			should.exist(error);
 			done(error);
 		});
 
-		stream.on("data", function (file) {
+		stream.on('data', function(file) {
 			should.exist(file);
 			should.not.exist(file.contents);
 			should.not.exist(file.eslint);
@@ -171,30 +173,4 @@ describe("Gulp eslint plugin", function () {
 		stream.write(srcFile);
 		stream.end();
 	});
-
-	it("should throw error if file does not exist", function (done) {
-
-		var srcFile = new gutil.File({
-				cwd: "test/",
-				base: "test/fixtures",
-				path: "test/fixtures/use-strict.js",
-				contents: null
-			});
-
-		var stream = eslint();
-
-		stream.on("error", function(error) {
-			should.exist(error);
-			done();
-		});
-
-		stream.on("data", function (file) {
-			should.not.exist(file);
-			done(new Error('File was expected to be null'));
-		});
-
-		stream.write(null);
-		stream.end();
-	});
-
 });

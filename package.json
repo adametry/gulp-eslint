@@ -42,14 +42,15 @@
       }
     ],
   "dependencies": {
+    "bufferstreams": "0.0.2",
     "eslint": "^0.14.0",
     "gulp-util": "^3.0.1",
-    "map-stream": "^0.1.0",
-    "through": "^2.3.4"
+    "through2": "^0.6.3"
   },
   "devDependencies": {
     "gulp": "*",
     "mocha": "*",
-    "should": "^4.6.5"
+    "should": "^4.6.5",
+    "through": "^2.3.6"
   }
 }

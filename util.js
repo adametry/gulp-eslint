@@ -2,7 +2,6 @@
 
 var path = require('path'),
 	gutil = require('gulp-util'),
-	through = require('through'),
 	CLIEngine = require('eslint').CLIEngine,
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
@@ -21,23 +20,9 @@ function optional(name) {
 }
 
 /**
- * Variation on event-stream's "wait" method that returns a "reset" stream.
- */
-exports.wait = function wait(cb) {
-	var content = new Buffer([]);
-	return through(function bufferData(data) {
-		content = Buffer.concat([content, data]);
-		this.queue(data);
-	}, function releaseData() {
-		cb(content.toString());
-		this.emit('end');
-	});
-};
-
-/**
  * Mimic the CLIEngine.isPathIgnored, but resolve .eslintignore based on file's directory rather than process.cwd()
  */
-exports.isPathIgnored = function (file, options) {
+exports.isPathIgnored = function(file, options) {
 	var filePath;
 	if (!options.ignore) {
 		return false;
@@ -56,10 +41,10 @@ exports.isPathIgnored = function (file, options) {
 /**
  * Mimic the CLIEngine::loadPlugins
  */
-exports.loadPlugins = function (pluginNames) {
+exports.loadPlugins = function(pluginNames) {
 	// WARNING: HACK AHEAD!
 	// We can either process text/file, or create a new CLIEngine instance to make use of the internal plugin cache.
-	//  Creating a new CLIEngine is probably the cheapest approach.
+	//	Creating a new CLIEngine is probably the cheapest approach.
 	return pluginNames && new CLIEngine({
 		plugins: pluginNames
 	}) && void 0;
@@ -124,7 +109,7 @@ exports.migrateOptions = function migrateOptions(from) {
 /**
  * Resolve writable
  */
-exports.isErrorMessage = function (message) {
+exports.isErrorMessage = function(message) {
 	var level = message.fatal ? 2 : message.severity;
 	if (Array.isArray(level)) {
 		level = level[0];
@@ -136,7 +121,7 @@ exports.isErrorMessage = function (message) {
  * Resolve formatter from unknown type (accepts string or function)
  * @exception TypeError thrown if unable to resolve the formatter type
  */
-exports.resolveFormatter = function (formatter) {
+exports.resolveFormatter = function(formatter) {
 	if (!formatter) {
 		// default formatter
 		formatter = 'stylish';
@@ -168,7 +153,7 @@ exports.resolveFormatter = function (formatter) {
 /**
  * Resolve writable
  */
-exports.resolveWritable = function (writable) {
+exports.resolveWritable = function(writable) {
 	if (!writable) {
 		writable = gutil.log;
 	} else if (typeof writable.write === 'function') {
@@ -180,13 +165,13 @@ exports.resolveWritable = function (writable) {
 /**
  * Write formatter results to writable/output
  */
-exports.writeResults = function (results, formatter, writable) {
+exports.writeResults = function(results, formatter, writable) {
 	var config;
 	if (!results) {
 		results = [];
 	}
 	// get the first result config
-	results.some(function (result) {
+	results.some(function(result) {
 		config = result && result.config;
 		return config;
 	});

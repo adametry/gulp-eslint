@@ -1,6 +1,7 @@
 'use strict';
 
-var map = require('map-stream'),
+var through = require('through2'),
+	BufferStreams = require('bufferstreams'),
 	PluginError = require('gulp-util').PluginError,
 	eslint = require('eslint').linter,
 	CLIEngine = require('eslint').CLIEngine,
@@ -25,23 +26,23 @@ function gulpEslint(options) {
 		};
 	}
 
-	return map(function (file, output) {
+	return through.obj(function(file, enc, cb) {
 		// remove base path from file path before calling isPathIgnored
 		if (util.isPathIgnored(file, linter.options) || file.isNull()) {
-			output(null, file);
+			cb(null, file);
 
 		} else if (file.isStream()) {
 			// eslint is synchronous, so wait for the complete contents
 			// replace content stream with new readable content stream
-			file.contents = file.contents.pipe(util.wait(function (contents) {
-				file.eslint = verify(file.path, contents);
-				output(null, file);
+			file.contents = file.contents.pipe(new BufferStreams(function(none, buf, done) {
+				file.eslint = verify(file.path, String(buf));
+				cb(null, file);
+				done(null, buf);
 			}));
 
 		} else {
-			file.eslint = verify(file.path, file.contents.toString('utf8'));
-			output(null, file);
-
+			file.eslint = verify(file.path, file.contents.toString());
+			cb(null, file);
 		}
 	});
 
@@ -50,13 +51,13 @@ function gulpEslint(options) {
 /**
  * Fail when an eslint error is found in eslint results.
  */
-gulpEslint.failOnError = function () {
+gulpEslint.failOnError = function() {
 
-	return map(function (file, output) {
+	return through.obj(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
 
-		messages.some(function (message) {
+		messages.some(function(message) {
 			if (util.isErrorMessage(message)) {
 				error = new PluginError(
 					'gulp-eslint',
@@ -78,19 +79,19 @@ gulpEslint.failOnError = function () {
 /**
  * Fail when the stream ends if any eslint error(s) occurred
  */
-gulpEslint.failAfterError = function () {
+gulpEslint.failAfterError = function() {
 	var errorCount = 0;
 
-	return map(function (file, output) {
+	return through.obj(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
-		messages.forEach(function (message) {
+		messages.forEach(function(message) {
 			if (util.isErrorMessage(message)) {
 				errorCount++;
 			}
 		});
-		output(null, file);
+		cb(null, file);
 
-	}).once('end', function () {
+	}).once('end', function() {
 		// Only format results if files has been lint'd
 		if (errorCount > 0) {
 			this.emit('error', new PluginError(
@@ -107,18 +108,18 @@ gulpEslint.failAfterError = function () {
 /**
  * Wait until all files have been linted and format all results at once.
  */
-gulpEslint.format = function (formatter, writable) {
+gulpEslint.format = function(formatter, writable) {
 	var results = [];
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return map(function (file, output) {
+	return through.obj(function(file, enc, cb) {
 		if (file.eslint) {
 			results.push(file.eslint);
 		}
-		output(null, file);
+		cb(null, file);
 
-	}).once('end', function () {
+	}).once('finish', function() {
 		// Only format results if files has been lint'd
 		if (results.length) {
 			util.writeResults(results, formatter, writable);
@@ -131,11 +132,11 @@ gulpEslint.format = function (formatter, writable) {
 /**
  * Format the results of each file individually.
  */
-gulpEslint.formatEach = function (formatter, writable) {
+gulpEslint.formatEach = function(formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return map(function (file, output) {
+	return through.obj(function(file, enc, cb) {
 		var error = null;
 		if (file.eslint) {
 			try {
@@ -144,7 +145,7 @@ gulpEslint.formatEach = function (formatter, writable) {
 				error = new PluginError('gulp-eslint', err);
 			}
 		}
-		output(error, file);
+		cb(error, file);
 	});
 };
 
