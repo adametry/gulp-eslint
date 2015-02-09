@@ -90,8 +90,7 @@ gulpEslint.failAfterError = function() {
 			}
 		});
 		cb(null, file);
-
-	}).once('end', function() {
+	}, function(cb) {
 		// Only format results if files has been lint'd
 		if (errorCount > 0) {
 			this.emit('error', new PluginError(
@@ -102,6 +101,7 @@ gulpEslint.failAfterError = function() {
 				}
 			));
 		}
+		cb();
 	});
 };
 
@@ -118,14 +118,14 @@ gulpEslint.format = function(formatter, writable) {
 			results.push(file.eslint);
 		}
 		cb(null, file);
-
-	}).once('finish', function() {
+	}, function(cb) {
 		// Only format results if files has been lint'd
 		if (results.length) {
 			util.writeResults(results, formatter, writable);
 		}
 		// reset buffered results
 		results = [];
+		cb();
 	});
 };
 

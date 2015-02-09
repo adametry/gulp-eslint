@@ -2,6 +2,7 @@
 
 var path = require('path'),
 	gutil = require('gulp-util'),
+	objectAssign = require('object-assign'),
 	CLIEngine = require('eslint').CLIEngine,
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
@@ -54,7 +55,7 @@ exports.loadPlugins = function(pluginNames) {
  * Create config helper to merge various config sources
  */
 exports.migrateOptions = function migrateOptions(from) {
-	var globals, envs;
+	var envs;
 
 	if (typeof from === 'string') {
 		// basic config path overload: gulpEslint('path/to/config.json')
@@ -63,29 +64,20 @@ exports.migrateOptions = function migrateOptions(from) {
 		};
 	}
 
-	var to = {};
-	for (var key in from) {
-		if (from.hasOwnProperty(key)) {
-			to[key] = from[key];
-		}
+	var to = objectAssign({}, from);
+
+	to.globals = to.globals || to.global;
+	if (to.globals != null && Array.isArray(to.globals)) {
+		to.globals = Object.keys(to.globals).map(function cliGlobal(key) {
+			return to.globals[key] ? key + ':true' : key;
+		});
 	}
 
-	globals = to.globals || to.global;
-	if (globals != null) {
-		to.globals = Array.isArray(globals) ?
-			globals :
-			Object.keys(globals).map(function cliGlobal(key) {
-				return globals[key] ? key + ':true' : key;
-			});
-	}
-
-	envs = to.envs || to.env;
-	if (envs) {
-		to.envs = Array.isArray(envs) ?
-			envs :
-			Object.keys(envs).filter(function cliEnv(key) {
-				return envs[key];
-			});
+	to.envs = to.envs || to.env;
+	if (to.envs != null && Array.isArray(to.envs)) {
+		to.envs = Object.keys(to.envs).filter(function cliEnv(key) {
+			return to.envs[key];
+		});
 	}
 
 	if (to.config != null) {

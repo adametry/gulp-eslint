@@ -46,6 +46,7 @@
     "bufferstreams": "0.0.2",
     "eslint": "^0.14.0",
     "gulp-util": "^3.0.1",
+    "object-assign": "^2.0.0",
     "through2": "^0.6.3"
   },
   "devDependencies": {
