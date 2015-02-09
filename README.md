@@ -1,16 +1,16 @@
-# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint/badge.svg)](https://coveralls.io/r/adametry/gulp-eslint)
+# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint.svg)](https://coveralls.io/r/adametry/gulp-eslint)
 
 > A [gulp](http://gulpjs.com/) plugin for [ESLint](http://eslint.org/).
 
-## Usage
+## Installation
 
-First, install `gulp-eslint` as a dependency:
+[Use npm](https://docs.npmjs.com/cli/install).
 
-```shell
+```sh
 npm install gulp-eslint
 ```
 
-Then, add it to your *gulpfile.js*:
+## Usage
 
 ```javascript
 var gulp = require('gulp'),
@@ -187,7 +187,6 @@ eslint.format();
 
 // write messages to stdout
 eslint.format('junit', process.stdout)
-
 ``` 
 
 ### eslint.formatEach(formatter, output)
@@ -202,6 +201,7 @@ The arguments for `formatEach` are the same as the arguments for `format`.
 Eslint may be theured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, eslint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached. Any configuration will expand upon the [default eslint configuration](https://github.com/nzakas/eslint/wiki/Rules).
 
 ##Ignore Files
+
 Eslint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/wearefractal/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
 
 Eslint will also detect an `.eslintignore` file when a directory passes through the pipeline. All subsequent files that pass through may be skipped if they match any pattern found in this file. The file may contain multiple globs as strings within a JSON array:
