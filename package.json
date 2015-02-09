@@ -35,7 +35,9 @@
     "plugin"
   ],
   "author": "Adametry",
-  "contribtutor": "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)",
+  "contributors": [
+    "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)"
+  ],
   "licenses": [
     {
       "type": "MIT",
