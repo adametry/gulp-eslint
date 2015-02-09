@@ -16,7 +16,9 @@
     "test": "mocha",
     "gulp": "gulp",
     "throw-on-error": "gulp throw-on-error",
-    "throw-after-error": "gulp throw-after-error"
+    "throw-after-error": "gulp throw-after-error",
+    "coverage": "istanbul cover _mocha",
+    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
   "keywords": [
     "gulpplugin",
@@ -53,6 +55,8 @@
   },
   "devDependencies": {
     "gulp": "*",
+    "istanbul": "^0.3.5",
+    "istanbul-coveralls": "^1.0.1",
     "jscs": "^1.11.0",
     "mocha": "*",
     "should": "^4.6.5",
