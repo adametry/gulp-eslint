@@ -51,6 +51,7 @@
     "eslint": "^0.14.0",
     "gulp-util": "^3.0.1",
     "object-assign": "^2.0.0",
+    "optional": "^0.1.2",
     "through2": "^0.6.3"
   },
   "devDependencies": {
@@ -60,7 +61,8 @@
     "jscs": "^1.11.0",
     "mocha": "*",
     "should": "^4.6.5",
-    "through": "^2.3.6"
+    "through": "^2.3.6",
+    "vinyl": "^0.4.6"
   },
   "jscsConfig": {
     "preset": "google",

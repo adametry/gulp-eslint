@@ -3,22 +3,12 @@
 var path = require('path'),
 	gutil = require('gulp-util'),
 	objectAssign = require('object-assign'),
+	optional = require('optional'),
 	CLIEngine = require('eslint').CLIEngine,
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
 
 var ignoreFileFinder = new FileFinder('.eslintignore');
-
-/**
- * Optional import, if not found, returns null.
- */
-function optional(name) {
-	try {
-		return require(name);
-	} catch (error) {
-		return null;
-	}
-}
 
 /**
  * Mimic the CLIEngine.isPathIgnored, but resolve .eslintignore based on file's directory rather than process.cwd()
@@ -54,48 +44,50 @@ exports.loadPlugins = function(pluginNames) {
 /**
  * Create config helper to merge various config sources
  */
-exports.migrateOptions = function migrateOptions(from) {
-	var envs;
-
-	if (typeof from === 'string') {
+exports.migrateOptions = function migrateOptions(options) {
+	if (typeof options === 'string') {
 		// basic config path overload: gulpEslint('path/to/config.json')
-		from = {
-			configFile: from
+		options = {
+			configFile: options
 		};
+	} else {
+		options = objectAssign({}, options);
 	}
 
-	var to = objectAssign({}, from);
-
-	to.globals = to.globals || to.global;
-	if (to.globals != null && Array.isArray(to.globals)) {
-		to.globals = Object.keys(to.globals).map(function cliGlobal(key) {
-			return to.globals[key] ? key + ':true' : key;
+	options.globals = options.globals || options.global;
+	if (options.globals != null && Array.isArray(options.globals)) {
+		options.globals = Object.keys(options.globals).map(function cliGlobal(key) {
+			return options.globals[key] ? key + ':true' : key;
 		});
 	}
 
-	to.envs = to.envs || to.env;
-	if (to.envs != null && Array.isArray(to.envs)) {
-		to.envs = Object.keys(to.envs).filter(function cliEnv(key) {
-			return to.envs[key];
+	options.envs = options.envs || options.env;
+	if (options.envs != null && Array.isArray(options.envs)) {
+		options.envs = Object.keys(options.envs).filter(function cliEnv(key) {
+			return options.envs[key];
 		});
 	}
 
-	if (to.config != null) {
+	if (options.config != null) {
 		// The "config" option has been deprecated. Use "configFile".
-		to.configFile = to.config;
+		options.configFile = options.config;
 	}
 
-	if (to.rulesdir != null) {
+	if (options.rulesdir != null) {
 		// The "rulesdir" option has been deprecated. Use "rulesPaths".
-		to.rulesPaths = (typeof to.rulesdir === 'string') ? [to.rulesdir] : to.rulesdir;
+		if (typeof options.rulesdir === 'string') {
+			options.rulesPaths = [options.rulesdir];
+		} else {
+			options.rulesPaths = options.rulesdir;
+		}
 	}
 
-	if (to.eslintrc != null) {
+	if (options.eslintrc != null) {
 		// The "eslintrc" option has been deprecated. Use "useEslintrc".
-		to.useEslintrc = to.eslintrc;
+		options.useEslintrc = options.eslintrc;
 	}
 
-	return to;
+	return options;
 };
 
 /**

@@ -36,8 +36,8 @@ function gulpEslint(options) {
 			// replace content stream with new readable content stream
 			file.contents = file.contents.pipe(new BufferStreams(function(none, buf, done) {
 				file.eslint = verify(file.path, String(buf));
-				cb(null, file);
 				done(null, buf);
+				cb(null, file);
 			}));
 
 		} else {

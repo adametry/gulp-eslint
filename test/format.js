@@ -1,48 +1,37 @@
 /*global describe, it, beforeEach */
 'use strict';
 
-var should = require('should'),
-	gutil = require('gulp-util'),
+var File = require('vinyl'),
+	should = require('should'),
 	eslint = require('../');
 
 require('mocha');
 
+function getFiles() {
+	return [
+		new File({
+			path: 'test/fixtures',
+			contents: null,
+			isDirectory: true
+		}),
+		new File({
+			path: 'test/fixtures/use-strict.js',
+			contents: new Buffer('(function () {\n\n\tvoid 0;\n\n}());\n\n')
+		}),
+		new File({
+			path: 'test/fixtures/undeclared.js',
+			contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
+		}),
+		new File({
+			path: 'test/fixtures/passing.js',
+			contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
+		})
+	];
+}
+
 describe('gulp-eslint format', function() {
 
-	var formatCount, writeCount, files, lintStream;
-
-	/**
-	 * Create gutil.Files from file paths
-	 */
-	function getFiles() {
-		return [
-			new gutil.File({
-				cwd: 'test/',
-				base: 'test/fixtures',
-				path: 'test/fixtures',
-				contents: null,
-				isDirectory: true
-			}),
-			new gutil.File({
-				cwd: 'test/',
-				base: 'test/fixtures',
-				path: 'test/fixtures/use-strict.js',
-				contents: new Buffer('(function () {\n\n\tvoid 0;\n\n}());\n\n')
-			}),
-			new gutil.File({
-				cwd: 'test/',
-				base: 'test/fixtures',
-				path: 'test/fixtures/undeclared.js',
-				contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
-			}),
-			new gutil.File({
-				cwd: 'test/',
-				base: 'test/fixtures',
-				path: 'test/fixtures/passing.js',
-				contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
-			})
-		];
-	}
+	var formatCount, writeCount;
 
 	/**
 	 * Custom eslint formatted result writer for counting write attempts
@@ -74,19 +63,16 @@ describe('gulp-eslint format', function() {
 		}
 
 		beforeEach(function() {
-			lintStream = eslint();
 			formatCount = 0;
 			writeCount = 0;
 		});
 
 		it('should format all eslint results at once', function(done) {
-			files = getFiles();
+			var files = getFiles();
 
-			lintStream.on('error', function(error) {
-				should.exist(error);
-				done(error);
-
-			}).on('end', function() {
+			var lintStream = eslint()
+			.on('error', done)
+			.on('end', function() {
 				process.nextTick(function() {
 					formatCount.should.equal(1);
 					writeCount.should.equal(1);
@@ -96,10 +82,7 @@ describe('gulp-eslint format', function() {
 
 			var formatStream = eslint.format(formatResults, outputWriter);
 
-			formatStream.on('error', function(error) {
-				should.exist(error);
-				done(error);
-			});
+			formatStream.on('error', done);
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);
@@ -119,28 +102,20 @@ describe('gulp-eslint format', function() {
 			results.should.be.instanceof(Array).with.a.lengthOf(1);
 			formatCount++;
 
-			var messageCount = results.reduce(function(sum, result) {
+			return results.reduce(function(sum, result) {
 				return sum + result.messages.length;
-			}, 0);
-
-			return messageCount + ' messages';
+			}, 0) + ' messages';
 		}
 
-		beforeEach(function() {
-			lintStream = eslint();
+		it('should format individual eslint results', function(done) {
 			formatCount = 0;
 			writeCount = 0;
-		});
 
-		it('should format individual eslint results', function(done) {
+			var files = getFiles();
 
-			files = getFiles();
-
-			lintStream.on('error', function(error) {
-				should.exist(error);
-				done(error);
-
-			}).on('finish', function() {
+			var lintStream = eslint()
+			.on('error', done)
+			.on('finish', function() {
 				process.nextTick(function() {
 					var fileCount = files.length - 1;// remove directory
 					formatCount.should.equal(fileCount);
