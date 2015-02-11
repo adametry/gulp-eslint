@@ -97,11 +97,7 @@ Alias: `eslintrc` *(deprecated)*
 
 Type: `Object`
 
-Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). The rule configuration keys must match available validation rules. The associated values should be:
-
-* 0 - turn the rule off
-* 1 - turn the rule on as a warning
-* 2 - turn the rule on as an error
+Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [rules](http://eslint.org/docs/rules/).
 
 ```javascript
 {
@@ -113,13 +109,11 @@ Inline [rules configuration](https://github.com/nzakas/eslint/wiki/Command-line-
 }
 ```
 
-For a list of available rule IDs, see the eslint [rules wiki](https://github.com/nzakas/eslint/wiki/Rules).
-
 #### options.globals
 
 Type: `Object`
 
-Inline `globals` configuration. The keys will be considered global variables, and the value determines whether the variable may be reassigned (true) or not (false). For example:
+Specify [globals](http://eslint.org/docs/configuring/#specifying-globals).
 
 ```javascript
 {
@@ -134,12 +128,11 @@ Inline `globals` configuration. The keys will be considered global variables, an
 
 Type: `Array`
 
-A list of env keys for [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`).
-
+Specify a list of [environments](http://eslint.org/docs/configuring/#specifying-environments) to be applied.
 
 Type: `Object`
 
-Inline [env configuration](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). An env is a preset of rule configurations associated with an JavaScript environment (e.g., `node`, `browser`). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (true) or not (false).
+Specify [environments](http://eslint.org/docs/configuring/#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
 
 Alias: `env` *(deprecated)*
 
@@ -151,7 +144,7 @@ Shorthand for defining `options.configFile`.
 
 ### eslint.failOnError()
 
-Stop a task/stream if en eslint error has been reported for any file. 
+Stop a task/stream if an eslint error has been reported for any file.
 
 ```javascript
 // Cause the stream to stop(/fail) before copying an invalid JS file to the output directory
