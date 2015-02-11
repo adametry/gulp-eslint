@@ -47,20 +47,20 @@
     }
   ],
   "dependencies": {
-    "bufferstreams": "0.0.2",
-    "eslint": "^0.14.0",
+    "bufferstreams": "1.0.1",
+    "eslint": "^0.14.1",
     "gulp-util": "^3.0.1",
     "object-assign": "^2.0.0",
     "optional": "^0.1.2",
     "through2": "^0.6.3"
   },
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^3.8.11",
     "istanbul": "^0.3.5",
     "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.11.0",
+    "jscs": "^1.11.2",
     "mocha": "*",
-    "should": "^4.6.5",
+    "should": "^5.0.0",
     "through": "^2.3.6",
     "vinyl": "^0.4.6"
   },
