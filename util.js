@@ -62,7 +62,7 @@ exports.migrateOptions = function migrateOptions(options) {
 	}
 
 	options.envs = options.envs || options.env;
-	if (options.envs != null && Array.isArray(options.envs)) {
+	if (options.envs != null && !Array.isArray(options.envs)) {
 		options.envs = Object.keys(options.envs).filter(function cliEnv(key) {
 			return options.envs[key];
 		});
