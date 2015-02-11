@@ -1,8 +1,18 @@
 # Changelog
 
+## 0.4.2
+
+* Bump bufferstreams dependency to 1.x
+* Fix wrong option handling (@Jakobo)
+
 ## 0.4.1
 
+* Code refactoring
+
 ## 0.4.0
+
+* Bump eslint dependency to 0.14.x
+* Use Stream2 instead of older Stream
 
 ## 0.3.0
 
