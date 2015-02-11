@@ -126,10 +126,7 @@ describe('gulp-eslint format', function() {
 
 			var formatStream = eslint.formatEach(formatResult, outputWriter);
 
-			formatStream.on('error', function(error) {
-				should.exist(error);
-				done(error);
-			});
+			formatStream.on('error', done);
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);

@@ -14,11 +14,11 @@ function gulpEslint(options) {
 	options = util.migrateOptions(options);
 	var linter = new CLIEngine(options);
 
-	function verify(filePath, contents) {
+	function verify(filePath, str) {
 		// mimic CLIEngine::processFile
 		var config = linter.getConfigForFile(filePath);
 		util.loadPlugins(config.plugins);
-		var messages = eslint.verify(contents, config, filePath);
+		var messages = eslint.verify(str, config, filePath);
 		//eslint.reset();
 		return {
 			filePath: filePath,

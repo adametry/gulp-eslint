@@ -11,7 +11,8 @@ var path = require('path'),
 var ignoreFileFinder = new FileFinder('.eslintignore');
 
 /**
- * Mimic the CLIEngine.isPathIgnored, but resolve .eslintignore based on file's directory rather than process.cwd()
+ * Mimic the CLIEngine.isPathIgnored,
+ * but resolve .eslintignore based on file's directory rather than process.cwd()
  */
 exports.isPathIgnored = function(file, options) {
 	var filePath;
@@ -34,11 +35,10 @@ exports.isPathIgnored = function(file, options) {
  */
 exports.loadPlugins = function(pluginNames) {
 	// WARNING: HACK AHEAD!
-	// We can either process text/file, or create a new CLIEngine instance to make use of the internal plugin cache.
+	// We can either process text/file, or create a new CLIEngine instance
+	// to make use of the internal plugin cache.
 	//	Creating a new CLIEngine is probably the cheapest approach.
-	return pluginNames && new CLIEngine({
-		plugins: pluginNames
-	}) && void 0;
+	return pluginNames && new CLIEngine({plugins: pluginNames}) && void 0;
 };
 
 /**
@@ -55,7 +55,7 @@ exports.migrateOptions = function migrateOptions(options) {
 	}
 
 	options.globals = options.globals || options.global;
-	if (options.globals != null && Array.isArray(options.globals)) {
+	if (options.globals != null && !Array.isArray(options.globals)) {
 		options.globals = Object.keys(options.globals).map(function cliGlobal(key) {
 			return options.globals[key] ? key + ':true' : key;
 		});
@@ -112,7 +112,6 @@ exports.resolveFormatter = function(formatter) {
 	}
 
 	if (typeof formatter === 'string') {
-
 		// load formatter (module, relative to cwd, eslint formatter)
 		formatter =	(new CLIEngine()).getFormatter(formatter);
 

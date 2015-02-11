@@ -9,7 +9,12 @@ require('mocha');
 
 describe('gulp-eslint failOnError', function() {
 	it('should fail if an error is found', function(done) {
-		var lintStream = eslint({rules: {'strict': 2}});
+		var lintStream = eslint({
+			envs: ['window'],
+			rules: {
+				'no-undef': 2
+			}
+		});
 
 		lintStream.pipe(eslint.failOnError().on('error', function(err) {
 			should.exists(err);
@@ -18,7 +23,7 @@ describe('gulp-eslint failOnError', function() {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('(function() {}());')
+			contents: new Buffer('document = "abuse read-only value";')
 		}));
 	});
 

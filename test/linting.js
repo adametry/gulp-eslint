@@ -12,7 +12,11 @@ require('mocha');
 describe('Gulp eslint plugin', function() {
 
 	it('should produce expected message via buffer', function(done) {
-		eslint()
+		eslint({
+			globals: {
+				'$': true
+			}
+		})
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
@@ -20,18 +24,19 @@ describe('Gulp eslint plugin', function() {
 			should.exist(file.eslint);
 			file.eslint.should.have.property('filePath', 'test/fixtures/use-strict.js');
 
-			var messages = file.eslint.messages;
-			messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			file.eslint.messages
+			.should.be.instanceof(Array)
+			.and.have.lengthOf(1);
 
-			var message = file.eslint.messages[0];
-			message.should.have.properties('message', 'line', 'column')
-				.and.have.property('ruleId', 'strict');
+			file.eslint.messages[0]
+			.should.have.properties('message', 'line', 'column')
+			.and.have.property('ruleId', 'strict');
 
 			done();
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('(function() {\n\n\tvoid 0;\n\n}());\n\n')
+			contents: new Buffer('(function() { $.fn.foo = true; }());')
 		}));
 	});
 
