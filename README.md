@@ -154,6 +154,18 @@ gulp.src('**/*.js')
 	.pipe(gulp.dest('../output'));
 ```
 
+### eslint.failAfterError()
+
+Stop a task/stream if an eslint error has been reported for any file, but wait for all of them to be processed first.
+
+```javascript
+// Cause the stream to stop(/fail) when the stream ends if any eslint error(s) occurred.
+gulp.src('**/*.js')
+	.pipe(eslint())
+	.pipe(eslint.failAfterError())
+	.pipe(gulp.dest('../output'));
+```
+
 ### eslint.format(formatter, output)
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
