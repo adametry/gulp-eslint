@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3
+
+* Fix "rulePaths" typo
+
 ## 0.4.2
 
 * Bump bufferstreams dependency to 1.x
