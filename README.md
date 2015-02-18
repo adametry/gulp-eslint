@@ -35,7 +35,7 @@ Or use the plugin API to do things like:
 ```javascript
 gulp.src('js/**/*.js')
 	.pipe(eslint({
-		rulesPaths: [
+		rulePaths: [
 			'custom-rules/'
 		],
 		rules: {
@@ -61,7 +61,7 @@ gulp.src('js/**/*.js')
 
 ### eslint(options)
 
-#### options.rulesPaths
+#### options.rulePaths
 
 Type: `Array`
 

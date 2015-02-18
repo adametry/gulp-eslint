@@ -74,11 +74,11 @@ exports.migrateOptions = function migrateOptions(options) {
 	}
 
 	if (options.rulesdir != null) {
-		// The "rulesdir" option has been deprecated. Use "rulesPaths".
+		// The "rulesdir" option has been deprecated. Use "rulePaths".
 		if (typeof options.rulesdir === 'string') {
-			options.rulesPaths = [options.rulesdir];
+			options.rulePaths = [options.rulesdir];
 		} else {
-			options.rulesPaths = options.rulesdir;
+			options.rulePaths = options.rulesdir;
 		}
 	}
 
