@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0
+
+* Bump eslint dependency to 0.15.x
+
 ## 0.4.3
 
 * Fix "rulePaths" typo

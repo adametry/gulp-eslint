@@ -48,7 +48,7 @@
   ],
   "dependencies": {
     "bufferstreams": "1.0.1",
-    "eslint": "^0.14.1",
+    "eslint": "^0.15.0",
     "gulp-util": "^3.0.1",
     "object-assign": "^2.0.0",
     "optional": "^0.1.2",
@@ -56,11 +56,11 @@
   },
   "devDependencies": {
     "gulp": "^3.8.11",
-    "istanbul": "^0.3.5",
+    "istanbul": "^0.3.6",
     "istanbul-coveralls": "^1.0.1",
-    "jscs": "^1.11.2",
+    "jscs": "^1.11.3",
     "mocha": "*",
-    "should": "^5.0.0",
+    "should": "^5.0.1",
     "through": "^2.3.6",
     "vinyl": "^0.4.6"
   },
