@@ -30,7 +30,6 @@ function getFiles() {
 }
 
 describe('gulp-eslint format', function() {
-
 	var formatCount, writeCount;
 
 	/**
@@ -44,7 +43,6 @@ describe('gulp-eslint format', function() {
 	}
 
 	describe('format all results', function() {
-
 		/**
 		 * Custom eslint result formatter for counting format passes and
 		 * returning a expected formatted result message.

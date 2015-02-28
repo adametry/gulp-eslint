@@ -1,11 +1,12 @@
 /*global describe, it*/
 'use strict';
 
-var fs = require('fs'),
-	File = require('vinyl'),
-	through = require('through'),
-	should = require('should'),
-	eslint = require('../');
+var fs = require('fs');
+
+var eslint = require('../');
+var File = require('vinyl');
+var should = require('should');
+var through = require('through');
 
 require('mocha');
 
@@ -13,6 +14,7 @@ describe('Gulp eslint plugin', function() {
 
 	it('should produce expected message via buffer', function(done) {
 		eslint({
+			configFile: 'test/fixtures/.eslintrc-babel',
 			globals: {
 				'$': true
 			}
@@ -36,7 +38,10 @@ describe('Gulp eslint plugin', function() {
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('(function() { $.fn.foo = true; }());')
+			contents: new Buffer(
+				'import foo from "bar";\n' +
+				'(function() { $.fn.foo = (a) => `${a}b`; }());'
+      )
 		}));
 	});
 

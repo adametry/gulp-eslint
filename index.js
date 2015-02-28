@@ -1,11 +1,11 @@
 'use strict';
 
-var through = require('through2'),
-	BufferStreams = require('bufferstreams'),
-	PluginError = require('gulp-util').PluginError,
-	eslint = require('eslint').linter,
-	CLIEngine = require('eslint').CLIEngine,
-	util = require('./util');
+var through = require('through2');
+var BufferStreams = require('bufferstreams');
+var PluginError = require('gulp-util').PluginError;
+var eslint = require('eslint').linter;
+var CLIEngine = require('eslint').CLIEngine;
+var util = require('./util');
 
 /**
  * Append eslint result to each file
