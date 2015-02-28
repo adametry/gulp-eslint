@@ -1,11 +1,2 @@
 coverage
-node_modules/*
-npm-debug.log
-.*
-!test/fixtures/**/*
-!.gitignore
-!.travis.yml
-!.gitattributes
-!.editorconfig
-!.eslintrc
-*.sublime-*
+node_modules
