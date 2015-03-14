@@ -38,10 +38,7 @@ describe('Gulp eslint plugin', function() {
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer(
-				'import foo from "bar";\n' +
-				'(function() { $.fn.foo = (a) => `${a}b`; }());'
-      )
+			contents: new Buffer('(() => { $.fn.foo = (a) => `${a}b`; }());')
 		}));
 	});
 

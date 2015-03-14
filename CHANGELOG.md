@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+* Bump eslint dependency to 0.17.x
+
 ## 0.6.0
 
 * Bump eslint dependency to 0.16.x
