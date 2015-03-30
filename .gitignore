@@ -1,2 +1,3 @@
 coverage
+*.sublime-*
 node_modules
