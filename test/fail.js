@@ -18,7 +18,7 @@ describe('gulp-eslint failOnError', function() {
 
 		lintStream.pipe(eslint.failOnError().on('error', function(err) {
 			should.exists(err);
-			err.message.should.equal('\'document\' is read only.');
+			err.message.should.equal('\"document\" is read only.');
 			err.fileName.should.equal('test/fixtures/invalid.js');
 			err.plugin.should.equal('gulp-eslint');
 			done();
