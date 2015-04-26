@@ -3,7 +3,6 @@
 var path = require('path'),
 	gutil = require('gulp-util'),
 	objectAssign = require('object-assign'),
-	optional = require('optional'),
 	CLIEngine = require('eslint').CLIEngine,
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');

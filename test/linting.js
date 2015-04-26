@@ -2,11 +2,11 @@
 'use strict';
 
 var fs = require('fs');
-
 var eslint = require('../');
+var stream = require('stream');
 var File = require('vinyl');
 var should = require('should');
-var through = require('through');
+var through = require('through2');
 
 require('mocha');
 
@@ -76,13 +76,13 @@ describe('Gulp eslint plugin', function() {
 	it('should lint multiple streaming files', function(done) {
 		var fileCount = 0;
 
-		var stream = eslint()
+		var lintStream = eslint()
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
 			should.ok(file.isStream());
 
-			file.contents.pipe(through(function() {}, function() {
+			file.contents.pipe(through(function() {
 				should.exist(file.eslint);
 
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
@@ -92,23 +92,24 @@ describe('Gulp eslint plugin', function() {
 
 				fileCount++;
 			}));
-		})
-		.on('end', function() {
-			process.nextTick(function() {
-				fileCount.should.equal(2);
-				done();
-			});
 		});
 
-		stream.write(new File({
+		lintStream.pipe(new stream.PassThrough({objectMode: true}))
+		.on('finish', function() {
+			fileCount.should.equal(2);
+			done();
+		});
+
+		lintStream.write(new File({
 			path: 'test/fixtures/use-strict.js',
 			contents: fs.createReadStream('test/fixtures/use-strict.js')
 		}));
-		stream.write(new File({
+		lintStream.write(new File({
 			path: 'test/fixtures/use-strict.js',
 			contents: fs.createReadStream('test/fixtures/use-strict.js')
 		}));
-		stream.end();
+
+		lintStream.end();
 	});
 
 	it('should ignore files with null content', function(done) {
