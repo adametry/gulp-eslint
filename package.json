@@ -12,11 +12,9 @@
     "test": "test"
   },
   "scripts": {
-    "pretest": "jscs *.js test/*.js && eslint *.js test/*.js",
+    "pretest": "jscs *.js test/*.js && gulp test",
     "test": "mocha",
     "gulp": "gulp",
-    "throw-on-error": "gulp throw-on-error",
-    "throw-after-error": "gulp throw-after-error",
     "coverage": "istanbul cover _mocha",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
