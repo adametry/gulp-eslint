@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.1
+
+* tidying-up dependencies
+
 ## 0.11.0
 
 * Improve code coverage
