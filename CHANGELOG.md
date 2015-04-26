@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0
+
+* Improve code coverage
+* Remove support for deprecated/legacy formatters
+
+## 0.10.0
+
+* Bump eslint dependency to 0.20.x
+
 ## 0.9.0
 
 * Bump eslint dependency to 0.19.x
