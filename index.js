@@ -22,7 +22,7 @@ function gulpEslint(options) {
 		//eslint.reset();
 		return {
 			filePath: filePath,
-			messages: messages || []
+			messages: messages
 		};
 	}
 

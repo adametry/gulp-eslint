@@ -8,6 +8,7 @@
 		"no-eq-null": 0,
 		"guard-for-in": 1,
 		"no-empty": 1,
+		"no-underscore-dangle": 0,
 		"no-use-before-define": 0,
 		"no-obj-calls": 2,
 		"no-unused-vars": 0,

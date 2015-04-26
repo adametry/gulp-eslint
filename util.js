@@ -26,7 +26,10 @@ exports.isPathIgnored = function(file, options) {
 		};
 	}
 	// set file path relative to the .eslintignore directory or cwd
-	filePath = path.relative(path.dirname(options.ignorePath || '') || process.cwd(), file.path);
+	filePath = path.relative(
+		path.dirname(options.ignorePath || '') || process.cwd(),
+		file.path || ''
+	);
 	return IgnoredPaths.load(options).contains(filePath);
 };
 
@@ -38,7 +41,9 @@ exports.loadPlugins = function(pluginNames) {
 	// We can either process text/file, or create a new CLIEngine instance
 	// to make use of the internal plugin cache.
 	//	Creating a new CLIEngine is probably the cheapest approach.
-	return pluginNames && new CLIEngine({plugins: pluginNames}) && void 0;
+	if (pluginNames) {
+		void new CLIEngine({plugins: pluginNames});
+	}
 };
 
 /**
@@ -106,28 +111,15 @@ exports.isErrorMessage = function(message) {
  * @exception TypeError thrown if unable to resolve the formatter type
  */
 exports.resolveFormatter = function(formatter) {
-	if (!formatter) {
-		// default formatter
-		formatter = 'stylish';
-	}
-
-	if (typeof formatter === 'string') {
+	// use eslint to look up formatter references
+	if (typeof formatter !== 'function') {
 		// load formatter (module, relative to cwd, eslint formatter)
-		formatter =	(new CLIEngine()).getFormatter(formatter);
-
-		if (typeof formatter === 'string') {
-			// certain formatter modules return a path to the formatter
-			formatter = optional(formatter);
-		}
+		formatter =	(new CLIEngine()).getFormatter(formatter) || formatter;
 	}
 
 	if (typeof formatter !== 'function') {
-		if (arguments[0] == null) {
-			// eslint@<0.3.0 default
-			return exports.resolveFormatter('compact');
-		} else {
-			throw new TypeError('Invalid Formatter');
-		}
+		// formatter not found
+		throw new TypeError('Invalid Formatter');
 	}
 
 	return formatter;
