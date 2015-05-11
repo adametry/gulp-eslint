@@ -1,32 +1,43 @@
-{
-	"rules": {
-		"no-alert": 0,
-		"no-bitwise": 0,
-		"camelcase": 1,
-		"curly": 1,
-		"eqeqeq": 0,
-		"no-eq-null": 0,
-		"guard-for-in": 1,
-		"no-empty": 1,
-		"no-underscore-dangle": 0,
-		"no-use-before-define": 0,
-		"no-obj-calls": 2,
-		"no-unused-vars": 0,
-		"new-cap": 1,
-		"no-shadow": 0,
-		"strict": 2,
-		"no-invalid-regexp": 2,
-		"no-comma-dangle": 2,
-		"no-undef": 1,
-		"no-new": 1,
-		"no-extra-semi": 1,
-		"no-debugger": 2,
-		"no-caller": 1,
-		"semi": 1,
-		"quotes": 0,
-		"no-unreachable":2,
-		"eol-last":0
-	},
-	"globals": { },
-	"env":{ "node": true }
-}
+env:
+	node: true
+
+rules:
+	indent: 2
+	brace-style: [2, "1tbs"]
+	comma-style: [2, "last"]
+	default-case: 2
+	func-style: [2, "declaration"]
+	no-floating-decimal: 2
+	no-nested-ternary: 2
+	no-undefined: 2
+	radix: 2
+	space-after-function-name: [2, "never"]
+	space-after-keywords: [2, "always"]
+	space-before-blocks: 2
+	spaced-line-comment: [2, "always", { exceptions: ["-"]}]
+	valid-jsdoc: [2, { prefer: { "return": "returns" }}]
+	wrap-iife: 2
+	guard-for-in: 2
+	strict: [2, "global"]
+	no-alert: 2
+	camelcase: 1
+	curly: [2, "all"]
+	eqeqeq: [2, "allow-null"]
+	no-empty: 2
+	no-underscore-dangle: 1
+	no-use-before-define: 2
+	no-obj-calls: 2
+	no-unused-vars: [0, {"vars": "local", "args": "after-used"}]
+	new-cap: 2
+	no-shadow: 1
+	no-invalid-regexp: 2
+	comma-dangle: [2, "never"]
+	no-undef: 2
+	no-new: 2
+	no-extra-semi: 2
+	no-debugger: 2
+	no-caller: 1
+	semi: 2
+	quotes: [2, "single", "avoid-escape"]
+	no-unreachable: 2
+	eol-last: 1
