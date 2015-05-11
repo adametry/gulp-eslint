@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^3.0.1",
+    "eslint-plugin-better": "^0.1.5",
     "gulp": "^3.8.11",
     "istanbul": "^0.3.13",
     "istanbul-coveralls": "^1.0.2",

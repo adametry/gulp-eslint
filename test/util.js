@@ -5,7 +5,7 @@ var File = require('vinyl'),
 	path = require('path'),
 	stream = require('stream'),
 	should = require('should'),
-	eslintUtil = require('eslint/lib/util'),
+	CLIEngine = require('eslint').CLIEngine,
 	util = require('../util');
 
 require('mocha');
@@ -66,10 +66,16 @@ describe('utility methods', function() {
 
 	describe('loadPlugins', function() {
 
-		it('should attempt to load plugins', function() {
+		it('should load plugins', function() {
+
+			util.loadPlugins(['better'], new CLIEngine({}));
+
+		});
+
+		it('should throw if a plugin is not found', function() {
 
 			function loadMissingPlugin() {
-				util.loadPlugins(['missing-plugin']);
+				util.loadPlugins(['missing-plugin'], new CLIEngine({}));
 			}
 			loadMissingPlugin.should.throw('Cannot find module \'eslint-plugin-missing-plugin\'');
 

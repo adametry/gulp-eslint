@@ -4,6 +4,7 @@ var path = require('path'),
 	gutil = require('gulp-util'),
 	objectAssign = require('object-assign'),
 	CLIEngine = require('eslint').CLIEngine,
+	esUtil = require('eslint/lib/util'),
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
 
@@ -35,13 +36,17 @@ exports.isPathIgnored = function(file, options) {
 /**
  * Mimic the CLIEngine::loadPlugins
  */
-exports.loadPlugins = function(pluginNames) {
-	// WARNING: HACK AHEAD!
-	// We can either process text/file, or create a new CLIEngine instance
-	// to make use of the internal plugin cache.
-	//	Creating a new CLIEngine is probably the cheapest approach.
+exports.loadPlugins = function(pluginNames, linter) {
+	// Replicate the cli-engine's internal loadPlugins method;
+	// However, use the fancy new addPlugin method to populate the internal loadedPlugins table
 	if (pluginNames) {
-		void new CLIEngine({plugins: pluginNames});
+		pluginNames.forEach(function loadAndAddPlugin(pluginName) {
+			var pluginNamespace = esUtil.getNamespace(pluginName),
+				pluginNameWithoutPrefix = esUtil.removePluginPrefix(esUtil.removeNameSpace(pluginName)),
+				plugin = require(pluginNamespace + esUtil.PLUGIN_NAME_PREFIX + pluginNameWithoutPrefix);
+			// Use the fancy new addPlugin method...
+			linter.addPlugin(pluginName, plugin);
+		});
 	}
 };
 
