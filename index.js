@@ -6,6 +6,9 @@ var PluginError = require('gulp-util').PluginError;
 var eslint = require('eslint').linter;
 var CLIEngine = require('eslint').CLIEngine;
 var util = require('./util');
+var resolve = require('resolve').sync
+var execSync = require('child_process').execSync;
+var path = require('path');
 
 /**
  * Append eslint result to each file
@@ -47,6 +50,40 @@ function gulpEslint(options) {
 	});
 
 }
+
+/**
+ * Use globally installed eshint
+ */
+gulpEslint.useGlobalModules = function() {
+	try {
+		var globalModulesPath = execSync('npm config get prefix').toString().trim();
+		globalModulesPath = path.join(globalModulesPath, 'lib', 'node_modules');
+
+		var globalEslintPath = resolve('eslint', {
+			basedir: globalModulesPath
+		});
+
+		var globalIgnoredPathsPath = resolve('eslint/lib/ignored-paths', {
+			basedir: globalModulesPath
+		});
+
+		var globalFileFinderPath = resolve('eslint/lib/file-finder', {
+			basedir: globalModulesPath
+		});
+
+		var globalEslint = require(globalEslintPath);
+
+		eslint = globalEslint.linter;
+		CLIEngine = globalEslint.CLIEngine;
+
+		util.useGlobalModules(
+			CLIEngine,
+			require(globalIgnoredPathsPath),
+			require(globalFileFinderPath)
+		);
+	} catch (err) {
+	}
+};
 
 /**
  * Fail when an eslint error is found in eslint results.

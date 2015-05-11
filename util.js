@@ -8,7 +8,14 @@ var path = require('path'),
 	IgnoredPaths = require('eslint/lib/ignored-paths'),
 	FileFinder = require('eslint/lib/file-finder');
 
-var ignoreFileFinder = new FileFinder('.eslintignore');
+/**
+ * Use globally installed eshint
+ */
+exports.useGlobalModules = function(CLIEngine_, IgnoredPaths_, FileFinder_) {
+	CLIEngine = CLIEngine_;
+	IgnoredPaths = IgnoredPaths_;
+	FileFinder = FileFinder_;
+};
 
 /**
  * Mimic the CLIEngine.isPathIgnored,
@@ -16,6 +23,8 @@ var ignoreFileFinder = new FileFinder('.eslintignore');
  */
 exports.isPathIgnored = function(file, options) {
 	var filePath;
+	var ignoreFileFinder = new FileFinder('.eslintignore');
+
 	if (!options.ignore) {
 		return false;
 	}
