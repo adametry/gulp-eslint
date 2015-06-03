@@ -46,7 +46,7 @@
   ],
   "dependencies": {
     "bufferstreams": "1.0.1",
-    "eslint": "^0.21.0",
+    "eslint": "^0.22.1",
     "gulp-util": "^3.0.4",
     "object-assign": "^2.0.0",
     "through2": "^0.6.3"
