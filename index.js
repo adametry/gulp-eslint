@@ -18,6 +18,11 @@ function gulpEslint(options) {
 		var config = linter.getConfigForFile(filePath);
 		util.loadPlugins(config.plugins, linter);
 		var messages = eslint.verify(str, config, filePath);
+		if (options.quiet) {
+			messages = messages.filter(function isError(message) {
+				return message.severity === 2;
+			});
+		}
 		//eslint.reset();
 		return {
 			filePath: filePath,
