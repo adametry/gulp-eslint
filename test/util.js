@@ -12,6 +12,73 @@ require('mocha');
 
 describe('utility methods', function() {
 
+	describe('transform', function() {
+
+		it('should handle files in a stream', function(done) {
+
+			var passedFile = false,
+				streamFile = new File({
+					path: 'test/fixtures/invalid.js',
+					contents: new Buffer('document = "abuse read-only value";')
+				}),
+				stream = util.transform(function(file, enc, cb) {
+					should.exist(file);
+					should.exist(cb);
+					passedFile = (streamFile === file);
+					cb();
+				})
+				.on('error', done)
+				.on('finish', function() {
+					passedFile.should.equal(true);
+					done();
+				});
+
+			stream.end(streamFile);
+
+		});
+
+		it('should flush when stream is ending', function(done) {
+
+			var count = 0,
+				finalCount = 0,
+				files = [
+					new File({
+						path: 'test/fixtures/invalid.js',
+						contents: new Buffer('document = "abuse read-only value";')
+					}),
+					new File({
+						path: 'test/fixtures/undeclared.js',
+						contents: new Buffer('x = 0;')
+					})
+				],
+				stream = util.transform(function(file, enc, cb) {
+					should.exist(file);
+					should.exist(cb);
+					count += 1;
+					cb();
+				}, function(cb) {
+					should.exist(cb);
+					count.should.equal(files.length);
+					stream._writableState.ending.should.equal(true);
+					finalCount = count;
+					cb();
+				})
+				.on('error', done)
+				.on('finish', function() {
+					finalCount.should.equal(files.length);
+					done();
+				});
+
+			files.forEach(function(file) {
+				stream.write(file);
+			});
+
+			stream.end();
+
+		});
+
+	});
+
 	describe('isPathIgnored', function() {
 
 		it('should return false if "ignore" option is not defined or truthy', function(done) {

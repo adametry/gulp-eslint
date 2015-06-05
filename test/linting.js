@@ -6,7 +6,6 @@ var eslint = require('../');
 var stream = require('stream');
 var File = require('vinyl');
 var should = require('should');
-var through = require('through2');
 
 require('mocha');
 
@@ -82,7 +81,8 @@ describe('Gulp eslint plugin', function() {
 			should.exist(file);
 			should.ok(file.isStream());
 
-			file.contents.pipe(through(function() {
+			var contentStream = new stream.Transform({objectMode: true});
+			contentStream._transform = function() {
 				should.exist(file.eslint);
 
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
@@ -91,7 +91,9 @@ describe('Gulp eslint plugin', function() {
 				.and.have.property('ruleId', 'strict');
 
 				fileCount++;
-			}));
+			};
+
+			file.contents.pipe(contentStream);
 		});
 
 		lintStream.pipe(new stream.PassThrough({objectMode: true}))

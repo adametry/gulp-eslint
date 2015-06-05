@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.13.2
+
+* Remove dependency on through2 to address highWatermark overflow issue (#36)
+
 ## 0.13.1
 
 * Update dependencies

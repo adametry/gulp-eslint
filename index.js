@@ -1,6 +1,5 @@
 'use strict';
 
-var through = require('through2');
 var BufferStreams = require('bufferstreams');
 var PluginError = require('gulp-util').PluginError;
 var eslint = require('eslint').linter;
@@ -26,7 +25,7 @@ function gulpEslint(options) {
 		};
 	}
 
-	return through.obj(function(file, enc, cb) {
+	return util.transform(function(file, enc, cb) {
 		// remove base path from file path before calling isPathIgnored
 		if (util.isPathIgnored(file, linter.options) || file.isNull()) {
 			cb(null, file);
@@ -45,7 +44,6 @@ function gulpEslint(options) {
 			cb(null, file);
 		}
 	});
-
 }
 
 /**
@@ -53,7 +51,7 @@ function gulpEslint(options) {
  */
 gulpEslint.failOnError = function() {
 
-	return through.obj(function(file, enc, output) {
+	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
 
@@ -82,7 +80,7 @@ gulpEslint.failOnError = function() {
 gulpEslint.failAfterError = function() {
 	var errorCount = 0;
 
-	return through.obj(function(file, enc, cb) {
+	return util.transform(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
 		messages.forEach(function(message) {
 			if (util.isErrorMessage(message)) {
@@ -113,7 +111,7 @@ gulpEslint.format = function(formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return through.obj(function(file, enc, cb) {
+	return util.transform(function(file, enc, cb) {
 		if (file.eslint) {
 			results.push(file.eslint);
 		}
@@ -136,7 +134,7 @@ gulpEslint.formatEach = function(formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return through.obj(function(file, enc, cb) {
+	return util.transform(function(file, enc, cb) {
 		var error = null;
 		if (file.eslint) {
 			try {

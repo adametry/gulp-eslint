@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path'),
+	TransformStream = require('stream').Transform,
 	gutil = require('gulp-util'),
 	objectAssign = require('object-assign'),
 	CLIEngine = require('eslint').CLIEngine,
@@ -9,6 +10,20 @@ var path = require('path'),
 	FileFinder = require('eslint/lib/file-finder');
 
 var ignoreFileFinder = new FileFinder('.eslintignore');
+
+/**
+ * Convenience method for creating a transform stream in object mode
+ */
+exports.transform = function(transform, flush) {
+	var stream = new TransformStream({
+		objectMode: true
+	});
+	stream._transform = transform;
+	if (typeof flush === 'function') {
+		stream._flush = flush;
+	}
+	return stream;
+};
 
 /**
  * Mimic the CLIEngine.isPathIgnored,
