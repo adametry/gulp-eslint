@@ -12,7 +12,8 @@ describe('gulp-eslint failOnError', function() {
 		var lintStream = eslint({
 			envs: ['browser'],
 			rules: {
-				'no-undef': 2
+				'no-undef': 2,
+				'strict': 0
 			}
 		});
 
@@ -37,7 +38,7 @@ describe('gulp-eslint failOnError', function() {
 
 	it('should pass a file if only warnings are found', function(done) {
 
-		var lintStream = eslint({rules: {'no-undef': 1}});
+		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failOnError())
 		.on('error', done)
@@ -53,7 +54,8 @@ describe('gulp-eslint failOnError', function() {
 		var lintStream = eslint({
 			envs: ['browser'],
 			rules: {
-				'no-undef': 2
+				'no-undef': 2,
+				'strict': 0
 			}
 		});
 
@@ -75,7 +77,8 @@ describe('gulp-eslint failOnError', function() {
 		var lintStream = eslint({
 			envs: ['browser'],
 			rules: {
-				'no-undef': 2
+				'no-undef': 2,
+				'strict': 0
 			}
 		});
 
@@ -94,7 +97,7 @@ describe('gulp-eslint failOnError', function() {
 	});
 
 	it('should pass when the file stream ends if only warnings are found', function(done) {
-		var lintStream = eslint({rules: {'no-undef': 1}});
+		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failAfterError())
 		.on('error', done)
@@ -107,7 +110,7 @@ describe('gulp-eslint failOnError', function() {
 	});
 
 	it('should handle eslint reports without messages', function(done) {
-		var lintStream = eslint({rules: {'no-undef': 1}});
+		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failAfterError())
 		.on('error', done)

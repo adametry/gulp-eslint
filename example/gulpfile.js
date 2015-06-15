@@ -10,6 +10,7 @@ var scriptsGlobs = ['../test/fixtures/**/*.js'];
  * Simple example of using eslint and a formatter
  * Note: eslint does not write to the console itself.
  * Use format or formatEach to print eslint results.
+ * @returns {stream} gulp file stream
  */
 gulp.task('basic', function() {
 	return gulp.src(scriptsGlobs)
@@ -19,41 +20,42 @@ gulp.task('basic', function() {
 
 /**
  * Inline eslint configuration
+ * @returns {stream} gulp file stream
  */
 gulp.task('inline-config', function() {
 	return gulp.src(scriptsGlobs)
 		.pipe(eslint({
-			"rules": {
-				"no-alert": 0,
-				"no-bitwise": 0,
-				"camelcase": 1,
-				"curly": 1,
-				"eqeqeq": 0,
-				"no-eq-null": 0,
-				"guard-for-in": 1,
-				"no-empty": 1,
-				"no-use-before-define": 0,
-				"no-obj-calls": 2,
-				"no-unused-vars": 0,
-				"new-cap": 1,
-				"no-shadow": 0,
-				"strict": 2,
-				"no-invalid-regexp": 2,
-				"no-comma-dangle": 2,
-				"no-undef": 1,
-				"no-new": 1,
-				"no-extra-semi": 1,
-				"no-debugger": 2,
-				"no-caller": 1,
-				"semi": 1,
-				"quotes": 0,
-				"no-unreachable": 2
+			'rules': {
+				'no-alert': 0,
+				'no-bitwise': 0,
+				'camelcase': 1,
+				'curly': 1,
+				'eqeqeq': 0,
+				'no-eq-null': 0,
+				'guard-for-in': 1,
+				'no-empty': 1,
+				'no-use-before-define': 0,
+				'no-obj-calls': 2,
+				'no-unused-vars': 0,
+				'new-cap': 1,
+				'no-shadow': 0,
+				'strict': 2,
+				'no-invalid-regexp': 2,
+				'no-comma-dangle': 2,
+				'no-undef': 1,
+				'no-new': 1,
+				'no-extra-semi': 1,
+				'no-debugger': 2,
+				'no-caller': 1,
+				'semi': 1,
+				'quotes': 0,
+				'no-unreachable': 2
 			},
-			"globals": {
-				"$": false
+			'globals': {
+				'$': false
 			},
-			"env": {
-				"node": true
+			'env': {
+				'node': true
 			}
 		}))
 		.pipe(eslint.format());
@@ -61,6 +63,7 @@ gulp.task('inline-config', function() {
 
 /**
  * Load configuration file
+ * @returns {stream} gulp file stream
  */
 gulp.task('load-config', function() {
 	return gulp.src(scriptsGlobs)
@@ -72,6 +75,7 @@ gulp.task('load-config', function() {
 
 /**
  * Shorthand way to load a configuration file
+ * @returns {stream} gulp file stream
  */
 gulp.task('load-config-shorthand', function() {
 	return gulp.src(scriptsGlobs)
@@ -81,6 +85,7 @@ gulp.task('load-config-shorthand', function() {
 
 /**
  * Using various formatters
+ * @returns {stream} gulp file stream
  */
 gulp.task('eslint-formatter', function() {
 	return gulp.src(scriptsGlobs)
@@ -93,6 +98,7 @@ gulp.task('eslint-formatter', function() {
 
 /**
  * Using eslint with streaming files
+ * @returns {stream} gulp file stream
  */
 gulp.task('stream', function() {
 	return gulp.src(scriptsGlobs, { buffer: false })

@@ -2,27 +2,21 @@
 
 var BufferStreams = require('bufferstreams');
 var PluginError = require('gulp-util').PluginError;
-var eslint = require('eslint').linter;
 var CLIEngine = require('eslint').CLIEngine;
 var util = require('./util');
 
 /**
  * Append eslint result to each file
+ * @param {(object|string)} [options] - Configure rules, env, global, and other options for running eslint
+ * @returns {stream} gulp file stream
  */
 function gulpEslint(options) {
 	options = util.migrateOptions(options);
 	var linter = new CLIEngine(options);
 
 	function verify(filePath, str) {
-		// mimic CLIEngine::processFile
-		var config = linter.getConfigForFile(filePath);
-		util.loadPlugins(config.plugins, linter);
-		var messages = eslint.verify(str, config, filePath);
-		//eslint.reset();
-		return {
-			filePath: filePath,
-			messages: messages
-		};
+		// woot! eslint now supports text processing with localized config files!
+		return linter.executeOnText(str, filePath).results[0];
 	}
 
 	return util.transform(function(file, enc, cb) {
@@ -48,6 +42,7 @@ function gulpEslint(options) {
 
 /**
  * Fail when an eslint error is found in eslint results.
+ * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
 
@@ -76,6 +71,7 @@ gulpEslint.failOnError = function() {
 
 /**
  * Fail when the stream ends if any eslint error(s) occurred
+ * @returns {stream} gulp file stream
  */
 gulpEslint.failAfterError = function() {
 	var errorCount = 0;
@@ -105,6 +101,9 @@ gulpEslint.failAfterError = function() {
 
 /**
  * Wait until all files have been linted and format all results at once.
+ * @param {(string|function)} [formatter=stylish] - The name or function for a eslint result formatter
+ * @param {(function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ * @returns {stream} gulp file stream
  */
 gulpEslint.format = function(formatter, writable) {
 	var results = [];
@@ -129,6 +128,9 @@ gulpEslint.format = function(formatter, writable) {
 
 /**
  * Format the results of each file individually.
+ * @param {(string|function)} [formatter=stylish] - The name or function for a eslint result formatter
+ * @param {(function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ * @returns {stream} gulp file stream
  */
 gulpEslint.formatEach = function(formatter, writable) {
 	formatter = util.resolveFormatter(formatter);

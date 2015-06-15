@@ -36,6 +36,8 @@ describe('gulp-eslint format', function() {
 	/**
 	 * Custom eslint formatted result writer for counting write attempts
 	 * rather than writing to the console.
+	 * @param {string} message - a message to count as written
+	 * @returns {undefined} void
 	 */
 	function outputWriter(message) {
 		should.exist(message);
@@ -45,6 +47,9 @@ describe('gulp-eslint format', function() {
 
 	/**
 	 * Custom eslint formatted result writer that will throw an exception
+	 * @exception Error Always thrown to test error handling in writers
+	 * @param {string} message - a message to trigger an error
+	 * @returns {undefined} void
 	 */
 	function failWriter(message) {
 		var error = new Error('Writer Test Error');
@@ -56,6 +61,9 @@ describe('gulp-eslint format', function() {
 		/**
 		 * Custom eslint result formatter for counting format passes and
 		 * returning a expected formatted result message.
+		 * @param {array} results - eslint results
+		 * @param {object} config - format config
+		 * @returns {string} formatted results
 		 */
 		function formatResults(results, config) {
 			should.exist(config);

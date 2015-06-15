@@ -21,7 +21,7 @@ describe('utility methods', function() {
 					path: 'test/fixtures/invalid.js',
 					contents: new Buffer('document = "abuse read-only value";')
 				}),
-				stream = util.transform(function(file, enc, cb) {
+				testStream = util.transform(function(file, enc, cb) {
 					should.exist(file);
 					should.exist(cb);
 					passedFile = (streamFile === file);
@@ -33,7 +33,7 @@ describe('utility methods', function() {
 					done();
 				});
 
-			stream.end(streamFile);
+			testStream.end(streamFile);
 
 		});
 
@@ -51,7 +51,7 @@ describe('utility methods', function() {
 						contents: new Buffer('x = 0;')
 					})
 				],
-				stream = util.transform(function(file, enc, cb) {
+				testStream = util.transform(function(file, enc, cb) {
 					should.exist(file);
 					should.exist(cb);
 					count += 1;
@@ -59,7 +59,7 @@ describe('utility methods', function() {
 				}, function(cb) {
 					should.exist(cb);
 					count.should.equal(files.length);
-					stream._writableState.ending.should.equal(true);
+					testStream._writableState.ending.should.equal(true);
 					finalCount = count;
 					cb();
 				})
@@ -70,10 +70,10 @@ describe('utility methods', function() {
 				});
 
 			files.forEach(function(file) {
-				stream.write(file);
+				testStream.write(file);
 			});
 
-			stream.end();
+			testStream.end();
 
 		});
 
@@ -127,25 +127,6 @@ describe('utility methods', function() {
 			result.should.equal(false);
 
 			done();
-		});
-
-	});
-
-	describe('loadPlugins', function() {
-
-		it('should load plugins', function() {
-
-			util.loadPlugins(['better'], new CLIEngine({}));
-
-		});
-
-		it('should throw if a plugin is not found', function() {
-
-			function loadMissingPlugin() {
-				util.loadPlugins(['missing-plugin'], new CLIEngine({}));
-			}
-			loadMissingPlugin.should.throw('Cannot find module \'eslint-plugin-missing-plugin\'');
-
 		});
 
 	});
@@ -299,11 +280,11 @@ describe('utility methods', function() {
 				testValue = 'Formatted Output',
 				write = util.resolveWritable(writable);
 
-			writable._write = function writeChunk(chunk, encoding, done) {
+			writable._write = function writeChunk(chunk, encoding, cb) {
 				should.exist(chunk);
 				chunk.should.equal(testValue);
 				written = true;
-				done();
+				cb();
 			};
 
 			writable

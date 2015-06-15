@@ -1,43 +1,44 @@
 env:
-	node: true
+  node: true
 
 rules:
-	indent: 2
-	brace-style: [2, "1tbs"]
-	comma-style: [2, "last"]
-	default-case: 2
-	func-style: [2, "declaration"]
-	no-floating-decimal: 2
-	no-nested-ternary: 2
-	no-undefined: 2
-	radix: 2
-	space-after-function-name: [2, "never"]
-	space-after-keywords: [2, "always"]
-	space-before-blocks: 2
-	spaced-line-comment: [2, "always", { exceptions: ["-"]}]
-	valid-jsdoc: [2, { prefer: { "return": "returns" }}]
-	wrap-iife: 2
-	guard-for-in: 2
-	strict: [2, "global"]
-	no-alert: 2
-	camelcase: 1
-	curly: [2, "all"]
-	eqeqeq: [2, "allow-null"]
-	no-empty: 2
-	no-underscore-dangle: 1
-	no-use-before-define: 2
-	no-obj-calls: 2
-	no-unused-vars: [0, {"vars": "local", "args": "after-used"}]
-	new-cap: 2
-	no-shadow: 1
-	no-invalid-regexp: 2
-	comma-dangle: [2, "never"]
-	no-undef: 2
-	no-new: 2
-	no-extra-semi: 2
-	no-debugger: 2
-	no-caller: 1
-	semi: 2
-	quotes: [2, "single", "avoid-escape"]
-	no-unreachable: 2
-	eol-last: 1
+  indent: [2, 'tab']
+  brace-style: [2, "1tbs"]
+  comma-style: [2, "last"]
+  default-case: 2
+  func-style: [2, "declaration"]
+  no-floating-decimal: 2
+  no-nested-ternary: 2
+  no-undefined: 2
+  radix: 2
+  space-after-function-name: [2, "never"]
+  space-after-keywords: [2, "always"]
+  space-before-blocks: 2
+  spaced-line-comment: [2, "always", { exceptions: ["-"]}]
+  valid-jsdoc: [1, { prefer: { "return": "returns" }}]
+  wrap-iife: 2
+  guard-for-in: 2
+  strict: [2, "global"]
+  global-strict: 0
+  no-alert: 2
+  camelcase: 1
+  curly: [2, "all"]
+  eqeqeq: [2, "allow-null"]
+  no-empty: 2
+  no-underscore-dangle: 0
+  no-use-before-define: 2
+  no-obj-calls: 2
+  no-unused-vars: [0, {"vars": "local", "args": "after-used"}]
+  new-cap: 2
+  no-shadow: 1
+  no-invalid-regexp: 2
+  comma-dangle: [2, "never"]
+  no-undef: 2
+  no-new: 2
+  no-extra-semi: 2
+  no-debugger: 2
+  no-caller: 1
+  semi: 2
+  quotes: [1, "single", "avoid-escape"]
+  no-unreachable: 2
+  eol-last: 1

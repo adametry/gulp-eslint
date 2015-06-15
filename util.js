@@ -13,6 +13,9 @@ var ignoreFileFinder = new FileFinder('.eslintignore');
 
 /**
  * Convenience method for creating a transform stream in object mode
+ * @param {function} transform - An async function that is called for each stream chunk
+ * @param {function} [flush] - An async function that is called before closing the stream
+ * @returns {stream} A transform stream
  */
 exports.transform = function(transform, flush) {
 	var stream = new TransformStream({
@@ -28,6 +31,9 @@ exports.transform = function(transform, flush) {
 /**
  * Mimic the CLIEngine.isPathIgnored,
  * but resolve .eslintignore based on file's directory rather than process.cwd()
+ * @param {object} file - file with a "path" property
+ * @param {object} options - linter options
+ * @returns {boolean} Whether the path is ignored
  */
 exports.isPathIgnored = function(file, options) {
 	var filePath;
@@ -49,24 +55,9 @@ exports.isPathIgnored = function(file, options) {
 };
 
 /**
- * Mimic the CLIEngine::loadPlugins
- */
-exports.loadPlugins = function(pluginNames, linter) {
-	// Replicate the cli-engine's internal loadPlugins method;
-	// However, use the fancy new addPlugin method to populate the internal loadedPlugins table
-	if (pluginNames) {
-		pluginNames.forEach(function loadAndAddPlugin(pluginName) {
-			var pluginNamespace = esUtil.getNamespace(pluginName),
-				pluginNameWithoutPrefix = esUtil.removePluginPrefix(esUtil.removeNameSpace(pluginName)),
-				plugin = require(pluginNamespace + esUtil.PLUGIN_NAME_PREFIX + pluginNameWithoutPrefix);
-			// Use the fancy new addPlugin method...
-			linter.addPlugin(pluginName, plugin);
-		});
-	}
-};
-
-/**
  * Create config helper to merge various config sources
+ * @param {object} options - options to migrate
+ * @returns {object} migrated options
  */
 exports.migrateOptions = function migrateOptions(options) {
 	if (typeof options === 'string') {
@@ -116,6 +107,8 @@ exports.migrateOptions = function migrateOptions(options) {
 
 /**
  * Resolve writable
+ * @param {object} message - an eslint message
+ * @returns {boolean} whether the message is an error message
  */
 exports.isErrorMessage = function(message) {
 	var level = message.fatal ? 2 : message.severity;
@@ -128,6 +121,8 @@ exports.isErrorMessage = function(message) {
 /**
  * Resolve formatter from unknown type (accepts string or function)
  * @exception TypeError thrown if unable to resolve the formatter type
+ * @param {(string|function)} [formatter=stylish] - A name to resolve as a formatter. If a function is provided, the same function is returned.
+ * @returns {function} An eslint formatter
  */
 exports.resolveFormatter = function(formatter) {
 	// use eslint to look up formatter references
@@ -146,6 +141,8 @@ exports.resolveFormatter = function(formatter) {
 
 /**
  * Resolve writable
+ * @param {(function|stream)} [writable=gulp-util.log] - A stream or function to resolve as a format writer
+ * @returns {function} A function that writes formatted messages
  */
 exports.resolveWritable = function(writable) {
 	if (!writable) {
@@ -158,6 +155,10 @@ exports.resolveWritable = function(writable) {
 
 /**
  * Write formatter results to writable/output
+ * @param {object[]} results - A list of eslint results
+ * @param {function} formatter - A function used to format eslint results
+ * @param {function} writable - A function used to write formatted eslint results
+ * @returns {undefined} void
  */
 exports.writeResults = function(results, formatter, writable) {
 	var config;
