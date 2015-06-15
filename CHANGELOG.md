@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.14.0
+
+* Bump eslint dependency to ^0.23.0
+* Remove no-longer-needed code
+* Fix project eslintrc syntax
+
 ## 0.13.2
 
 * Remove dependency on through2 to address highWatermark overflow issue (#36)
