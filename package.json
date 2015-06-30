@@ -45,20 +45,20 @@
     }
   ],
   "dependencies": {
-    "bufferstreams": "1.0.1",
-    "eslint": "^0.23.0",
-    "gulp-util": "^3.0.4",
+    "bufferstreams": "1.0.2",
+    "eslint": "^0.24.0",
+    "gulp-util": "^3.0.6",
     "object-assign": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^3.0.1",
+    "babel-eslint": "^3.1.20",
     "eslint-plugin-better": "^0.1.5",
-    "gulp": "^3.8.11",
-    "istanbul": "^0.3.13",
-    "istanbul-coveralls": "^1.0.2",
-    "jscs": "^1.12.0",
-    "mocha": "^2.2.4",
-    "should": "^6.0.1",
+    "gulp": "^3.9.0",
+    "istanbul": "^0.3.17",
+    "istanbul-coveralls": "^1.0.3",
+    "jscs": "^1.13.1",
+    "mocha": "^2.2.5",
+    "should": "^7.0.1",
     "vinyl": "^0.5.0"
   },
   "jscsConfig": {
