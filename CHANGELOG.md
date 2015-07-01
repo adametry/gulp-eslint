@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.0
+
+* Update dependencies
+* Bump eslint dependency to ^0.24.0
+
 ## 0.14.0
 
 * Bump eslint dependency to ^0.23.0
