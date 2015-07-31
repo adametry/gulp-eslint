@@ -37,7 +37,7 @@ describe('Gulp eslint plugin', function() {
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('(() => {\n$.fn.foo = (a) => `${a}b`; }());')
+			contents: new Buffer('(() => {\n\t$.fn.foo = (a) => `${a}b`; }());')
 		}));
 	});
 

@@ -1,6 +1,6 @@
 {
   "name": "gulp-eslint",
-  "version": "0.15.0",
+  "version": "1.0.0-rc-1",
   "description": "A gulp plugin for processing files with eslint",
   "repository": "adametry/gulp-eslint",
   "files": [
@@ -15,6 +15,7 @@
     "pretest": "jscs *.js test/*.js && gulp test",
     "test": "mocha",
     "gulp": "gulp",
+    "gulp-example": "gulp --gulpfile=example/gulpfile.js",
     "coverage": "istanbul cover _mocha",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },
@@ -38,21 +39,15 @@
   "contributors": [
     "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/adametry/gulp-eslint/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "dependencies": {
     "bufferstreams": "1.0.2",
-    "eslint": "^0.24.0",
+    "eslint": "^1.0.0-rc-3",
     "gulp-util": "^3.0.6",
     "object-assign": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^3.1.20",
-    "eslint-plugin-better": "^0.1.5",
     "gulp": "^3.9.0",
     "istanbul": "^0.3.17",
     "istanbul-coveralls": "^1.0.3",

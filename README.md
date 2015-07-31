@@ -107,7 +107,7 @@ Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [r
 {
 	"rules":{
 		"camelcase": 1,
-		"no-comma-dangle": 2,
+		"comma-dangle": 2,
 		"quotes": 0
 	}
 }

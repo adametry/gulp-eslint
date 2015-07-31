@@ -11,10 +11,9 @@ rules:
   no-nested-ternary: 2
   no-undefined: 2
   radix: 2
-  space-after-function-name: [2, "never"]
+  space-before-function-paren: [2, "never"]
   space-after-keywords: [2, "always"]
   space-before-blocks: 2
-  spaced-line-comment: [2, "always", { exceptions: ["-"]}]
   valid-jsdoc: [1, { prefer: { "return": "returns" }}]
   wrap-iife: 2
   guard-for-in: 2

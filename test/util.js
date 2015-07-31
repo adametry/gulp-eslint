@@ -195,8 +195,8 @@ describe('utility methods', function() {
 
 			var rulePaths = ['Rules/Dir'],
 				options = util.migrateOptions({
-				rulesdir: rulePaths
-			});
+					rulesdir: rulePaths
+				});
 			should.exist(options.rulePaths);
 			options.rulePaths.should.equal(rulePaths);
 
