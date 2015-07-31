@@ -41,7 +41,7 @@ gulp.task('inline-config', function() {
 				'no-shadow': 0,
 				'strict': 2,
 				'no-invalid-regexp': 2,
-				'no-comma-dangle': 2,
+				'comma-dangle': 2,
 				'no-undef': 1,
 				'no-new': 1,
 				'no-extra-semi': 1,
