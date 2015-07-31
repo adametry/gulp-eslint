@@ -1,4 +1,4 @@
-/*global describe, it, beforeEach */
+/* global describe, it, beforeEach */
 'use strict';
 
 var File = require('vinyl'),
