@@ -14,7 +14,7 @@ rules:
   space-before-function-paren: [2, "never"]
   space-after-keywords: [2, "always"]
   space-before-blocks: 2
-  valid-jsdoc: [1, { prefer: { "return": "returns" }}]
+  valid-jsdoc: [1, { requireReturn: false, prefer: { return": "returns" }}]
   wrap-iife: 2
   guard-for-in: 2
   strict: [2, "global"]

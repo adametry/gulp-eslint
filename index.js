@@ -7,7 +7,8 @@ var util = require('./util');
 
 /**
  * Append eslint result to each file
- * @param {(object|string)} [options] - Configure rules, env, global, and other options for running eslint
+ *
+ * @param {(Object|String)} [options] - Configure rules, env, global, and other options for running eslint
  * @returns {stream} gulp file stream
  */
 function gulpEslint(options) {
@@ -42,6 +43,7 @@ function gulpEslint(options) {
 
 /**
  * Fail when an eslint error is found in eslint results.
+ *
  * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
@@ -71,6 +73,7 @@ gulpEslint.failOnError = function() {
 
 /**
  * Fail when the stream ends if any eslint error(s) occurred
+ *
  * @returns {stream} gulp file stream
  */
 gulpEslint.failAfterError = function() {
@@ -101,8 +104,9 @@ gulpEslint.failAfterError = function() {
 
 /**
  * Wait until all files have been linted and format all results at once.
- * @param {(string|function)} [formatter=stylish] - The name or function for a eslint result formatter
- * @param {(function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ *
+ * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
+ * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.format = function(formatter, writable) {
@@ -128,8 +132,9 @@ gulpEslint.format = function(formatter, writable) {
 
 /**
  * Format the results of each file individually.
- * @param {(string|function)} [formatter=stylish] - The name or function for a eslint result formatter
- * @param {(function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ *
+ * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
+ * @param {(Function|Stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.formatEach = function(formatter, writable) {
