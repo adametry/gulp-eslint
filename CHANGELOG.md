@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+* Bump eslint dependency to ^1.0.0
+* Update dev-dependencies and js-doc formats
+
 ## 0.15.0
 
 * Update dependencies
