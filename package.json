@@ -47,11 +47,11 @@
     "object-assign": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^3.1.20",
+    "babel-eslint": "^4.0.5",
     "gulp": "^3.9.0",
     "istanbul": "^0.3.17",
     "istanbul-coveralls": "^1.0.3",
-    "jscs": "^1.13.1",
+    "jscs": "^2.0.0",
     "mocha": "^2.2.5",
     "should": "^7.0.1",
     "vinyl": "^0.5.0"
