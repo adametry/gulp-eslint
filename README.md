@@ -81,7 +81,7 @@ Alias: `rulesdir` *(deprecated)*
 
 Type: `String`
 
-Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files). *Note:* This file must have a “.json” file extension.
+Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files).
 
 #### options.reset
 
