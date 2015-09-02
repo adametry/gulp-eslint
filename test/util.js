@@ -214,15 +214,15 @@ describe('utility methods', function() {
 
 	});
 
-	describe('isErrorMessage', function() {
+	describe('isProblemMessage', function() {
 
 		it('should determine severity a "fatal" message flag', function() {
 			var errorMessage = {
 				fatal: true,
 				severity: 0
 			};
-			var isError = util.isErrorMessage(errorMessage);
-			isError.should.equal(true);
+			var isProblem = util.isProblemMessage(errorMessage, 2);
+			isProblem.should.equal(true);
 
 		});
 
@@ -230,8 +230,28 @@ describe('utility methods', function() {
 			var errorMessage = {
 				severity: [2, 1]
 			};
-			var isError = util.isErrorMessage(errorMessage);
-			isError.should.equal(true);
+			var isProblem = util.isProblemMessage(errorMessage, 2);
+			isProblem.should.equal(true);
+
+		});
+
+		it('should consider a warning message a problem with a minLevel of 1', function() {
+			var warningMessage = {
+				fatal: false,
+				severity: 1
+			};
+			var isProblem = util.isProblemMessage(warningMessage, 1);
+			isProblem.should.equal(true);
+
+		});
+
+		it('should not consider a warning message a problem with a minLevel of 2', function() {
+			var warningMessage = {
+				fatal: false,
+				severity: 1
+			};
+			var isProblem = util.isProblemMessage(warningMessage, 2);
+			isProblem.should.equal(false);
 
 		});
 
