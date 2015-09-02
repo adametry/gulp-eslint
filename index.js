@@ -42,18 +42,18 @@ function gulpEslint(options) {
 }
 
 /**
- * Fail when an eslint error is found in eslint results.
+ * Fail when an eslint message is found at or above the minimum level in eslint results
  *
+ * @param {Number} minLevel - The minimum level to consider a failure
  * @returns {stream} gulp file stream
  */
-gulpEslint.failOnError = function() {
-
+function failOnProblem(minLevel) {
 	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
 
 		messages.some(function(message) {
-			if (util.isErrorMessage(message)) {
+			if (util.isProblemMessage(message, minLevel)) {
 				error = new PluginError(
 					'gulp-eslint',
 					{
@@ -69,37 +69,74 @@ gulpEslint.failOnError = function() {
 
 		return output(error, file);
 	});
-};
+}
 
 /**
- * Fail when the stream ends if any eslint error(s) occurred
+ * Fail when the stream ends if any eslint messages occurred at or above the minimum level
  *
+ * @param {Number} minLevel - The minimum level to consider a failure
  * @returns {stream} gulp file stream
  */
-gulpEslint.failAfterError = function() {
-	var errorCount = 0;
+function failAfterProblem(minLevel) {
+	var problemCount = 0;
 
 	return util.transform(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
 		messages.forEach(function(message) {
-			if (util.isErrorMessage(message)) {
-				errorCount++;
+			if (util.isProblemMessage(message, minLevel)) {
+				problemCount++;
 			}
 		});
 		cb(null, file);
 	}, function(cb) {
 		// Only format results if files has been lint'd
-		if (errorCount > 0) {
+		if (problemCount > 0) {
 			this.emit('error', new PluginError(
 				'gulp-eslint',
 				{
 					name: 'ESLintError',
-					message: 'Failed with ' + errorCount + (errorCount === 1 ? ' error' : ' errors')
+					message: 'Failed with ' + problemCount + (problemCount === 1 ? ' problem' : ' problems')
 				}
 			));
 		}
 		cb();
 	});
+}
+
+/**
+ * Fail when an eslint warning or error is found in eslint results
+ *
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.failOnWarning = function() {
+	return failOnProblem(1);
+};
+
+/**
+ * Fail when an eslint error is found in eslint results
+ *
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.failOnError = function() {
+	return failOnProblem(2);
+};
+
+/**
+ * Fail when the stream ends if any eslint warnings or errors occurred
+ *
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.failAfterWarning = function() {
+	return failAfterProblem(1);
+};
+
+/**
+ * Fail when the stream ends if any eslint errors occurred
+ *
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.failAfterError = function() {
+	return failAfterProblem(2);
 };
 
 /**

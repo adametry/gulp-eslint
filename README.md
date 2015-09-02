@@ -170,6 +170,30 @@ gulp.src('**/*.js')
 	.pipe(gulp.dest('../output'));
 ```
 
+### eslint.failOnWarning()
+
+Stop a task/stream if an eslint warning or error has been reported for any file.
+
+```javascript
+// Cause the stream to stop(/fail) before copying an invalid JS file to the output directory
+gulp.src('**/*.js')
+  .pipe(eslint())
+  .pipe(eslint.failOnWarning())
+  .pipe(gulp.dest('../output'));
+```
+
+### eslint.failAfterWarning()
+
+Stop a task/stream if an eslint warning or error has been reported for any file, but wait for all of them to be processed first.
+
+```javascript
+// Cause the stream to stop(/fail) when the stream ends if any eslint warning(s) or error(s) occurred.
+gulp.src('**/*.js')
+  .pipe(eslint())
+  .pipe(eslint.failAfterWarning())
+  .pipe(gulp.dest('../output'));
+```
+
 ### eslint.format(formatter, output)
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
@@ -196,7 +220,7 @@ eslint.format();
 
 // write messages to stdout
 eslint.format('junit', process.stdout)
-``` 
+```
 
 ### eslint.formatEach(formatter, output)
 

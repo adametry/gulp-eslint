@@ -112,14 +112,15 @@ exports.migrateOptions = function migrateOptions(options) {
  * Resolve writable
  *
  * @param {Object} message - an eslint message
+ * @param {Number} minLevel - the minimum level to consider a problem
  * @returns {Boolean} whether the message is an error message
  */
-exports.isErrorMessage = function(message) {
+exports.isProblemMessage = function(message, minLevel) {
 	var level = message.fatal ? 2 : message.severity;
 	if (Array.isArray(level)) {
 		level = level[0];
 	}
-	return (level > 1);
+	return (level >= minLevel);
 };
 
 /**
