@@ -1,4 +1,4 @@
-# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint.svg)](https://coveralls.io/r/adametry/gulp-eslint)
+# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://coveralls.io/repos/adametry/gulp-eslint/badge.svg?branch=master&service=github)](https://coveralls.io/github/adametry/gulp-eslint?branch=master)
 
 > A [gulp](http://gulpjs.com/) plugin for [ESLint](http://eslint.org/).
 
