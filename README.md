@@ -69,7 +69,7 @@ gulp.src('js/**/*.js')
 
 Type: `Array`
 
-A list of rules file paths rules to import. For more information about rules, see the ESLint [rules doc](http://eslint.org/docs/rules/).
+A list of rules file paths rules to import. For more information about rules, see [Rules](http://eslint.org/docs/rules/).
 
 Type: `String` *(deprecated)*
 
@@ -81,7 +81,7 @@ Alias: `rulesdir` *(deprecated)*
 
 Type: `String`
 
-Path to the ESLint rules configuration file. For more information, see the ESLint CLI [configFile option](http://eslint.org/docs/user-guide/command-line-interface) and [Configuring ESLint](http://eslint.org/docs/user-guide/configuring#using-configuration-files). *Note:* This file must have a “.json” file extension.
+Path to the ESLint rules configuration file. For more information, see the ESLint CLI [config option](http://eslint.org/docs/user-guide/command-line-interface#c-config) and [Using Configuration Files](http://eslint.org/docs/user-guide/configuring#using-configuration-files). *Note:* This file must have a “.json” file extension.
 
 #### options.reset
 
@@ -174,7 +174,7 @@ gulp.src('**/*.js')
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no ESLint results to format.
 
-The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
+The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [ESLint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
 // use the default "stylish" ESLint formatter
