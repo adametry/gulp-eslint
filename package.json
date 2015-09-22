@@ -1,6 +1,6 @@
 {
   "name": "gulp-eslint",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A gulp plugin for processing files with eslint",
   "repository": "adametry/gulp-eslint",
   "files": [
@@ -42,12 +42,12 @@
   "license": "MIT",
   "dependencies": {
     "bufferstreams": "1.0.2",
-    "eslint": "^1.0.0",
+    "eslint": "^1.5.1",
     "gulp-util": "^3.0.6",
     "object-assign": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^4.0.5",
+    "babel-eslint": "^4.1.1",
     "gulp": "^3.9.0",
     "istanbul": "^0.3.17",
     "istanbul-coveralls": "^1.0.3",

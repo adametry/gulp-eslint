@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+* Bump eslint dependency to ^1.5.1
+
 ## 1.0.0
 
 * Bump eslint dependency to ^1.0.0
