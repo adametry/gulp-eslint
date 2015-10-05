@@ -47,6 +47,7 @@ function gulpEslint(options) {
  * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
+
 	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
