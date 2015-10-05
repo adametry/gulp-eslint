@@ -50,20 +50,6 @@ describe('gulp-eslint failOnError', function() {
 		}));
 	});
 
-	it('should pass a file if warnings are under threshold', function(done) {
-
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
-
-		lintStream.pipe(eslint.failOnError({maxWarnings: 3}))
-		.on('error', done)
-		.on('finish', done);
-
-		lintStream.end(new File({
-			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0; y = 0;')
-		}));
-	});
-
 	it('should fail when the file stream ends if an error is found', function(done) {
 		var lintStream = eslint({
 			envs: ['browser'],
