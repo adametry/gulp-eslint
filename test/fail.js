@@ -64,28 +64,6 @@ describe('gulp-eslint failOnError', function() {
 		}));
 	});
 
-	it('should fail immediately if too many warnings when using failOnError', function(done) {
-
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
-
-		lintStream.pipe(eslint.failOnError({maxWarnings: 2}))
-		.on('error', function(err) {
-			should.exist(err);
-			err.name.should.equal('ESLintError');
-			err.message.should.equal('Failed because of too many warnings. ' +
-										'Found 2 warnings, threshold is 2.');
-			done();
-		})
-		.on('end', function() {
-			done(new Error('An error was not thrown before ending'));
-		});
-
-		lintStream.end(new File({
-			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0; y = 0;')
-		}));
-	});
-
 	it('should fail when the file stream ends if an error is found', function(done) {
 		var lintStream = eslint({
 			envs: ['browser'],
@@ -145,10 +123,26 @@ describe('gulp-eslint failOnError', function() {
 		}));
 	});
 
+	it('should handle eslint reports without messages', function(done) {
+		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
+
+		lintStream.pipe(eslint.failAfterError())
+		.on('error', done)
+		.on('finish', done);
+
+		lintStream.end(new File({
+			path: 'test/fixtures/invalid.js',
+			contents: new Buffer('x = 0;')
+		}));
+	});
+
+});
+
+describe('gulp-eslint failAfterWarnings', function() {
 	it('should pass when the file stream ends if too few warnings found', function(done) {
 		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
 
-		lintStream.pipe(eslint.failAfterError({maxWarnings: 3}))
+		lintStream.pipe(eslint.failAfterWarnings(3))
 		.on('error', done)
 		.on('finish', done);
 
@@ -167,7 +161,7 @@ describe('gulp-eslint failOnError', function() {
 			}
 		});
 
-		lintStream.pipe(eslint.failAfterError({maxWarnings: 1}).on('error', function(err) {
+		lintStream.pipe(eslint.failAfterWarnings(1).on('error', function(err) {
 			should.exists(err);
 			err.message.should.equal('Failed because of too many warnings. ' +
 										'Found 2 warnings, threshold is 1.');
@@ -179,19 +173,6 @@ describe('gulp-eslint failOnError', function() {
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('x = 0; y = 0;')
-		}));
-	});
-
-	it('should handle eslint reports without messages', function(done) {
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
-
-		lintStream.pipe(eslint.failAfterError())
-		.on('error', done)
-		.on('finish', done);
-
-		lintStream.end(new File({
-			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0;')
 		}));
 	});
 

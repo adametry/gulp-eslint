@@ -44,19 +44,12 @@ function gulpEslint(options) {
 /**
  * Fail when an eslint error is found in eslint results.
  *
- * @param {Object} [options] - Configures options for failing
  * @returns {stream} gulp file stream
  */
-gulpEslint.failOnError = function(options) {
-	var maxWarnings = -1;
-	if (options && options.maxWarnings) {
-		maxWarnings = options.maxWarnings;
-	}
-
+gulpEslint.failOnError = function() {
 	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
-			error = null,
-			warningCount = 0;
+			error = null;
 
 		messages.some(function(message) {
 			if (util.isErrorMessage(message)) {
@@ -70,20 +63,6 @@ gulpEslint.failOnError = function(options) {
 					}
 				);
 				return true;
-			} else if (maxWarnings > -1 && util.isWarningMessage(message)) {
-				warningCount++;
-				if (warningCount >= maxWarnings) {
-					error = new PluginError(
-						'gulp-eslint',
-						{
-							name: 'ESLintError',
-							message: 'Failed because of too many warnings. ' +
-									'Found ' + warningCount + (warningCount === 1 ? ' warning' : ' warnings') +
-									', threshold is ' + maxWarnings + '.'
-						}
-					);
-					return true;
-				}
 			}
 		});
 
@@ -96,22 +75,14 @@ gulpEslint.failOnError = function(options) {
  *
  * @returns {stream} gulp file stream
  */
-gulpEslint.failAfterError = function(options) {
-	var errorCount = 0,
-		warningCount = 0,
-		maxWarnings = -1;
-
-	if (options && options.maxWarnings) {
-		maxWarnings = options.maxWarnings;
-	}
+gulpEslint.failAfterError = function() {
+	var errorCount = 0;
 
 	return util.transform(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
 		messages.forEach(function(message) {
 			if (util.isErrorMessage(message)) {
 				errorCount++;
-			} else if (maxWarnings > -1 && util.isWarningMessage(message)) {
-				warningCount++;
 			}
 		});
 		cb(null, file);
@@ -126,7 +97,23 @@ gulpEslint.failAfterError = function(options) {
 				}
 			));
 		}
-		if (maxWarnings > -1 && warningCount >= maxWarnings) {
+		cb();
+	});
+};
+
+gulpEslint.failAfterWarnings = function(maxWarnings) {
+	var warningCount = 0;
+
+	return util.transform(function(file, enc, cb) {
+		var messages = file.eslint && file.eslint.messages || [];
+		messages.forEach(function(message) {
+			if (util.isWarningMessage(message)) {
+				warningCount++;
+			}
+		});
+		cb(null, file);
+	}, function(cb) {
+		if (warningCount >= maxWarnings) {
 			this.emit('error', new PluginError(
 				'gulp-eslint',
 				{
