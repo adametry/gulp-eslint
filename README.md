@@ -169,7 +169,7 @@ gulp.src('**/*.js')
 	.pipe(eslint.failAfterError())
 	.pipe(gulp.dest('../output'));
 ```
-### eslint.failOnWarning(maxWarnings)
+### eslint.failAfterWarnings(maxWarnings)
 
 Stop a task/stream if too many warnings have been reported.
 
