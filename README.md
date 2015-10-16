@@ -218,3 +218,16 @@ Eslint will also detect an `.eslintignore` file when a directory passes through 
 ```javascript
 ['**/*.min.js','output/**/*']
 ```
+
+##Error Event Handler
+
+To catch error events and pass them to a tool like `gulp-notify` it is possible to do the following on either `failAfterError` or `failOnError`.
+
+```javascript
+.pipe(eslint.failOnError().on('error', function(error) {
+	notify({title: error.name, message: error.message});
+});
+```
+
+`failOnError` will pass a specific error object containing `name`, `message`, `fileName`, and `lineNumber`.
+`failAfterError` will pass a less specific error object containing only `name`, and `message`.
