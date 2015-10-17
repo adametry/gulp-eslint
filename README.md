@@ -69,7 +69,7 @@ gulp.src('js/**/*.js')
 
 Type: `Array`
 
-A list of rules file paths rules to import. For more information about rules, see the eslint [rules doc](https://github.com/eslint/eslint/wiki/Rules).
+A list of rules file paths rules to import. For more information about rules, see the ESLint [rules](http://eslint.org/docs/rules/).
 
 Type: `String` *(deprecated)*
 
@@ -81,19 +81,19 @@ Alias: `rulesdir` *(deprecated)*
 
 Type: `String`
 
-Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files).
+Path to the ESLint rules configuration file. For more information, see the ESLint CLI [config option](http://eslint.org/docs/user-guide/command-line-interface#c-config) and [Using Configuration Files](http://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 #### options.reset
 
 Type: `Boolean`
 
-When true, eslint will not include its default set of rules when configured.
+When true, ESLint will not include its default set of rules when configured.
 
 #### options.useEslintrc
 
 Type: `Boolean`
 
-When false, eslint will not load [.eslintrc](http://eslint.org/docs/configuring/).
+When false, ESLint will not load (http://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 Alias: `eslintrc` *(deprecated)*
 
@@ -101,7 +101,7 @@ Alias: `eslintrc` *(deprecated)*
 
 Type: `Object`
 
-Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [rules](http://eslint.org/docs/rules/).
+Set [configuration](http://eslint.org/docs/user-guide/configuring#configuring-rules) of [rules](http://eslint.org/docs/rules/).
 
 ```javascript
 {
@@ -117,7 +117,7 @@ Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [r
 
 Type: `Object`
 
-Specify [globals](http://eslint.org/docs/configuring/#specifying-globals).
+Specify [globals](http://eslint.org/docs/user-guide/configuring#specifying-globals).
 
 ```javascript
 {
@@ -132,11 +132,11 @@ Specify [globals](http://eslint.org/docs/configuring/#specifying-globals).
 
 Type: `Array`
 
-Specify a list of [environments](http://eslint.org/docs/configuring/#specifying-environments) to be applied.
+Specify a list of [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments) to be applied.
 
 Type: `Object`
 
-Specify [environments](http://eslint.org/docs/configuring/#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
+Specify [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
 
 Alias: `env` *(deprecated)*
 
@@ -148,7 +148,7 @@ Shorthand for defining `options.configFile`.
 
 ### eslint.failOnError()
 
-Stop a task/stream if an eslint error has been reported for any file.
+Stop a task/stream if an ESLint error has been reported for any file.
 
 ```javascript
 // Cause the stream to stop(/fail) before copying an invalid JS file to the output directory
@@ -160,7 +160,7 @@ gulp.src('**/*.js')
 
 ### eslint.failAfterError()
 
-Stop a task/stream if an eslint error has been reported for any file, but wait for all of them to be processed first.
+Stop a task/stream if an ESLint error has been reported for any file, but wait for all of them to be processed first.
 
 ```javascript
 // Cause the stream to stop(/fail) when the stream ends if any eslint error(s) occurred.
@@ -174,7 +174,7 @@ gulp.src('**/*.js')
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
 
-The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/nzakas/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
+The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [ESLint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters). If `undefined`, the ESLint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
 // use the default "stylish" eslint formatter
@@ -200,20 +200,20 @@ eslint.format('junit', process.stdout)
 
 ### eslint.formatEach(formatter, output)
 
-Format each linted file individually. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
+Format each linted file individually. This should be used in the stream after piping through `eslint`; otherwise, this will find no ESLint results to format.
 
 The arguments for `formatEach` are the same as the arguments for `format`.
 
 
 ##Configuration
 
-Eslint may be theured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, eslint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached. Any configuration will expand upon the [default eslint configuration](https://github.com/nzakas/eslint/wiki/Rules).
+ESLint may be configured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. When not configured in this way, ESLint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached.
 
 ##Ignore Files
 
-Eslint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/wearefractal/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
+ESLint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/wearefractal/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
 
-Eslint will also detect an `.eslintignore` file when a directory passes through the pipeline. All subsequent files that pass through may be skipped if they match any pattern found in this file. The file may contain multiple globs as strings within a JSON array:
+ESLint will also detect an `.eslintignore` file when a directory passes through the pipeline. All subsequent files that pass through may be skipped if they match any pattern found in this file. The file may contain multiple globs as strings within a JSON array:
 
 ```javascript
 ['**/*.min.js','output/**/*']
