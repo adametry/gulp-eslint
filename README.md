@@ -69,7 +69,7 @@ gulp.src('js/**/*.js')
 
 Type: `Array`
 
-A list of rules file paths rules to import. For more information about rules, see the eslint [rules doc](https://github.com/eslint/eslint/wiki/Rules).
+A list of rules file paths rules to import. For more information about rules, see the ESLint [rules](http://eslint.org/docs/rules/).
 
 Type: `String` *(deprecated)*
 
@@ -81,7 +81,7 @@ Alias: `rulesdir` *(deprecated)*
 
 Type: `String`
 
-Path to the eslint rules configuration file. For more information, see the eslint CLI [configFile option](https://github.com/nzakas/eslint/wiki/Command-line-interface#-c---config) and [configFile file info](https://github.com/nzakas/eslint/wiki/Command-line-interface#configuration-files).
+Path to the eslint rules configuration file. For more information, see the eslint CLI [config option](http://eslint.org/docs/user-guide/command-line-interface#c-config) and [Using Configuration Files](http://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 #### options.reset
 
@@ -93,7 +93,7 @@ When true, eslint will not include its default set of rules when configured.
 
 Type: `Boolean`
 
-When false, eslint will not load [.eslintrc](http://eslint.org/docs/configuring/).
+When false, eslint will not load (http://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 Alias: `eslintrc` *(deprecated)*
 
@@ -101,7 +101,7 @@ Alias: `eslintrc` *(deprecated)*
 
 Type: `Object`
 
-Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [rules](http://eslint.org/docs/rules/).
+Set [configuration](http://eslint.org/docs/user-guide/configuring#configuring-rules) of [rules](http://eslint.org/docs/rules/).
 
 ```javascript
 {
@@ -117,7 +117,7 @@ Set [configuration](http://eslint.org/docs/configuring/#configuring-rules) of [r
 
 Type: `Object`
 
-Specify [globals](http://eslint.org/docs/configuring/#specifying-globals).
+Specify [globals](http://eslint.org/docs/user-guide/configuring#specifying-globals).
 
 ```javascript
 {
@@ -132,11 +132,11 @@ Specify [globals](http://eslint.org/docs/configuring/#specifying-globals).
 
 Type: `Array`
 
-Specify a list of [environments](http://eslint.org/docs/configuring/#specifying-environments) to be applied.
+Specify a list of [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments) to be applied.
 
 Type: `Object`
 
-Specify [environments](http://eslint.org/docs/configuring/#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
+Specify [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
 
 Alias: `env` *(deprecated)*
 
@@ -174,7 +174,7 @@ gulp.src('**/*.js')
 
 Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
 
-The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/nzakas/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
+The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [eslint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters). If `undefined`, the eslint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
 // use the default "stylish" eslint formatter
