@@ -1,15 +1,9 @@
 'use strict';
 
-var path = require('path'),
-	TransformStream = require('stream').Transform,
+var TransformStream = require('stream').Transform,
 	gutil = require('gulp-util'),
 	objectAssign = require('object-assign'),
-	CLIEngine = require('eslint').CLIEngine,
-	esUtil = require('eslint/lib/util'),
-	IgnoredPaths = require('eslint/lib/ignored-paths'),
-	FileFinder = require('eslint/lib/file-finder');
-
-var ignoreFileFinder = new FileFinder('.eslintignore');
+	CLIEngine = require('eslint').CLIEngine;
 
 /**
  * Convenience method for creating a transform stream in object mode
@@ -30,30 +24,25 @@ exports.transform = function(transform, flush) {
 };
 
 /**
- * Mimic the CLIEngine.isPathIgnored,
- * but resolve .eslintignore based on file's directory rather than process.cwd()
+ * Mimic the CLIEngine's createIgnoreResult function,
+ * only without the eslint CLI reference.
  *
  * @param {Object} file - file with a "path" property
- * @param {Object} options - linter options
- * @returns {Boolean} Whether the path is ignored
+ * @returns {Object} An eslint report with an ignore warning
  */
-exports.isPathIgnored = function(file, options) {
-	var filePath;
-	if (!options.ignore) {
-		return false;
-	}
-	if (typeof options.ignorePath !== 'string') {
-		options = {
-			ignore: true,
-			ignorePath: ignoreFileFinder.findInDirectoryOrParents(path.dirname(file.path || ''))
-		};
-	}
-	// set file path relative to the .eslintignore directory or cwd
-	filePath = path.relative(
-		path.dirname(options.ignorePath || '') || process.cwd(),
-		file.path || ''
-	);
-	return IgnoredPaths.load(options).contains(filePath);
+exports.createIgnoreResult = function(file) {
+	return {
+		filePath: file.path,
+		messages: [{
+			fatal: false,
+			severity: 1,
+			message: file.path.indexOf('node_modules/') < 0 ?
+				'File ignored because of your .eslintignore file.' :
+				'File ignored because it is in ./node_modules.'
+		}],
+		errorCount: 0,
+		warningCount: 1
+	};
 };
 
 /**
@@ -114,12 +103,32 @@ exports.migrateOptions = function migrateOptions(options) {
  * @param {Object} message - an eslint message
  * @returns {Boolean} whether the message is an error message
  */
-exports.isErrorMessage = function(message) {
+function isErrorMessage(message) {
 	var level = message.fatal ? 2 : message.severity;
 	if (Array.isArray(level)) {
 		level = level[0];
 	}
 	return (level > 1);
+}
+exports.isErrorMessage = isErrorMessage;
+
+function reduceErrorCount(count, message) {
+	return count + isErrorMessage(message);
+}
+function reduceWarningCount(count, message) {
+	return count + (message.severity === 1);
+}
+exports.getQuietResult = function(result, filter) {
+	if (typeof filter !== 'function') {
+		filter = isErrorMessage;
+	}
+	var messages = result.messages.filter(filter);
+	return {
+		filePath: result.filePath,
+		messages: messages,
+		errorCount: messages.reduce(reduceErrorCount, 0),
+		warningCount: messages.reduce(reduceWarningCount, 0)
+	};
 };
 
 /**
@@ -133,7 +142,7 @@ exports.resolveFormatter = function(formatter) {
 	// use eslint to look up formatter references
 	if (typeof formatter !== 'function') {
 		// load formatter (module, relative to cwd, eslint formatter)
-		formatter =	(new CLIEngine()).getFormatter(formatter) || formatter;
+		formatter =	CLIEngine.getFormatter(formatter) || formatter;
 	}
 
 	if (typeof formatter !== 'function') {

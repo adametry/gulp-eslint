@@ -81,19 +81,16 @@ describe('Gulp eslint plugin', function() {
 			should.exist(file);
 			should.ok(file.isStream());
 
-			var contentStream = new stream.Transform({objectMode: true});
-			contentStream._transform = function() {
-				should.exist(file.eslint);
+			should.exist(file.contents);
+			should.ok(file.contents.readable);
 
-				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-				file.eslint.messages[0]
-				.should.have.properties('message', 'line', 'column')
-				.and.have.property('ruleId', 'strict');
+			should.exist(file.eslint);
+			file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			file.eslint.messages[0]
+			.should.have.properties('message', 'line', 'column')
+			.and.have.property('ruleId', 'strict');
 
-				fileCount++;
-			};
-
-			file.contents.pipe(contentStream);
+			fileCount++;
 		});
 
 		lintStream.pipe(new stream.PassThrough({objectMode: true}))
@@ -128,4 +125,142 @@ describe('Gulp eslint plugin', function() {
 			isDirectory: true
 		}));
 	});
+
+	describe('"warnIgnoredFile" option', function() {
+
+		it('when true, should warn when a file is ignored by .eslintignore', function(done) {
+			eslint({warnIgnoredFile: true})
+			.on('error', done)
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+				file.eslint.messages[0]
+				.should.have.property('message', 'File ignored because of your .eslintignore file.');
+				file.eslint.errorCount.should.equal(0);
+				file.eslint.warningCount.should.equal(1);
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/ignored.js',
+				contents: new Buffer('(function () {ignore = abc;}});')
+			}));
+		});
+
+		it('when true, should warn when a "node_modules" file is ignored', function(done) {
+			eslint({warnIgnoredFile: true})
+			.on('error', done)
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+				file.eslint.messages[0]
+				.should.have.property('message', 'File ignored because it is in ./node_modules.');
+				file.eslint.errorCount.should.equal(0);
+				file.eslint.warningCount.should.equal(1);
+				done();
+			})
+			.end(new File({
+				path: 'node_modules/test/index.js',
+				contents: new Buffer('(function () {ignore = abc;}});')
+			}));
+		});
+
+		it('when not true, should silently ignore files', function(done) {
+			eslint({warnIgnoredFile: false})
+			.on('error', done)
+			.on('data', function(file) {
+				should.exist(file);
+				should.not.exist(file.eslint);
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/ignored.js',
+				contents: new Buffer('(function () {ignore = abc;}});')
+			}));
+		});
+
+	});
+
+	describe('"quiet" option', function() {
+
+		it('when true, should remove warnings', function(done) {
+			eslint({quiet: true, rules: {'no-undef': 1, 'strict': 2}})
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+				file.eslint.errorCount.should.equal(1);
+				file.eslint.warningCount.should.equal(0);
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/invalid.js',
+				contents: new Buffer('function z() { x = 0; }')
+			}));
+		});
+
+		it('when a function, should filter messages', function(done) {
+			function warningsOnly(message) {
+				return message.severity === 1;
+			}
+			eslint({quiet: warningsOnly, rules: {'no-undef': 1, 'strict': 2}})
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+				file.eslint.errorCount.should.equal(0);
+				file.eslint.warningCount.should.equal(1);
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/invalid.js',
+				contents: new Buffer('function z() { x = 0; }')
+			}));
+		});
+
+	});
+
+	describe('"fix" option', function() {
+
+		it('when true, should update buffered contents', function(done) {
+			eslint({fix: true, rules: {'no-extra-semi': 1, 'no-trailing-spaces': 2}})
+			.on('error', done)
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(0);
+				file.eslint.errorCount.should.equal(0);
+				file.eslint.warningCount.should.equal(0);
+				file.eslint.output.should.equal('var x = 0;');
+				file.contents.toString().should.equal('var x = 0;');
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/fixable.js',
+				contents: new Buffer('var x = 0;; ')
+			}));
+		});
+
+		it('when true, should update stream contents', function(done) {
+			eslint({fix: true, rules: {'no-extra-semi': 1, 'no-trailing-spaces': 2}})
+			.on('error', done)
+			.on('data', function(file) {
+				should.exist(file);
+				should.exist(file.eslint);
+				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(0);
+				file.eslint.errorCount.should.equal(0);
+				file.eslint.warningCount.should.equal(0);
+				file.eslint.output.should.equal('var x = 0;');
+				file.contents.toString().should.equal('var x = 0;');
+				done();
+			})
+			.end(new File({
+				path: 'test/fixtures/fixable.js',
+				contents: fs.createReadStream('test/fixtures/fixable.js')
+			}));
+		});
+
+	});
+
 });

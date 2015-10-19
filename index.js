@@ -4,6 +4,7 @@ var BufferStreams = require('bufferstreams');
 var PluginError = require('gulp-util').PluginError;
 var CLIEngine = require('eslint').CLIEngine;
 var util = require('./util');
+var path = require('path');
 
 /**
  * Append eslint result to each file
@@ -13,29 +14,60 @@ var util = require('./util');
  */
 function gulpEslint(options) {
 	options = util.migrateOptions(options);
+	// TODO: config as options.base to support "parsers" and "extends"
 	var linter = new CLIEngine(options);
 
-	function verify(filePath, str) {
-		// woot! eslint now supports text processing with localized config files!
-		return linter.executeOnText(str, filePath).results[0];
+	function verify(str, filePath) {
+		var result = linter.executeOnText(str, filePath).results[0];
+
+		if (options.quiet) {
+			// ignore warnings
+			result = util.getQuietResult(result, options.quiet);
+		}
+
+		return result;
 	}
 
 	return util.transform(function(file, enc, cb) {
-		// remove base path from file path before calling isPathIgnored
-		if (util.isPathIgnored(file, linter.options) || file.isNull()) {
+
+		// Note:
+		// Vinyl files can have an independently defined cwd, but eslint works relative to `process.cwd()`.
+		// (https://github.com/gulpjs/gulp/blob/master/docs/recipes/specifying-a-cwd.md)
+		// Also, eslint doesn't adjust file paths relative to an ancestory .eslintignore path.
+		// E.g., If ../.eslintignore has "foo/*.js", eslint will ignore ./foo/*.js, instead of ../foo/*.js.
+		// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint does this as well...
+
+		var filePath = path.relative(process.cwd(), file.path);
+
+		if (file.isNull()) {
+			// quietly ignore null files (directories)
+			cb(null, file);
+
+		} else if (linter.isPathIgnored(filePath)) {
+
+			if (linter.options.ignore && options.warnIgnoredFile) {
+				// Warn that gulp.src is needlessly loading files that eslint ignores
+				file.eslint = util.createIgnoreResult(file);
+			}
 			cb(null, file);
 
 		} else if (file.isStream()) {
 			// eslint is synchronous, so wait for the complete contents
 			// replace content stream with new readable content stream
 			file.contents = file.contents.pipe(new BufferStreams(function(none, buf, done) {
-				file.eslint = verify(file.path, String(buf));
+				file.eslint = verify(String(buf), filePath);
+				if (file.eslint.hasOwnProperty('output')) {
+					file.contents = new Buffer(file.eslint.output, 'utf8');
+				}
 				done(null, buf);
 				cb(null, file);
 			}));
 
 		} else {
-			file.eslint = verify(file.path, file.contents.toString());
+			file.eslint = verify(file.contents.toString(), filePath);
+			if (file.eslint.hasOwnProperty('output')) {
+				file.contents = new Buffer(file.eslint.output);
+			}
 			cb(null, file);
 		}
 	});
@@ -47,7 +79,7 @@ function gulpEslint(options) {
  * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
-
+	// TODO: accept maxWarnings argument
 	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
@@ -78,7 +110,7 @@ gulpEslint.failOnError = function() {
  */
 gulpEslint.failAfterError = function() {
 	var errorCount = 0;
-
+	// TODO: accept maxWarnings argument
 	return util.transform(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
 		messages.forEach(function(message) {

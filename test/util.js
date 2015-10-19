@@ -79,54 +79,38 @@ describe('utility methods', function() {
 
 	});
 
-	describe('isPathIgnored', function() {
+	describe('createIgnoreResult', function() {
 
-		it('should return false if "ignore" option is not defined or truthy', function(done) {
-			var stubFile = {
-				path: ''
-			};
-			var result = util.isPathIgnored(stubFile, {});
-			result.should.equal(false);
+		it('should create a warning that the file is ignored by ".eslintignore"', function() {
 
-			done();
+			var file = new File({
+				path: 'test/fixtures/ignored.js',
+				contents: new Buffer('')
+			});
+			var result = util.createIgnoreResult(file);
+			should.exist(result);
+			result.filePath.should.equal(file.path);
+			result.errorCount.should.equal(0);
+			result.warningCount.should.equal(1);
+			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			result.messages[0].message.should.equal('File ignored because of your .eslintignore file.');
+
 		});
 
-		it('should resolve the ignorePath if not defined', function(done) {
-			var stubFile = {
-				path: null
-			};
-			var result = util.isPathIgnored(stubFile, {
-				ignore: true
+		it('should create a warning for paths that include "node_modules"', function() {
+
+			var file = new File({
+				path: 'node_modules/test/index.js',
+				contents: new Buffer('')
 			});
-			result.should.equal(false);
+			var result = util.createIgnoreResult(file);
+			should.exist(result);
+			result.filePath.should.equal(file.path);
+			result.errorCount.should.equal(0);
+			result.warningCount.should.equal(1);
+			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			result.messages[0].message.should.equal('File ignored because it is in ./node_modules.');
 
-			done();
-		});
-
-		it('should ignore paths defined in .eslintignore files', function(done) {
-			var stubFile = {
-				path: path.resolve(__dirname, './fixtures/ignore-this-file.js')
-			};
-			var result = util.isPathIgnored(stubFile, {
-				ignore: true,
-				ignorePath: path.resolve(__dirname, './fixtures/.eslintignore')
-			});
-			result.should.equal(true);
-
-			done();
-		});
-
-		it('should resolve to the cwd if the ignorePath is empty', function(done) {
-			var stubFile = {
-				path: null
-			};
-			var result = util.isPathIgnored(stubFile, {
-				ignore: true,
-				ignorePath: ''
-			});
-			result.should.equal(false);
-
-			done();
 		});
 
 	});
@@ -233,6 +217,52 @@ describe('utility methods', function() {
 			var isError = util.isErrorMessage(errorMessage);
 			isError.should.equal(true);
 
+		});
+
+	});
+
+	describe('getQuietResult', function() {
+
+		var result = {
+			filePath: 'test/fixtures/invalid.js',
+			messages: [{
+				ruleId: 'error',
+				severity: 2,
+				message: 'This is an error.',
+				line: 1,
+				column: 1,
+				nodeType: 'FunctionDeclaration',
+				source: 'function a() { x = 0; }'
+			},{
+				ruleId: 'warning',
+				severity: 1,
+				message: 'This is a warning.',
+				line: 1,
+				column: 1,
+				nodeType: 'FunctionDeclaration',
+				source: 'function a() { x = 0; }'
+			}],
+			errorCount: 1,
+			warningCount: 1
+		};
+
+		it('should filter messages', function() {
+			function warningsOnly(message) {
+				return message.severity === 1;
+			}
+			var quietResult = util.getQuietResult(result, warningsOnly);
+			quietResult.filePath.should.equal('test/fixtures/invalid.js');
+			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			quietResult.errorCount.should.equal(0);
+			quietResult.warningCount.should.equal(1);
+		});
+
+		it('should remove warning messages', function() {
+			var quietResult = util.getQuietResult(result, true);
+			quietResult.filePath.should.equal('test/fixtures/invalid.js');
+			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
+			quietResult.errorCount.should.equal(1);
+			quietResult.warningCount.should.equal(0);
 		});
 
 	});
