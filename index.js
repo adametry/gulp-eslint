@@ -102,6 +102,33 @@ gulpEslint.failAfterError = function() {
 	});
 };
 
+gulpEslint.failAfterWarnings = function(maxWarnings) {
+	var warningCount = 0;
+
+	return util.transform(function(file, enc, cb) {
+		var messages = file.eslint && file.eslint.messages || [];
+		messages.forEach(function(message) {
+			if (util.isWarningMessage(message)) {
+				warningCount++;
+			}
+		});
+		cb(null, file);
+	}, function(cb) {
+		if (warningCount >= maxWarnings) {
+			this.emit('error', new PluginError(
+				'gulp-eslint',
+				{
+					name: 'ESLintError',
+					message: 'Failed because of too many warnings. ' +
+							'Found ' + warningCount + (warningCount === 1 ? ' warning' : ' warnings') +
+							', threshold is ' + maxWarnings + '.'
+				}
+			));
+		}
+		cb();
+	});
+};
+
 /**
  * Wait until all files have been linted and format all results at once.
  *

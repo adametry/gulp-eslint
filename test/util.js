@@ -237,6 +237,28 @@ describe('utility methods', function() {
 
 	});
 
+	describe('isWarningMessage', function() {
+
+		it('should consider severity 1 a warning', function() {
+			var message = {
+				severity: 1
+			};
+			var isWarning = util.isWarningMessage(message);
+			isWarning.should.equal(true);
+
+		});
+
+		it('should determine severity from an config array', function() {
+			var message = {
+				severity: [1]
+			};
+			var isWarning = util.isWarningMessage(message);
+			isWarning.should.equal(true);
+
+		});
+
+	});
+
 	describe('resolveFormatter', function() {
 
 		it('should default to the "stylish" formatter', function() {

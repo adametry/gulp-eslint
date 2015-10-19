@@ -123,3 +123,43 @@ describe('gulp-eslint failOnError', function() {
 	});
 
 });
+
+describe('gulp-eslint failAfterWarnings', function() {
+	it('should pass when the file stream ends if too few warnings found', function(done) {
+		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
+
+		lintStream.pipe(eslint.failAfterWarnings(3))
+		.on('error', done)
+		.on('finish', done);
+
+		lintStream.end(new File({
+			path: 'test/fixtures/invalid.js',
+			contents: new Buffer('x = 0; y = 0;')
+		}));
+	});
+
+	it('should fail when the file stream ends if too many warnings are found', function(done) {
+		var lintStream = eslint({
+			envs: ['browser'],
+			rules: {
+				'no-undef': 1,
+				'strict': 0
+			}
+		});
+
+		lintStream.pipe(eslint.failAfterWarnings(1).on('error', function(err) {
+			should.exists(err);
+			err.message.should.equal('Failed because of too many warnings. ' +
+										'Found 2 warnings, threshold is 1.');
+			err.name.should.equal('ESLintError');
+			err.plugin.should.equal('gulp-eslint');
+			done();
+		}));
+
+		lintStream.end(new File({
+			path: 'test/fixtures/invalid.js',
+			contents: new Buffer('x = 0; y = 0;')
+		}));
+	});
+
+});
