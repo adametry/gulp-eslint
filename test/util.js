@@ -93,7 +93,7 @@ describe('utility methods', function() {
 			result.errorCount.should.equal(0);
 			result.warningCount.should.equal(1);
 			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-			result.messages[0].message.should.equal('File ignored because of your .eslintignore file.');
+			result.messages[0].message.should.equal('File ignored because of your .eslintignore file');
 
 		});
 
@@ -109,7 +109,7 @@ describe('utility methods', function() {
 			result.errorCount.should.equal(0);
 			result.warningCount.should.equal(1);
 			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-			result.messages[0].message.should.equal('File ignored because it is in ./node_modules.');
+			result.messages[0].message.should.equal('File ignored because it has a node_modules/** path');
 
 		});
 

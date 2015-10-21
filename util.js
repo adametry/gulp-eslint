@@ -37,8 +37,8 @@ exports.createIgnoreResult = function(file) {
 			fatal: false,
 			severity: 1,
 			message: file.path.indexOf('node_modules/') < 0 ?
-				'File ignored because of your .eslintignore file.' :
-				'File ignored because it is in ./node_modules.'
+				'File ignored because of your .eslintignore file' :
+				'File ignored because it has a node_modules/** path'
 		}],
 		errorCount: 0,
 		warningCount: 1
@@ -92,6 +92,11 @@ exports.migrateOptions = function migrateOptions(options) {
 	if (options.eslintrc != null) {
 		// The "eslintrc" option has been deprecated. Use "useEslintrc".
 		options.useEslintrc = options.eslintrc;
+	}
+
+	if (options.extends) {
+		// nest options as baseConfig, since it's basically an .eslintrc config file
+		options.baseConfig = objectAssign(options.baseConfig || {}, options, {baseConfig: null});
 	}
 
 	return options;

@@ -14,7 +14,6 @@ var path = require('path');
  */
 function gulpEslint(options) {
 	options = util.migrateOptions(options);
-	// TODO: config as options.base to support "parsers" and "extends"
 	var linter = new CLIEngine(options);
 
 	function verify(str, filePath) {
@@ -29,23 +28,23 @@ function gulpEslint(options) {
 	}
 
 	return util.transform(function(file, enc, cb) {
-
-		// Note:
-		// Vinyl files can have an independently defined cwd, but eslint works relative to `process.cwd()`.
-		// (https://github.com/gulpjs/gulp/blob/master/docs/recipes/specifying-a-cwd.md)
-		// Also, eslint doesn't adjust file paths relative to an ancestory .eslintignore path.
-		// E.g., If ../.eslintignore has "foo/*.js", eslint will ignore ./foo/*.js, instead of ../foo/*.js.
-		// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint does this as well...
-
 		var filePath = path.relative(process.cwd(), file.path);
 
 		if (file.isNull()) {
+			// CONSIDER: If this is not a directory, run linter.executeOnFiles([filePath])
 			// quietly ignore null files (directories)
 			cb(null, file);
 
 		} else if (linter.isPathIgnored(filePath)) {
 
-			if (linter.options.ignore && options.warnIgnoredFile) {
+			// Note:
+			// Vinyl files can have an independently defined cwd, but eslint works relative to `process.cwd()`.
+			// (https://github.com/gulpjs/gulp/blob/master/docs/recipes/specifying-a-cwd.md)
+			// Also, eslint doesn't adjust file paths relative to an ancestory .eslintignore path.
+			// E.g., If ../.eslintignore has "foo/*.js", eslint will ignore ./foo/*.js, instead of ../foo/*.js.
+			// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint must account for this limitation.
+
+			if (linter.options.ignore && options.warnFileIgnored) {
 				// Warn that gulp.src is needlessly loading files that eslint ignores
 				file.eslint = util.createIgnoreResult(file);
 			}
@@ -54,10 +53,11 @@ function gulpEslint(options) {
 		} else if (file.isStream()) {
 			// eslint is synchronous, so wait for the complete contents
 			// replace content stream with new readable content stream
-			file.contents = file.contents.pipe(new BufferStreams(function(none, buf, done) {
+			file.contents = file.contents.pipe(new BufferStreams(function(err, buf, done) {
 				file.eslint = verify(String(buf), filePath);
 				if (file.eslint.hasOwnProperty('output')) {
-					file.contents = new Buffer(file.eslint.output, 'utf8');
+					// Replace contents with eslint-fixed output
+					buf = new Buffer(file.eslint.output);
 				}
 				done(null, buf);
 				cb(null, file);
@@ -79,7 +79,6 @@ function gulpEslint(options) {
  * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
-	// TODO: accept maxWarnings argument
 	return util.transform(function(file, enc, output) {
 		var messages = file.eslint && file.eslint.messages || [],
 			error = null;
@@ -110,7 +109,6 @@ gulpEslint.failOnError = function() {
  */
 gulpEslint.failAfterError = function() {
 	var errorCount = 0;
-	// TODO: accept maxWarnings argument
 	return util.transform(function(file, enc, cb) {
 		var messages = file.eslint && file.eslint.messages || [];
 		messages.forEach(function(message) {

@@ -6,6 +6,7 @@ var eslint = require('../');
 var stream = require('stream');
 var File = require('vinyl');
 var should = require('should');
+var BufferStreams = require('bufferstreams');
 
 require('mocha');
 
@@ -126,17 +127,17 @@ describe('Gulp eslint plugin', function() {
 		}));
 	});
 
-	describe('"warnIgnoredFile" option', function() {
+	describe('"warnFileIgnored" option', function() {
 
 		it('when true, should warn when a file is ignored by .eslintignore', function(done) {
-			eslint({warnIgnoredFile: true})
+			eslint({warnFileIgnored: true})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
 				should.exist(file.eslint);
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 				file.eslint.messages[0]
-				.should.have.property('message', 'File ignored because of your .eslintignore file.');
+				.should.have.property('message', 'File ignored because of your .eslintignore file');
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(1);
 				done();
@@ -148,14 +149,14 @@ describe('Gulp eslint plugin', function() {
 		});
 
 		it('when true, should warn when a "node_modules" file is ignored', function(done) {
-			eslint({warnIgnoredFile: true})
+			eslint({warnFileIgnored: true})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
 				should.exist(file.eslint);
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 				file.eslint.messages[0]
-				.should.have.property('message', 'File ignored because it is in ./node_modules.');
+				.should.have.property('message', 'File ignored because it has a node_modules/** path');
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(1);
 				done();
@@ -167,7 +168,7 @@ describe('Gulp eslint plugin', function() {
 		});
 
 		it('when not true, should silently ignore files', function(done) {
-			eslint({warnIgnoredFile: false})
+			eslint({warnFileIgnored: false})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
@@ -252,8 +253,12 @@ describe('Gulp eslint plugin', function() {
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(0);
 				file.eslint.output.should.equal('var x = 0;');
-				file.contents.toString().should.equal('var x = 0;');
-				done();
+				file.contents = file.contents.pipe(new BufferStreams(function(err, buf, cb) {
+					cb(err, buf);
+					buf.toString().should.equal('var x = 0;');
+					done();
+				}));
+
 			})
 			.end(new File({
 				path: 'test/fixtures/fixable.js',
