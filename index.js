@@ -3,6 +3,7 @@
 var BufferStreams = require('bufferstreams');
 var PluginError = require('gulp-util').PluginError;
 var CLIEngine = require('eslint').CLIEngine;
+var fs = require('fs');
 var util = require('./util');
 
 /**
@@ -151,6 +152,28 @@ gulpEslint.formatEach = function(formatter, writable) {
 			}
 		}
 		cb(error, file);
+	});
+};
+
+/**
+ * Output fixes to files.
+ *
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.outputFixes = function() {
+	return util.transform(function(file, enc, cb) {
+		var result = file.eslint;
+		if (result.output) {
+			fs.writeFile(result.filePath, result.output, function(err) {
+				var error = null;
+				if (err) {
+					error = new PluginError('gulp-eslint', err);
+				}
+				cb(error, file);
+			});
+		} else {
+			cb(null, file);
+		}
 	});
 };
 
