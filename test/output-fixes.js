@@ -60,4 +60,27 @@ describe('eslint.outputFixes', function() {
 			}
 		});
 	});
+	it('should raise the error to write the file', function(done) {
+		var tmpfile = tmp.fileSync();
+		var fixableContents = 'undefined == null;\n';
+		var fixedContents = 'undefined === null;\n';
+		fs.writeFileSync(tmpfile.name, fixableContents);
+		fs.chmodSync(tmpfile.name, '0555');
+
+		eslint.outputFixes()
+		.on('error', function(err) {
+			should.exists(err);
+			err.plugin.should.equal('gulp-eslint');
+			done();
+		})
+		.on('finish', function() {
+			done(new Error('expected to raise an error'));
+		})
+		.end({
+			eslint: {
+				output: fixedContents,
+				filePath: tmpfile.name
+			}
+		});
+	});
 });
