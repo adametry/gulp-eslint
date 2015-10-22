@@ -140,6 +140,21 @@ Specify [environments](http://eslint.org/docs/user-guide/configuring#specifying-
 
 Alias: `env` *(deprecated)*
 
+#### options.fix
+
+Type: `Boolean`
+
+When true, ESLint will fix as many problems as possible.
+
+Use with `eslint.outputFixes`:
+
+```javascript
+gulp.src('js/**/*.js')
+	.pipe(eslint({ fix: true })
+	.pipe(eslint.outputFixes())
+	.pipe(eslint.format())
+```
+
 ### eslint(configFilePath)
 
 Type: `String`
@@ -204,6 +219,9 @@ Format each linted file individually. This should be used in the stream after pi
 
 The arguments for `formatEach` are the same as the arguments for `format`.
 
+### eslint.outputFixes()
+
+Output fixed file contents to each files. Use with `options.fix`.
 
 ##Configuration
 
