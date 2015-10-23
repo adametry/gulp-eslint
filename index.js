@@ -18,6 +18,8 @@ function gulpEslint(options) {
 
 	function verify(str, filePath) {
 		var result = linter.executeOnText(str, filePath).results[0];
+		// Note: Fixes are applied as part of "executeOnText".
+		// Any applied fix messages have been removed from the result.
 
 		if (options.quiet) {
 			// ignore warnings
@@ -31,8 +33,7 @@ function gulpEslint(options) {
 		var filePath = path.relative(process.cwd(), file.path);
 
 		if (file.isNull()) {
-			// CONSIDER: If this is not a directory, run linter.executeOnFiles([filePath])
-			// quietly ignore null files (directories)
+			// quietly ignore null files (read:false or directories)
 			cb(null, file);
 
 		} else if (linter.isPathIgnored(filePath)) {
@@ -45,7 +46,7 @@ function gulpEslint(options) {
 			// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint must account for this limitation.
 
 			if (linter.options.ignore && options.warnFileIgnored) {
-				// Warn that gulp.src is needlessly loading files that eslint ignores
+				// Warn that gulp.src is needlessly reading files that eslint ignores
 				file.eslint = util.createIgnoreResult(file);
 			}
 			cb(null, file);
@@ -55,8 +56,8 @@ function gulpEslint(options) {
 			// replace content stream with new readable content stream
 			file.contents = file.contents.pipe(new BufferStreams(function(err, buf, done) {
 				file.eslint = verify(String(buf), filePath);
+				// Update the fixed output; otherwise, fixable messages are simply ignored.
 				if (file.eslint.hasOwnProperty('output')) {
-					// Replace contents with eslint-fixed output
 					buf = new Buffer(file.eslint.output);
 				}
 				done(null, buf);
@@ -65,6 +66,7 @@ function gulpEslint(options) {
 
 		} else {
 			file.eslint = verify(file.contents.toString(), filePath);
+			// Update the fixed output; otherwise, fixable messages are simply ignored.
 			if (file.eslint.hasOwnProperty('output')) {
 				file.contents = new Buffer(file.eslint.output);
 			}

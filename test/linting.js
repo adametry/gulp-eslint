@@ -137,7 +137,7 @@ describe('Gulp eslint plugin', function() {
 				should.exist(file.eslint);
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 				file.eslint.messages[0]
-				.should.have.property('message', 'File ignored because of your .eslintignore file');
+				.should.have.property('message', 'File ignored because of .eslintignore file');
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(1);
 				done();

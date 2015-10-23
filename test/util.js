@@ -93,7 +93,7 @@ describe('utility methods', function() {
 			result.errorCount.should.equal(0);
 			result.warningCount.should.equal(1);
 			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-			result.messages[0].message.should.equal('File ignored because of your .eslintignore file');
+			result.messages[0].message.should.equal('File ignored because of .eslintignore file');
 
 		});
 
@@ -130,6 +130,7 @@ describe('utility methods', function() {
 			var options = util.migrateOptions({
 				config: 'Config/Path'
 			});
+			should.exist(options);
 			should.exist(options.configFile);
 			options.configFile.should.equal('Config/Path');
 
@@ -143,6 +144,7 @@ describe('utility methods', function() {
 					b: true
 				}
 			});
+			should.exist(options);
 			should.exist(options.globals);
 			options.globals.should.be.instanceof(Array).and.have.lengthOf(2);
 			options.globals[0].should.equal('a');
@@ -158,6 +160,7 @@ describe('utility methods', function() {
 					browser: true
 				}
 			});
+			should.exist(options);
 			should.exist(options.envs);
 			options.envs.should.be.instanceof(Array).and.have.lengthOf(1);
 			options.envs[0].should.equal('browser');
@@ -169,6 +172,7 @@ describe('utility methods', function() {
 			var options = util.migrateOptions({
 				rulesdir: 'Rules/Dir'
 			});
+			should.exist(options);
 			should.exist(options.rulePaths);
 			options.rulePaths.should.be.instanceof(Array).and.have.lengthOf(1);
 			options.rulePaths[0].should.equal('Rules/Dir');
@@ -181,6 +185,7 @@ describe('utility methods', function() {
 				options = util.migrateOptions({
 					rulesdir: rulePaths
 				});
+			should.exist(options);
 			should.exist(options.rulePaths);
 			options.rulePaths.should.equal(rulePaths);
 
@@ -191,8 +196,35 @@ describe('utility methods', function() {
 			var options = util.migrateOptions({
 				eslintrc: true
 			});
+			should.exist(options);
 			should.exist(options.useEslintrc);
 			options.useEslintrc.should.equal(true);
+
+		});
+
+		it('should migrate an "extends" value to "baseConfig" (w/o baseConfig)', function() {
+
+			var options = util.migrateOptions({
+				extends: 'eslint:recommended'
+			});
+			should.exist(options);
+			should.exist(options.baseConfig);
+			options.baseConfig.extends.should.equal('eslint:recommended');
+
+		});
+
+		it('should migrate an "extends" value to "baseConfig" (w/ baseConfig)', function() {
+
+			var options = util.migrateOptions({
+				extends: 'eslint:recommended',
+				baseConfig: {
+					parser: 'babel-eslint'
+				}
+			});
+			should.exist(options);
+			should.exist(options.baseConfig);
+			options.baseConfig.extends.should.equal('eslint:recommended');
+			options.baseConfig.parser.should.equal('babel-eslint');
 
 		});
 

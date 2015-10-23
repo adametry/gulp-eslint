@@ -50,6 +50,24 @@ describe('gulp-eslint failOnError', function() {
 		}));
 	});
 
+	it('should handle eslint reports without messages', function(done) {
+
+		var file = new File({
+			path: 'test/fixtures/invalid.js',
+			contents: new Buffer('#invalid!syntax}')
+		});
+		file.eslint = {};
+
+		eslint.failOnError()
+		.on('error', done)
+		.on('finish', done)
+		.end(file);
+	});
+
+});
+
+describe('gulp-eslint failAfterError', function() {
+
 	it('should fail when the file stream ends if an error is found', function(done) {
 		var lintStream = eslint({
 			envs: ['browser'],
@@ -110,16 +128,17 @@ describe('gulp-eslint failOnError', function() {
 	});
 
 	it('should handle eslint reports without messages', function(done) {
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
 
-		lintStream.pipe(eslint.failAfterError())
-		.on('error', done)
-		.on('finish', done);
-
-		lintStream.end(new File({
+		var file = new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0;')
-		}));
+			contents: new Buffer('#invalid!syntax}')
+		});
+		file.eslint = {};
+
+		eslint.failAfterError()
+		.on('error', done)
+		.on('finish', done)
+		.end(file);
 	});
 
 });

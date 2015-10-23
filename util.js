@@ -37,7 +37,7 @@ exports.createIgnoreResult = function(file) {
 			fatal: false,
 			severity: 1,
 			message: file.path.indexOf('node_modules/') < 0 ?
-				'File ignored because of your .eslintignore file' :
+				'File ignored because of .eslintignore file' :
 				'File ignored because it has a node_modules/** path'
 		}],
 		errorCount: 0,
