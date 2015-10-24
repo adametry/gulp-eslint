@@ -94,7 +94,7 @@ exports.migrateOptions = function migrateOptions(options) {
 		options.useEslintrc = options.eslintrc;
 	}
 
-	if (options.extends) {
+	if (options.extends || options.ecmaFeatures) {
 		// nest options as baseConfig, since it's basically an .eslintrc config file
 		options.baseConfig = objectAssign(options.baseConfig || {}, options, {baseConfig: null});
 	}

@@ -228,6 +228,20 @@ describe('utility methods', function() {
 
 		});
 
+		it('should migrate an "ecmaFeatures" value to "baseConfig"', function() {
+
+			var options = util.migrateOptions({
+				ecmaFeatures: {
+					templateStrings: true
+				}
+			});
+			should.exist(options);
+			should.exist(options.baseConfig);
+			should.exist(options.baseConfig.ecmaFeatures);
+			options.baseConfig.ecmaFeatures.templateStrings.should.equal(true);
+
+		});
+
 	});
 
 	describe('isErrorMessage', function() {
