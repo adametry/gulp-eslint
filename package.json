@@ -42,7 +42,7 @@
   "license": "MIT",
   "dependencies": {
     "bufferstreams": "1.0.2",
-    "eslint": "^1.0.0",
+    "eslint": "^1.7.3",
     "gulp-util": "^3.0.6",
     "object-assign": "^3.0.0"
   },
