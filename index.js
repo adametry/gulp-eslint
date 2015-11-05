@@ -23,7 +23,7 @@ function gulpEslint(options) {
 
 		if (options.quiet) {
 			// ignore warnings
-			result = util.getQuietResult(result, options.quiet);
+			result = util.filterResult(result, options.quiet);
 		}
 
 		return result;
@@ -37,7 +37,6 @@ function gulpEslint(options) {
 			cb(null, file);
 
 		} else if (linter.isPathIgnored(filePath)) {
-
 			// Note:
 			// Vinyl files can have an independently defined cwd, but eslint works relative to `process.cwd()`.
 			// (https://github.com/gulpjs/gulp/blob/master/docs/recipes/specifying-a-cwd.md)
@@ -59,6 +58,7 @@ function gulpEslint(options) {
 				// Update the fixed output; otherwise, fixable messages are simply ignored.
 				if (file.eslint.hasOwnProperty('output')) {
 					buf = new Buffer(file.eslint.output);
+					file.eslint.fixed = true;
 				}
 				done(null, buf);
 				cb(null, file);
@@ -69,6 +69,7 @@ function gulpEslint(options) {
 			// Update the fixed output; otherwise, fixable messages are simply ignored.
 			if (file.eslint.hasOwnProperty('output')) {
 				file.contents = new Buffer(file.eslint.output);
+				file.eslint.fixed = true;
 			}
 			cb(null, file);
 		}
@@ -76,31 +77,73 @@ function gulpEslint(options) {
 }
 
 /**
+ * Handle each eslint result as it passes through the stream.
+ *
+ * @param {Function} action - A function to handle each eslint result
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.result = function(action) {
+	if (typeof action !== 'function') {
+		throw new Error('Expected callable argument');
+	}
+
+	return util.transform(function(file, enc, done) {
+		if (file.eslint) {
+			util.tryResultAction(action, file.eslint, util.handleCallback(done, file));
+		} else {
+			done(null, file);
+		}
+	});
+};
+
+/**
+ * Handle all eslint results at the end of the stream.
+ *
+ * @param {Function} action - A function to handle all eslint results
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.results = function(action) {
+	if (typeof action !== 'function') {
+		throw new Error('Expected callable argument');
+	}
+
+	var results = [];
+	results.errorCount = 0;
+	results.warningCount = 0;
+
+	return util.transform(function(file, enc, done) {
+		if (file.eslint) {
+			results.push(file.eslint);
+			// collect total error/warning count
+			results.errorCount += file.eslint.errorCount;
+			results.warningCount += file.eslint.warningCount;
+		}
+		done(null, file);
+
+	}, function(done) {
+		util.tryResultAction(action, results, util.handleCallback(done));
+	});
+};
+
+/**
  * Fail when an eslint error is found in eslint results.
  *
  * @returns {stream} gulp file stream
  */
 gulpEslint.failOnError = function() {
-	return util.transform(function(file, enc, output) {
-		var messages = file.eslint && file.eslint.messages || [],
-			error = null;
-
-		messages.some(function(message) {
-			if (util.isErrorMessage(message)) {
-				error = new PluginError(
-					'gulp-eslint',
-					{
-						name: 'ESLintError',
-						fileName: file.path,
-						message: message.message,
-						lineNumber: message.line
-					}
-				);
-				return true;
-			}
-		});
-
-		return output(error, file);
+	return gulpEslint.result(function(result) {
+		var error = util.firstResultMessage(result, util.isErrorMessage);
+		if (error) {
+			throw new PluginError(
+				'gulp-eslint',
+				{
+					name: 'ESLintError',
+					fileName: result.filePath,
+					message: error.message,
+					lineNumber: error.line
+				}
+			);
+		}
 	});
 };
 
@@ -110,55 +153,17 @@ gulpEslint.failOnError = function() {
  * @returns {stream} gulp file stream
  */
 gulpEslint.failAfterError = function() {
-	var errorCount = 0;
-	return util.transform(function(file, enc, cb) {
-		var messages = file.eslint && file.eslint.messages || [];
-		messages.forEach(function(message) {
-			if (util.isErrorMessage(message)) {
-				errorCount++;
-			}
-		});
-		cb(null, file);
-	}, function(cb) {
-		// Only format results if files has been lint'd
-		if (errorCount > 0) {
-			this.emit('error', new PluginError(
+	return gulpEslint.results(function(results) {
+		var count = results.errorCount;
+		if (count > 0) {
+			throw new PluginError(
 				'gulp-eslint',
 				{
 					name: 'ESLintError',
-					message: 'Failed with ' + errorCount + (errorCount === 1 ? ' error' : ' errors')
+					message: 'Failed with ' + count + (count === 1 ? ' error' : ' errors')
 				}
-			));
+			);
 		}
-		cb();
-	});
-};
-
-/**
- * Wait until all files have been linted and format all results at once.
- *
- * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
- * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
- * @returns {stream} gulp file stream
- */
-gulpEslint.format = function(formatter, writable) {
-	var results = [];
-	formatter = util.resolveFormatter(formatter);
-	writable = util.resolveWritable(writable);
-
-	return util.transform(function(file, enc, cb) {
-		if (file.eslint) {
-			results.push(file.eslint);
-		}
-		cb(null, file);
-	}, function(cb) {
-		// Only format results if files has been lint'd
-		if (results.length) {
-			util.writeResults(results, formatter, writable);
-		}
-		// reset buffered results
-		results = [];
-		cb();
 	});
 };
 
@@ -173,16 +178,27 @@ gulpEslint.formatEach = function(formatter, writable) {
 	formatter = util.resolveFormatter(formatter);
 	writable = util.resolveWritable(writable);
 
-	return util.transform(function(file, enc, cb) {
-		var error = null;
-		if (file.eslint) {
-			try {
-				util.writeResults([file.eslint], formatter, writable);
-			} catch (err) {
-				error = new PluginError('gulp-eslint', err);
-			}
+	return gulpEslint.result(function(result) {
+		util.writeResults([result], formatter, writable);
+	});
+};
+
+/**
+ * Wait until all files have been linted and format all results at once.
+ *
+ * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
+ * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ * @returns {stream} gulp file stream
+ */
+gulpEslint.format = function(formatter, writable) {
+	formatter = util.resolveFormatter(formatter);
+	writable = util.resolveWritable(writable);
+
+	return gulpEslint.results(function(results) {
+		// Only format results if files has been lint'd
+		if (results.length) {
+			util.writeResults(results, formatter, writable);
 		}
-		cb(error, file);
 	});
 };
 

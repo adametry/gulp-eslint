@@ -267,7 +267,7 @@ describe('utility methods', function() {
 
 	});
 
-	describe('getQuietResult', function() {
+	describe('filterResult', function() {
 
 		var result = {
 			filePath: 'test/fixtures/invalid.js',
@@ -296,7 +296,7 @@ describe('utility methods', function() {
 			function warningsOnly(message) {
 				return message.severity === 1;
 			}
-			var quietResult = util.getQuietResult(result, warningsOnly);
+			var quietResult = util.filterResult(result, warningsOnly);
 			quietResult.filePath.should.equal('test/fixtures/invalid.js');
 			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 			quietResult.errorCount.should.equal(0);
@@ -304,7 +304,7 @@ describe('utility methods', function() {
 		});
 
 		it('should remove warning messages', function() {
-			var quietResult = util.getQuietResult(result, true);
+			var quietResult = util.filterResult(result, true);
 			quietResult.filePath.should.equal('test/fixtures/invalid.js');
 			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 			quietResult.errorCount.should.equal(1);

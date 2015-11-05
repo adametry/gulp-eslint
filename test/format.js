@@ -155,19 +155,19 @@ describe('gulp-eslint format', function() {
 			var files = getFiles();
 
 			var lintStream = eslint()
+			.on('error', done);
+
+			var formatStream = eslint.formatEach(formatResult, outputWriter)
 			.on('error', done)
 			.on('finish', function() {
-				process.nextTick(function() {
-					var fileCount = files.length - 1;// remove directory
-					formatCount.should.equal(fileCount);
-					writeCount.should.equal(fileCount);
-					done();
-				});
+				// the stream should not have emitted an error
+				this._writableState.errorEmitted.should.equal(false);
+
+				var fileCount = files.length - 1;// remove directory
+				formatCount.should.equal(fileCount);
+				writeCount.should.equal(fileCount);
+				done();
 			});
-
-			var formatStream = eslint.formatEach(formatResult, outputWriter);
-
-			formatStream.on('error', done);
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);

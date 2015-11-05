@@ -59,7 +59,10 @@ describe('gulp-eslint failOnError', function() {
 		file.eslint = {};
 
 		eslint.failOnError()
-		.on('error', done)
+		.on('error', function(error) {
+			this.removeListener('finish', done);
+			done(error);
+		})
 		.on('finish', done)
 		.end(file);
 	});

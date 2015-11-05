@@ -1,10 +1,9 @@
 'use strict';
 
-var gulp = require('gulp'),
-	gulpUtil = require('gulp-util'),
-	eslint = require('../index');
+// npm install gulp gulp-eslint
 
-var scriptsGlobs = ['../test/fixtures/**/*.js'];
+var gulp = require('gulp');
+var eslint = require('../');
 
 /**
  * Simple example of using eslint and a formatter
@@ -13,8 +12,10 @@ var scriptsGlobs = ['../test/fixtures/**/*.js'];
  * @returns {stream} gulp file stream
  */
 gulp.task('basic', function() {
-	return gulp.src(scriptsGlobs)
+	return gulp.src('../test/fixtures/**/*.js')
+		// default: use local linting config
 		.pipe(eslint())
+		// format eslint results and print them to the console
 		.pipe(eslint.format());
 });
 
@@ -23,8 +24,16 @@ gulp.task('basic', function() {
  * @returns {stream} gulp file stream
  */
 gulp.task('inline-config', function() {
-	return gulp.src(scriptsGlobs)
+	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint({
+			// gulp-eslint's config works much like .eslintrc with a dash of eslint's CLI
+
+			'extends':'eslint:recommended',
+
+			'ecmaFeatures':{
+				'modules': true
+			},
+
 			'rules': {
 				'no-alert': 0,
 				'no-bitwise': 0,
@@ -51,12 +60,15 @@ gulp.task('inline-config', function() {
 				'quotes': 0,
 				'no-unreachable': 2
 			},
+
 			'globals': {
 				'$': false
 			},
+
 			'env': {
 				'node': true
 			}
+
 		}))
 		.pipe(eslint.format());
 });
@@ -66,8 +78,9 @@ gulp.task('inline-config', function() {
  * @returns {stream} gulp file stream
  */
 gulp.task('load-config', function() {
-	return gulp.src(scriptsGlobs)
+	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint({
+			// Load a specific eslint config
 			config: 'config.json'
 		}))
 		.pipe(eslint.format());
@@ -78,49 +91,20 @@ gulp.task('load-config', function() {
  * @returns {stream} gulp file stream
  */
 gulp.task('load-config-shorthand', function() {
-	return gulp.src(scriptsGlobs)
+	return gulp.src('../test/fixtures/**/*.js')
+		// Load a specific eslint config
 		.pipe(eslint('config.json'))
 		.pipe(eslint.format());
 });
 
 /**
- * Using various formatters
- * @returns {stream} gulp file stream
- */
-gulp.task('eslint-formatter', function() {
-	return gulp.src(scriptsGlobs)
-		.pipe(eslint())
-		.pipe(eslint.format('checkstyle'))
-		.pipe(eslint.format('jslint-xml'))
-		.pipe(eslint.format('junit'))
-		.pipe(eslint.format('compact'));
-});
-
-/**
- * Using eslint with streaming files
- * @returns {stream} gulp file stream
- */
-gulp.task('stream', function() {
-	return gulp.src(scriptsGlobs, { buffer: false })
-		.pipe(eslint())
-		.pipe(eslint.format())
-		.pipe(eslint.failOnError())
-		.on('error', function(error) {
-			gulpUtil.log('Stream Exiting With Error');
-		});
-});
-
-/**
- *
+ * The default task will run all above tasks
  */
 gulp.task('default', [
-
 	'basic',
 	'inline-config',
 	'load-config',
-	'load-config-shorthand',
-	'eslint-formatter',
-	'stream'
+	'load-config-shorthand'
 
 ], function() {
 	console.log('All tasks completed successfully.');

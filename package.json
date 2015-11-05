@@ -15,7 +15,7 @@
     "pretest": "jscs *.js test/*.js && gulp test",
     "test": "mocha",
     "gulp": "gulp",
-    "gulp-example": "gulp --gulpfile=example/gulpfile.js",
+    "gulp-example": "gulp --gulpfile=example/config.js",
     "coverage": "istanbul cover _mocha",
     "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
   },

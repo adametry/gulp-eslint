@@ -103,9 +103,74 @@ exports.migrateOptions = function migrateOptions(options) {
 };
 
 /**
- * Resolve writable
+ * Ensure that callback errors are wrapped in a gulp PluginError
  *
- * @param {Object} message - an eslint message
+ * @param {Function} callback - callback to wrap
+ * @param {Object} [value=] - A value to pass to the callback
+ * @returns {Function} A callback to call(back) the callback
+ */
+exports.handleCallback = function(callback, value) {
+	return function(err) {
+		if (err != null && !(err instanceof gutil.PluginError)) {
+			err = new gutil.PluginError('gulp-eslint', err, {showStack: err.showStack !== false});
+		}
+		callback(err, value);
+	};
+};
+
+/**
+ * Call sync or async action and handle any thrown or async error
+ *
+ * @param {Function} action - Result action to call
+ * @param {(Object|Array)} result - An ESLint result or result list
+ * @param {Function} done - An callback for when the action is complete
+ */
+exports.tryResultAction = function(action, result, done) {
+	try {
+		if (action.length > 1) {
+			// async action
+			action.call(this, result, done);
+		} else {
+			// sync action
+			action.call(this, result);
+			done();
+		}
+	} catch (error) {
+		done(error == null ? new Error('Unknown Error') : error);
+	}
+};
+
+/**
+ * Get the first item in a list that meets a condition
+ *
+ * @param {Array} list - A list to search
+ * @param {Function} condition - A condition function that is passed an item and returns a boolean
+ * @returns {(Object|Null)} The first item to meet a condition or null, if no item meets the condition
+ */
+function first(list, condition) {
+	for (var i = 0, len = list && list.length || 0; i < len; i++) {
+		if (condition(list[i])) {
+			return list[i];
+		}
+	}
+	return null;
+}
+
+/**
+ * Get first message in an ESLint result to meet a condition
+ *
+ * @param {Object} result - An ESLint result
+ * @param {Function} condition - A condition function that is passed a message and returns a boolean
+ * @returns {Object} The first message to pass the condition or null
+ */
+exports.firstResultMessage = function(result, condition) {
+	return first(result.messages, condition);
+};
+
+/**
+ * Determine if a message is an error
+ *
+ * @param {Object} message - an ESLint message
  * @returns {Boolean} whether the message is an error message
  */
 function isErrorMessage(message) {
@@ -117,22 +182,45 @@ function isErrorMessage(message) {
 }
 exports.isErrorMessage = isErrorMessage;
 
-function reduceErrorCount(count, message) {
+/**
+ * Increment count if message is an error
+ *
+ * @param {Number} count - count of errors
+ * @param {Object} message - an ESLint message
+ * @returns {Number} The number of errors, message included
+ */
+function countErrorMessage(count, message) {
 	return count + isErrorMessage(message);
 }
-function reduceWarningCount(count, message) {
+
+/**
+ * Increment count if message is a warning
+ *
+ * @param {Number} count - count of warnings
+ * @param {Object} message - an ESLint message
+ * @returns {Number} The number of warnings, message included
+ */
+function countWarningMessage(count, message) {
 	return count + (message.severity === 1);
 }
-exports.getQuietResult = function(result, filter) {
+
+/**
+ * Filter result messages, update error and warning counts
+ *
+ * @param {Object} result - an ESLint result
+ * @param {Function} [filter=isErrorMessage] - A function that evaluates what messages to keep
+ * @returns {Object} A filtered ESLint result
+ */
+exports.filterResult = function(result, filter) {
 	if (typeof filter !== 'function') {
 		filter = isErrorMessage;
 	}
-	var messages = result.messages.filter(filter);
+	var messages = result.messages.filter(filter, result);
 	return {
 		filePath: result.filePath,
 		messages: messages,
-		errorCount: messages.reduce(reduceErrorCount, 0),
-		warningCount: messages.reduce(reduceWarningCount, 0)
+		errorCount: messages.reduce(countErrorMessage, 0),
+		warningCount: messages.reduce(countWarningMessage, 0)
 	};
 };
 
