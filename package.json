@@ -1,7 +1,7 @@
 {
   "name": "gulp-eslint",
   "version": "1.1.0-rc-2",
-  "description": "A gulp plugin for processing files with eslint",
+  "description": "A gulp plugin for processing files with ESLint",
   "repository": "adametry/gulp-eslint",
   "files": [
     "index.js",

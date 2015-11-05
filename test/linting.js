@@ -10,7 +10,7 @@ var BufferStreams = require('bufferstreams');
 
 require('mocha');
 
-describe('Gulp eslint plugin', function() {
+describe('gulp-eslint plugin', function() {
 
 	it('should produce expected message via buffer', function(done) {
 		eslint({

@@ -50,7 +50,7 @@ describe('gulp-eslint failOnError', function() {
 		}));
 	});
 
-	it('should handle eslint reports without messages', function(done) {
+	it('should handle ESLint reports without messages', function(done) {
 
 		var file = new File({
 			path: 'test/fixtures/invalid.js',
@@ -130,7 +130,7 @@ describe('gulp-eslint failAfterError', function() {
 		}));
 	});
 
-	it('should handle eslint reports without messages', function(done) {
+	it('should handle ESLint reports without messages', function(done) {
 
 		var file = new File({
 			path: 'test/fixtures/invalid.js',

@@ -7,7 +7,7 @@ var gulpIf = require('gulp-if');
 var eslint = require('../');
 
 function isFixed(file) {
-	// Has eslint fixed the file contents?
+	// Has ESLint fixed the file contents?
 	return file.eslint != null && file.eslint.fixed;
 }
 

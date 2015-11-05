@@ -7,9 +7,9 @@ var util = require('./util');
 var path = require('path');
 
 /**
- * Append eslint result to each file
+ * Append ESLint result to each file
  *
- * @param {(Object|String)} [options] - Configure rules, env, global, and other options for running eslint
+ * @param {(Object|String)} [options] - Configure rules, env, global, and other options for running ESLint
  * @returns {stream} gulp file stream
  */
 function gulpEslint(options) {
@@ -38,20 +38,20 @@ function gulpEslint(options) {
 
 		} else if (linter.isPathIgnored(filePath)) {
 			// Note:
-			// Vinyl files can have an independently defined cwd, but eslint works relative to `process.cwd()`.
+			// Vinyl files can have an independently defined cwd, but ESLint works relative to `process.cwd()`.
 			// (https://github.com/gulpjs/gulp/blob/master/docs/recipes/specifying-a-cwd.md)
-			// Also, eslint doesn't adjust file paths relative to an ancestory .eslintignore path.
-			// E.g., If ../.eslintignore has "foo/*.js", eslint will ignore ./foo/*.js, instead of ../foo/*.js.
+			// Also, ESLint doesn't adjust file paths relative to an ancestory .eslintignore path.
+			// E.g., If ../.eslintignore has "foo/*.js", ESLint will ignore ./foo/*.js, instead of ../foo/*.js.
 			// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint must account for this limitation.
 
 			if (linter.options.ignore && options.warnFileIgnored) {
-				// Warn that gulp.src is needlessly reading files that eslint ignores
+				// Warn that gulp.src is needlessly reading files that ESLint ignores
 				file.eslint = util.createIgnoreResult(file);
 			}
 			cb(null, file);
 
 		} else if (file.isStream()) {
-			// eslint is synchronous, so wait for the complete contents
+			// ESLint is synchronous, so wait for the complete contents
 			// replace content stream with new readable content stream
 			file.contents = file.contents.pipe(new BufferStreams(function(err, buf, done) {
 				file.eslint = verify(String(buf), filePath);
@@ -77,9 +77,9 @@ function gulpEslint(options) {
 }
 
 /**
- * Handle each eslint result as it passes through the stream.
+ * Handle each ESLint result as it passes through the stream.
  *
- * @param {Function} action - A function to handle each eslint result
+ * @param {Function} action - A function to handle each ESLint result
  * @returns {stream} gulp file stream
  */
 gulpEslint.result = function(action) {
@@ -97,9 +97,9 @@ gulpEslint.result = function(action) {
 };
 
 /**
- * Handle all eslint results at the end of the stream.
+ * Handle all ESLint results at the end of the stream.
  *
- * @param {Function} action - A function to handle all eslint results
+ * @param {Function} action - A function to handle all ESLint results
  * @returns {stream} gulp file stream
  */
 gulpEslint.results = function(action) {
@@ -126,7 +126,7 @@ gulpEslint.results = function(action) {
 };
 
 /**
- * Fail when an eslint error is found in eslint results.
+ * Fail when an ESLint error is found in ESLint results.
  *
  * @returns {stream} gulp file stream
  */
@@ -148,7 +148,7 @@ gulpEslint.failOnError = function() {
 };
 
 /**
- * Fail when the stream ends if any eslint error(s) occurred
+ * Fail when the stream ends if any ESLint error(s) occurred
  *
  * @returns {stream} gulp file stream
  */
@@ -170,8 +170,8 @@ gulpEslint.failAfterError = function() {
 /**
  * Format the results of each file individually.
  *
- * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
- * @param {(Function|Stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ * @param {(String|Function)} [formatter=stylish] - The name or function for a ESLint result formatter
+ * @param {(Function|Stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted ESLint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.formatEach = function(formatter, writable) {
@@ -186,8 +186,8 @@ gulpEslint.formatEach = function(formatter, writable) {
 /**
  * Wait until all files have been linted and format all results at once.
  *
- * @param {(String|Function)} [formatter=stylish] - The name or function for a eslint result formatter
- * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted eslint results.
+ * @param {(String|Function)} [formatter=stylish] - The name or function for a ESLint result formatter
+ * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted ESLint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.format = function(formatter, writable) {

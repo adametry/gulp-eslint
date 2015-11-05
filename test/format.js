@@ -34,7 +34,7 @@ describe('gulp-eslint format', function() {
 	var formatCount, writeCount;
 
 	/**
-	 * Custom eslint formatted result writer for counting write attempts
+	 * Custom ESLint formatted result writer for counting write attempts
 	 * rather than writing to the console.
 	 *
 	 * @param {String} message - a message to count as written
@@ -46,7 +46,7 @@ describe('gulp-eslint format', function() {
 	}
 
 	/**
-	 * Custom eslint formatted result writer that will throw an exception
+	 * Custom ESLint formatted result writer that will throw an exception
 	 *
 	 * @throws Error Always thrown to test error handling in writers
 	 * @param {String} message - a message to trigger an error
@@ -59,10 +59,10 @@ describe('gulp-eslint format', function() {
 
 	describe('format all results', function() {
 		/**
-		 * Custom eslint result formatter for counting format passes and
+		 * Custom ESLint result formatter for counting format passes and
 		 * returning a expected formatted result message.
 		 *
-		 * @param {Array} results - eslint results
+		 * @param {Array} results - ESLint results
 		 * @param {Object} config - format config
 		 * @returns {String} formatted results
 		 */
@@ -84,7 +84,7 @@ describe('gulp-eslint format', function() {
 			writeCount = 0;
 		});
 
-		it('should format all eslint results at once', function(done) {
+		it('should format all ESLint results at once', function(done) {
 			var files = getFiles();
 
 			var lintStream = eslint().on('error', done);
@@ -148,7 +148,7 @@ describe('gulp-eslint format', function() {
 			}, 0) + ' messages';
 		}
 
-		it('should format individual eslint results', function(done) {
+		it('should format individual ESLint results', function(done) {
 			formatCount = 0;
 			writeCount = 0;
 

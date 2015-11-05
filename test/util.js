@@ -322,7 +322,7 @@ describe('utility methods', function() {
 
 		});
 
-		it('should resolve a formatter (via eslint\'s CLIEngine)', function() {
+		it('should resolve a formatter', function() {
 
 			var formatter = util.resolveFormatter('tap');
 			formatter.should.equal(require('eslint/lib/formatters/tap'));

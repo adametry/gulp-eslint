@@ -25,10 +25,10 @@ exports.transform = function(transform, flush) {
 
 /**
  * Mimic the CLIEngine's createIgnoreResult function,
- * only without the eslint CLI reference.
+ * only without the ESLint CLI reference.
  *
  * @param {Object} file - file with a "path" property
- * @returns {Object} An eslint report with an ignore warning
+ * @returns {Object} An ESLint report with an ignore warning
  */
 exports.createIgnoreResult = function(file) {
 	return {
@@ -112,7 +112,9 @@ exports.migrateOptions = function migrateOptions(options) {
 exports.handleCallback = function(callback, value) {
 	return function(err) {
 		if (err != null && !(err instanceof gutil.PluginError)) {
-			err = new gutil.PluginError('gulp-eslint', err, {showStack: err.showStack !== false});
+			err = new gutil.PluginError(err.plugin || 'gulp-eslint', err, {
+				showStack: (err.showStack !== false)
+			});
 		}
 		callback(err, value);
 	};
@@ -229,12 +231,12 @@ exports.filterResult = function(result, filter) {
  *
  * @throws TypeError thrown if unable to resolve the formatter type
  * @param {(String|Function)} [formatter=stylish] - A name to resolve as a formatter. If a function is provided, the same function is returned.
- * @returns {Function} An eslint formatter
+ * @returns {Function} An ESLint formatter
  */
 exports.resolveFormatter = function(formatter) {
-	// use eslint to look up formatter references
+	// use ESLint to look up formatter references
 	if (typeof formatter !== 'function') {
-		// load formatter (module, relative to cwd, eslint formatter)
+		// load formatter (module, relative to cwd, ESLint formatter)
 		formatter =	CLIEngine.getFormatter(formatter) || formatter;
 	}
 
@@ -264,9 +266,9 @@ exports.resolveWritable = function(writable) {
 /**
  * Write formatter results to writable/output
  *
- * @param {Object[]} results - A list of eslint results
- * @param {Function} formatter - A function used to format eslint results
- * @param {Function} writable - A function used to write formatted eslint results
+ * @param {Object[]} results - A list of ESLint results
+ * @param {Function} formatter - A function used to format ESLint results
+ * @param {Function} writable - A function used to write formatted ESLint results
  */
 exports.writeResults = function(results, formatter, writable) {
 	var config;

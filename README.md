@@ -18,7 +18,7 @@ var gulp = require('gulp'),
 
 gulp.task('lint', function () {
     return gulp.src(['js/**/*.js'])
-        // eslint() attaches the lint output to the eslint property
+        // eslint() attaches the lint output to the "eslint" property
         // of the file object so it can be used by other modules.
         .pipe(eslint())
         // eslint.format() outputs the lint results to the console.
@@ -39,6 +39,13 @@ Or use the plugin API to do things like:
 ```javascript
 gulp.src('js/**/*.js')
 	.pipe(eslint({
+		// "expree" is installed with ESLint.
+		// Any other parser will need to be installed.
+		parser: 'espree',
+		extends: 'eslint:recommended',
+		ecmaFeatures: {
+		    'modules': true
+		},
 		rulePaths: [
 			'custom-rules/'
 		],
@@ -163,7 +170,7 @@ gulp.src('**/*.js')
 Stop a task/stream if an ESLint error has been reported for any file, but wait for all of them to be processed first.
 
 ```javascript
-// Cause the stream to stop(/fail) when the stream ends if any eslint error(s) occurred.
+// Cause the stream to stop(/fail) when the stream ends if any ESLint error(s) occurred.
 gulp.src('**/*.js')
 	.pipe(eslint())
 	.pipe(eslint.failAfterError())
@@ -172,15 +179,15 @@ gulp.src('**/*.js')
 
 ### eslint.format(formatter, output)
 
-Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no eslint results to format.
+Format all linted files once. This should be used in the stream after piping through `eslint`; otherwise, this will find no ESLint results to format.
 
 The `formatter` argument may be a `String`, `Function`, or `undefined`. As a `String`, a formatter module by that name or path will be resolved as a module, relative to `process.cwd()`, or as one of the [ESLint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters). If `undefined`, the ESLint “stylish” formatter will be resolved. A `Function` will be called with an `Array` of file linting results to format.
 
 ```javascript
-// use the default "stylish" eslint formatter
+// use the default "stylish" ESLint formatter
 eslint.format()
 
-// use the "checkstyle" eslint formatter
+// use the "checkstyle" ESLint formatter
 eslint.format('checkstyle')
 
 // use the "eslint-path-formatter" module formatter

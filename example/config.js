@@ -6,27 +6,27 @@ var gulp = require('gulp');
 var eslint = require('../');
 
 /**
- * Simple example of using eslint and a formatter
- * Note: eslint does not write to the console itself.
- * Use format or formatEach to print eslint results.
+ * Simple example of using ESLint and a formatter
+ * Note: ESLint does not write to the console itself.
+ * Use format or formatEach to print ESLint results.
  * @returns {stream} gulp file stream
  */
 gulp.task('basic', function() {
 	return gulp.src('../test/fixtures/**/*.js')
 		// default: use local linting config
 		.pipe(eslint())
-		// format eslint results and print them to the console
+		// format ESLint results and print them to the console
 		.pipe(eslint.format());
 });
 
 /**
- * Inline eslint configuration
+ * Inline ESLint configuration
  * @returns {stream} gulp file stream
  */
 gulp.task('inline-config', function() {
 	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint({
-			// gulp-eslint's config works much like .eslintrc with a dash of eslint's CLI
+			// gulp-eslint's config works much like .eslintrc with a dash of ESLint's CLI
 
 			'extends':'eslint:recommended',
 
@@ -80,7 +80,7 @@ gulp.task('inline-config', function() {
 gulp.task('load-config', function() {
 	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint({
-			// Load a specific eslint config
+			// Load a specific ESLint config
 			config: 'config.json'
 		}))
 		.pipe(eslint.format());
@@ -92,7 +92,7 @@ gulp.task('load-config', function() {
  */
 gulp.task('load-config-shorthand', function() {
 	return gulp.src('../test/fixtures/**/*.js')
-		// Load a specific eslint config
+		// Load a specific ESLint config
 		.pipe(eslint('config.json'))
 		.pipe(eslint.format());
 });
