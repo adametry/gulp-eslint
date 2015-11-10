@@ -225,7 +225,7 @@ describe('gulp-eslint plugin', function() {
 	describe('"fix" option', function() {
 
 		it('when true, should update buffered contents', function(done) {
-			eslint({fix: true, rules: {'no-extra-semi': 1, 'no-trailing-spaces': 2}})
+			eslint({fix: true, useEslintrc: false, rules: {'no-trailing-spaces': 2}})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
@@ -239,12 +239,12 @@ describe('gulp-eslint plugin', function() {
 			})
 			.end(new File({
 				path: 'test/fixtures/fixable.js',
-				contents: new Buffer('var x = 0;; ')
+				contents: new Buffer('var x = 0; ')
 			}));
 		});
 
 		it('when true, should update stream contents', function(done) {
-			eslint({fix: true, rules: {'no-extra-semi': 1, 'no-trailing-spaces': 2}})
+			eslint({fix: true, useEslintrc: false, rules: {'no-trailing-spaces': 2}})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
@@ -252,10 +252,10 @@ describe('gulp-eslint plugin', function() {
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(0);
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(0);
-				file.eslint.output.should.equal('var x = 0;');
+				file.eslint.output.should.equal('var x = 0;;');
 				file.contents = file.contents.pipe(new BufferStreams(function(err, buf, cb) {
 					cb(err, buf);
-					buf.toString().should.equal('var x = 0;');
+					buf.toString().should.equal('var x = 0;;');
 					done();
 				}));
 
