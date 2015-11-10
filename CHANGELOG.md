@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.0
+
+* Bump eslint dependency to ^1.4.0, when "fix" option was added
+* Apply eslint-fixed source to gulp file contents
+* Add "quiet" option to filter eslint messages
+* Update .eslintignore resolution to match eslint
+* Add file ignore warnings behind "warnFileIgnored" option
+* Migrate "ecmaFeatures" and "extends" option to "baseConfig" option
+* Add "result" and "results" methods and tests
+* Refactor "failOnError", "failAfterError", "format", and "formatEach" to use "result" or "results" methods
+
 ## 1.0.0
 
 * Bump eslint dependency to ^1.0.0
