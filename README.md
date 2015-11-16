@@ -257,7 +257,7 @@ eslint.format('checkstyle')
 eslint.format('eslint-path-formatter')
 ```
 
-The `output` argument may be a `WritableStream`, `Function`, or `undefined`. As a `WritableStream`, the formatter results will be written to the stream. If `undefined`, the formatter results will be written to [gulp’s log](https://github.com/gulpjs/gulp-util). A `Function` will be called with the formatter results as the only parameter.
+The `output` argument may be a `WritableStream`, `Function`, or `undefined`. As a `WritableStream`, the formatter results will be written to the stream. If `undefined`, the formatter results will be written to [gulp’s log](https://github.com/gulpjs/gulp-util#logmsg). A `Function` will be called with the formatter results as the only parameter.
 
 ```javascript
 // write to gulp's log (default)
