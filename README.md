@@ -257,7 +257,7 @@ eslint.format('checkstyle')
 eslint.format('eslint-path-formatter')
 ```
 
-The `output` argument may be a `WritableStream`, `Function`, or `undefined`. As a `WritableStream`, the formatter results will be written to the stream. If `undefined`, the formatter results will be written to [gulp’s log](https://github.com/wearefractal/gulp-util#logmsg). A `Function` will be called with the formatter results as the only parameter.
+The `output` argument may be a `WritableStream`, `Function`, or `undefined`. As a `WritableStream`, the formatter results will be written to the stream. If `undefined`, the formatter results will be written to [gulp’s log](https://github.com/gulpjs/gulp-util#logmsg). A `Function` will be called with the formatter results as the only parameter.
 
 ```javascript
 // write to gulp's log (default)
@@ -280,7 +280,7 @@ ESLint may be configured explicity by using any of the following plugin options:
 
 ##Ignore Files
 
-ESLint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/wearefractal/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
+ESLint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/contra/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
 
 ESLint will also detect an `.eslintignore` file at the cwd or a parent directory. See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#ignoring-files-and-directories) to learn how to construct this file.
 
