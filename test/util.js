@@ -242,6 +242,52 @@ describe('utility methods', function() {
 
 		});
 
+		it('should migrate "globals" to "baseConfig" in key-value format', function() {
+
+			var options = util.migrateOptions({
+				// trigger migration to baseConfig
+				ecmaFeatures: {},
+
+				// add global "token" identifier
+				globals: {
+					token: true
+				}
+			});
+
+			should.exist(options.baseConfig);
+			should.exist(options.baseConfig.globals);
+			options.baseConfig.globals.token.should.equal(true);
+			should.exist(options.baseConfig.ecmaFeatures);
+
+			should.exist(options.globals);
+			options.globals.should.be.instanceof(Array).and.have.lengthOf(1);
+			options.globals[0].should.equal('token:true');
+
+		});
+
+		it('should migrate "envs" to "baseConfig" in key-value format', function() {
+
+			var options = util.migrateOptions({
+				// trigger migration to baseConfig
+				ecmaFeatures: {},
+
+				// use "browser" env
+				envs: {
+					browser: true
+				}
+			});
+
+			should.exist(options.baseConfig);
+			should.exist(options.baseConfig.envs);
+			options.baseConfig.envs.browser.should.equal(true);
+			should.exist(options.baseConfig.ecmaFeatures);
+
+			should.exist(options.envs);
+			options.envs.should.be.instanceof(Array).and.have.lengthOf(1);
+			options.envs[0].should.equal('browser');
+
+		});
+
 	});
 
 	describe('isErrorMessage', function() {

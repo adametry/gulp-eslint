@@ -61,6 +61,11 @@ exports.migrateOptions = function migrateOptions(options) {
 		options = objectAssign({}, options);
 	}
 
+	if (options.extends || options.ecmaFeatures) {
+		// nest options as baseConfig, since it's basically an .eslintrc config file
+		options.baseConfig = objectAssign(options.baseConfig || {}, options, {baseConfig: null});
+	}
+
 	options.globals = options.globals || options.global;
 	if (options.globals != null && !Array.isArray(options.globals)) {
 		options.globals = Object.keys(options.globals).map(function cliGlobal(key) {
@@ -92,11 +97,6 @@ exports.migrateOptions = function migrateOptions(options) {
 	if (options.eslintrc != null) {
 		// The "eslintrc" option has been deprecated. Use "useEslintrc".
 		options.useEslintrc = options.eslintrc;
-	}
-
-	if (options.extends || options.ecmaFeatures) {
-		// nest options as baseConfig, since it's basically an .eslintrc config file
-		options.baseConfig = objectAssign(options.baseConfig || {}, options, {baseConfig: null});
 	}
 
 	return options;
