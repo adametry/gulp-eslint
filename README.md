@@ -208,8 +208,8 @@ gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint.results(function (results) {
     	// Called once for all ESLint results.
 	    console.log('Total Results: ' + results.length);
-	    console.log('Total Warnings: ' + result.warningCount);
-	    console.log('Total Errors: ' + result.errorCount);
+	    console.log('Total Warnings: ' + results.warningCount);
+	    console.log('Total Errors: ' + results.errorCount);
 	}));
 ```
 
