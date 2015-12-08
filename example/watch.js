@@ -31,7 +31,7 @@ gulp.task('cached-lint', function() {
 		// Only uncached and changed files past this point
 		.pipe(eslint())
 		.pipe(eslint.format())
-		.pipe(eslint.result(function (result) {
+		.pipe(eslint.result(function(result) {
 			if (result.warningCount > 0 || result.errorCount > 0) {
 				// If a file has errors/warnings remove uncache it
 				delete cache.caches.eslint[path.resolve(result.filePath)];
