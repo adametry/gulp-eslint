@@ -25,7 +25,7 @@ gulp.task('lint-watch', function() {
 
 
 gulp.task('cached-lint', function() {
-	// Read all js files within ./src
+	// Read all js files within test/fixtures
 	return gulp.src('../test/fixtures/*.js')
 		.pipe(cache('eslint'))
 		// Only uncached and changed files past this point
