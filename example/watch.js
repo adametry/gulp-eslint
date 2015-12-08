@@ -1,12 +1,11 @@
 'use strict';
 
-// npm install gulp gulp-eslint gulp-if gulp-cached
+// npm install gulp gulp-eslint gulp-cached
 
 var gulp = require('gulp');
+var path = require('path');
 var eslint = require('../');
 var cache = require('gulp-cached');
-var ifFile = require('gulp-if');
-var Transform = require('stream').Transform;
 
 
 gulp.task('lint-watch', function() {
@@ -25,45 +24,28 @@ gulp.task('lint-watch', function() {
 
 
 
-function isLinty(file) {
-	// check if a file has been fixed or has warnings/errors
-	return file.eslint != null
-		&&(file.eslint.warningCount > 0
-		|| file.eslint.errorCount > 0
-		|| file.eslint.fixed);
-}
-
-function uncache(name) {
-	// create a stream that removes files from gulp-cached
-	var stream = new Transform({
-		objectMode: true
-	});
-	stream._transform = function(file, enc, done) {
-		if (cache.caches[name]) {
-			delete cache.caches[name][file.path];
-		}
-		done(null, file);
-	};
-	return stream;
-}
-
 gulp.task('cached-lint', function() {
 	// Read all js files within ./src
 	return gulp.src('../test/fixtures/*.js')
-		.pipe(cache('lint-cache'))
+		.pipe(cache('eslint'))
 		// Only uncached and changed files past this point
 		.pipe(eslint())
 		.pipe(eslint.format())
-		// If a file has errors/warnings ("linty") uncache it
-		.pipe(ifFile(isLinty, uncache('lint-cache')));
+		.pipe(eslint.result(function (result) {
+			if (result.warningCount > 0 || result.errorCount > 0) {
+				// If a file has errors/warnings remove uncache it
+				delete cache.caches.eslint[path.resolve(result.filePath)];
+			}
+		}));
 });
 
 // Run the "cached-lint" task initially...
 gulp.task('cached-lint-watch', ['cached-lint'], function() {
 	// ...and whenever a watched file changes
 	return gulp.watch('../test/fixtures/*.js', ['cached-lint'], function(event) {
-		if (event.type === 'deleted' && cache.caches['lint-cache']) {
-			delete cache.caches['lint-cache'][event.path];
+		if (event.type === 'deleted' && cache.caches.eslint) {
+			// remove deleted files from cache
+			delete cache.caches.eslint[event.path];
 		}
 	});
 });
