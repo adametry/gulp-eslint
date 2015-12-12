@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-rc
+
+* Update ESLint dependency to "next"
+
+## 1.1.1
+
+* Fix config migration of "extends" and "ecmaFeatures" options
+
 ## 1.1.0
 
 * Bump eslint dependency to ^1.4.0, when "fix" option was added
