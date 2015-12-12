@@ -19,7 +19,7 @@ describe('utility methods', function() {
 			var passedFile = false,
 				streamFile = new File({
 					path: 'test/fixtures/invalid.js',
-					contents: new Buffer('document = "abuse read-only value";')
+					contents: new Buffer('x = 1;')
 				}),
 				testStream = util.transform(function(file, enc, cb) {
 					should.exist(file);
@@ -44,7 +44,7 @@ describe('utility methods', function() {
 				files = [
 					new File({
 						path: 'test/fixtures/invalid.js',
-						contents: new Buffer('document = "abuse read-only value";')
+						contents: new Buffer('x = 1;')
 					}),
 					new File({
 						path: 'test/fixtures/undeclared.js',

@@ -9,28 +9,26 @@ require('mocha');
 
 describe('gulp-eslint failOnError', function() {
 	it('should fail a file immediately if an error is found', function(done) {
-		var lintStream = eslint({
-			envs: ['browser'],
-			rules: {
-				'no-undef': 2,
-				'strict': 0
-			}
-		});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2}});
 
-		lintStream.pipe(eslint.failOnError().on('error', function(err) {
+		function endWithoutError() {
+			done(new Error('An error was not thrown before ending'));
+		}
+
+		lintStream.pipe(eslint.failOnError())
+		.on('error', function(err) {
+			this.removeListener('finish', endWithoutError);
 			should.exists(err);
-			err.message.should.equal('\"document\" is read only.');
+			err.message.should.equal('"x" is not defined.');
 			err.fileName.should.equal('test/fixtures/invalid.js');
 			err.plugin.should.equal('gulp-eslint');
 			done();
-		}))
-		.on('end', function() {
-			done(new Error('An error was not thrown before ending'));
-		});
+		})
+		.on('finish', endWithoutError);
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 1;')
 		}));
 
 		lintStream.end();
@@ -38,7 +36,7 @@ describe('gulp-eslint failOnError', function() {
 
 	it('should pass a file if only warnings are found', function(done) {
 
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failOnError())
 		.on('error', done)
@@ -72,36 +70,31 @@ describe('gulp-eslint failOnError', function() {
 describe('gulp-eslint failAfterError', function() {
 
 	it('should fail when the file stream ends if an error is found', function(done) {
-		var lintStream = eslint({
-			envs: ['browser'],
-			rules: {
-				'no-undef': 2,
-				'strict': 0
-			}
-		});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2}});
 
-		lintStream.pipe(eslint.failAfterError().on('error', function(err) {
+		function endWithoutError() {
+			done(new Error('An error was not thrown before ending'));
+		}
+
+		lintStream.pipe(eslint.failAfterError())
+		.on('error', function(err) {
+			this.removeListener('finish', endWithoutError);
 			should.exists(err);
 			err.message.should.equal('Failed with 1 error');
 			err.name.should.equal('ESLintError');
 			err.plugin.should.equal('gulp-eslint');
 			done();
-		}));
+		})
+		.on('finish', endWithoutError);
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 1;')
 		}));
 	});
 
 	it('should fail when the file stream ends if multiple errors are found', function(done) {
-		var lintStream = eslint({
-			envs: ['browser'],
-			rules: {
-				'no-undef': 2,
-				'strict': 0
-			}
-		});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2}});
 
 		lintStream.pipe(eslint.failAfterError().on('error', function(err) {
 			should.exists(err);
@@ -113,12 +106,12 @@ describe('gulp-eslint failAfterError', function() {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('document = "abuse read-only value"; a = false;')
+			contents: new Buffer('x = 1; a = false;')
 		}));
 	});
 
 	it('should pass when the file stream ends if only warnings are found', function(done) {
-		var lintStream = eslint({rules: {'no-undef': 1, 'strict': 0}});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failAfterError())
 		.on('error', done)

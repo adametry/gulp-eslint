@@ -10,15 +10,9 @@ require('mocha');
 
 describe('gulp-eslint result', function() {
 
-	it('should provide a ESLint result', function(done) {
+	it('should provide an ESLint result', function(done) {
 		var resultCount = 0;
-		var lintStream = eslint({
-			envs: ['browser'],
-			rules: {
-				'no-undef': 2,
-				'strict': [1, 'global']
-			}
-		});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2, 'strict': [1, 'global']}});
 
 		lintStream
 		.pipe(eslint.result(function(result) {
@@ -35,17 +29,17 @@ describe('gulp-eslint result', function() {
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-1.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 1;')
 		}));
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-2.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 2;')
 		}));
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-3.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 3;')
 		}));
 
 		lintStream.end();
@@ -180,13 +174,7 @@ describe('gulp-eslint results', function() {
 
 	it('should provide ESLint results', function(done) {
 		var resultsCalled = false;
-		var lintStream = eslint({
-			envs: ['browser'],
-			rules: {
-				'no-undef': 2,
-				'strict': [1, 'global']
-			}
-		});
+		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2, 'strict': [1, 'global']}});
 
 		lintStream
 		.pipe(eslint.results(function(results) {
@@ -203,17 +191,17 @@ describe('gulp-eslint results', function() {
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-1.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 1;')
 		}));
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-2.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 2;')
 		}));
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-3.js',
-			contents: new Buffer('document = "abuse read-only value";')
+			contents: new Buffer('x = 3;')
 		}));
 
 		lintStream.end();

@@ -12,13 +12,38 @@ require('mocha');
 
 describe('gulp-eslint plugin', function() {
 
-	it('should produce expected message via buffer', function(done) {
+	it('should configure an alternate parser', function(done) {
 		eslint({
 			configFile: 'test/fixtures/.eslintrc-babel',
 			globals: {
 				'$': true
 			}
 		})
+		.on('error', done)
+		.on('data', function(file) {
+			should.exist(file);
+			should.exist(file.contents);
+			should.exist(file.eslint);
+			file.eslint.should.have.property('filePath', 'test/fixtures/es6.js');
+
+			file.eslint.messages
+			.should.be.instanceof(Array)
+			.and.have.lengthOf(1);
+
+			file.eslint.messages[0]
+			.should.have.properties('message', 'line', 'column')
+			.and.have.property('ruleId', 'strict');
+
+			done();
+		})
+		.end(new File({
+			path: 'test/fixtures/es6.js',
+			contents: new Buffer('(() => {\n\t$.fn.foo = (a) => `${a}b`; }());')
+		}));
+	});
+
+	it('should produce expected message via buffer', function(done) {
+		eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
@@ -38,7 +63,7 @@ describe('gulp-eslint plugin', function() {
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('(() => {\n\t$.fn.foo = (a) => `${a}b`; }());')
+			contents: new Buffer('var x = 1;')
 		}));
 	});
 
