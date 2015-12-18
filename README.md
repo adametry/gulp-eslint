@@ -165,6 +165,12 @@ When `false`, ESLint will not load [.eslintrc files](http://eslint.org/docs/user
 
 Alias: `eslintrc` *(deprecated)*
 
+#### options.eslint
+
+Type: `Module`
+
+If you would like to use a custom version of eslint, you can pass it directly.
+
 ### eslint(configFilePath)
 
 Type: `String`
@@ -265,7 +271,7 @@ eslint.format();
 
 // write messages to stdout
 eslint.format('junit', process.stdout)
-``` 
+```
 
 ### eslint.formatEach(formatter, output)
 
@@ -286,7 +292,7 @@ ESLint will also detect an `.eslintignore` file at the cwd or a parent directory
 
 ## Extensions
 
-ESLint results are attached as an "eslint" property to the vinyl files that pass through a Gulp.js stream pipeline. This is available to streams that follow the initial `eslint` stream. The [eslint.result](#result) and [eslint.results](#results) methods are made available to support extensions and custom handling of ESLint results. 
+ESLint results are attached as an "eslint" property to the vinyl files that pass through a Gulp.js stream pipeline. This is available to streams that follow the initial `eslint` stream. The [eslint.result](#result) and [eslint.results](#results) methods are made available to support extensions and custom handling of ESLint results.
 
 #### Gulp-Eslint Extensions:
 * [gulp-eslint-threshold](https://github.com/krmbkt/gulp-eslint-threshold)

@@ -2,7 +2,6 @@
 
 var BufferStreams = require('bufferstreams');
 var PluginError = require('gulp-util').PluginError;
-var CLIEngine = require('eslint').CLIEngine;
 var util = require('./util');
 var path = require('path');
 
@@ -14,7 +13,10 @@ var path = require('path');
  */
 function gulpEslint(options) {
 	options = util.migrateOptions(options);
-	var linter = new CLIEngine(options);
+
+	var eslint = options.eslint || require('eslint');
+	delete options.eslint;
+	var linter = new eslint.CLIEngine(options);
 
 	function verify(str, filePath) {
 		var result = linter.executeOnText(str, filePath).results[0];
