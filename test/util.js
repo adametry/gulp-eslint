@@ -2,10 +2,8 @@
 'use strict';
 
 var File = require('vinyl'),
-	path = require('path'),
 	stream = require('stream'),
 	should = require('should'),
-	CLIEngine = require('eslint').CLIEngine,
 	util = require('../util');
 
 require('mocha');
@@ -109,7 +107,9 @@ describe('utility methods', function() {
 			result.errorCount.should.equal(0);
 			result.warningCount.should.equal(1);
 			result.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-			result.messages[0].message.should.equal('File ignored because it has a node_modules/** path');
+			result.messages[0].message.should.equal(
+				'File ignored because it has a node_modules/** path'
+			);
 
 		});
 

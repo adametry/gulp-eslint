@@ -28,9 +28,9 @@ gulp.task('inline-config', function() {
 		.pipe(eslint({
 			// gulp-eslint's config works much like .eslintrc with a dash of ESLint's CLI
 
-			'extends':'eslint:recommended',
+			'extends': 'eslint:recommended',
 
-			'ecmaFeatures':{
+			'ecmaFeatures': {
 				'modules': true
 			},
 

@@ -52,7 +52,7 @@ describe('gulp-eslint format', function() {
 	 * @param {String} message - a message to trigger an error
 	 */
 	function failWriter(message) {
-		var error = new Error('Writer Test Error');
+		var error = new Error('Writer Test Error' + (message ? ': ' + message : ''));
 		error.name = 'TestError';
 		throw error;
 	}
@@ -87,7 +87,8 @@ describe('gulp-eslint format', function() {
 		it('should format all ESLint results at once', function(done) {
 			var files = getFiles();
 
-			var lintStream = eslint().on('error', done);
+			var lintStream = eslint({useEslintrc: false, rules: {'strict': 2}});
+			lintStream.on('error', done);
 
 			var formatStream = eslint.format(formatResults, outputWriter);
 
@@ -154,7 +155,7 @@ describe('gulp-eslint format', function() {
 
 			var files = getFiles();
 
-			var lintStream = eslint()
+			var lintStream = eslint({useEslintrc: false, rules: {'strict': 2}})
 			.on('error', done);
 
 			var formatStream = eslint.formatEach(formatResult, outputWriter)
@@ -184,7 +185,7 @@ describe('gulp-eslint format', function() {
 
 			var files = getFiles();
 
-			var lintStream = eslint()
+			var lintStream = eslint({useEslintrc: false, rules: {'strict': 2}})
 			.on('error', done);
 
 			var formatStream = eslint.formatEach(formatResult, failWriter);
@@ -192,7 +193,7 @@ describe('gulp-eslint format', function() {
 			formatStream
 			.on('error', function(err) {
 				should.exists(err);
-				err.message.should.equal('Writer Test Error');
+				err.message.should.equal('Writer Test Error: 1 messages');
 				err.name.should.equal('TestError');
 				err.plugin.should.equal('gulp-eslint');
 				done();

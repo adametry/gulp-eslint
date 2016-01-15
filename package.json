@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "pretest": "jscs *.js test/*.js && gulp test",
+    "pretest": "gulp test",
     "test": "mocha",
     "gulp": "gulp",
     "gulp-example": "gulp --gulpfile=example/config.js",
@@ -51,18 +51,8 @@
     "gulp": "^3.9.0",
     "istanbul": "^0.4.0",
     "istanbul-coveralls": "^1.0.3",
-    "jscs": "^2.0.0",
     "mocha": "^2.2.5",
     "should": "^8.0.1",
     "vinyl": "^1.0.0"
-  },
-  "jscsConfig": {
-    "preset": "google",
-    "validateIndentation": "\t",
-    "disallowMultipleVarDecl": null,
-    "maximumLineLength": {
-      "value": 98,
-      "allowComments": true
-    }
   }
 }

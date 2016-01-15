@@ -12,7 +12,13 @@ describe('gulp-eslint result', function() {
 
 	it('should provide an ESLint result', function(done) {
 		var resultCount = 0;
-		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2, 'strict': [1, 'global']}});
+		var lintStream = eslint({
+			useEslintrc: false,
+			rules: {
+				'no-undef': 2,
+				'strict': [1, 'global']
+			}
+		});
 
 		lintStream
 		.pipe(eslint.result(function(result) {
@@ -174,7 +180,13 @@ describe('gulp-eslint results', function() {
 
 	it('should provide ESLint results', function(done) {
 		var resultsCalled = false;
-		var lintStream = eslint({useEslintrc: false, rules: {'no-undef': 2, 'strict': [1, 'global']}});
+		var lintStream = eslint({
+			useEslintrc: false,
+			rules: {
+				'no-undef': 2,
+				'strict': [1, 'global']
+			}
+		});
 
 		lintStream
 		.pipe(eslint.results(function(results) {

@@ -16,7 +16,7 @@ gulp.task('fail-immediately', function() {
 		.pipe(eslint.failOnError())
 		// need to do something before the process exits? Try this:
 		.on('error', function(error) {
-			gulpUtil.log('Stream Exiting With Error');
+			gulpUtil.log('Stream Exiting With Error: ' + error.message);
 		});
 });
 

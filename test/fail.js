@@ -19,7 +19,7 @@ describe('gulp-eslint failOnError', function() {
 		.on('error', function(err) {
 			this.removeListener('finish', endWithoutError);
 			should.exists(err);
-			err.message.should.equal('"x" is not defined.');
+			err.message.should.equal('\'x\' is not defined.');
 			err.fileName.should.equal('test/fixtures/invalid.js');
 			err.plugin.should.equal('gulp-eslint');
 			done();
@@ -57,9 +57,9 @@ describe('gulp-eslint failOnError', function() {
 		file.eslint = {};
 
 		eslint.failOnError()
-		.on('error', function(error) {
+		.on('error', function(err) {
 			this.removeListener('finish', done);
-			done(error);
+			done(err);
 		})
 		.on('finish', done)
 		.end(file);

@@ -1,12 +1,12 @@
 /* global describe, it*/
 'use strict';
 
-var fs = require('fs');
-var eslint = require('../');
-var stream = require('stream');
-var File = require('vinyl');
-var should = require('should');
-var BufferStreams = require('bufferstreams');
+var fs = require('fs'),
+	eslint = require('../'),
+	stream = require('stream'),
+	File = require('vinyl'),
+	should = require('should'),
+	BufferStreams = require('bufferstreams');
 
 require('mocha');
 
@@ -14,10 +14,9 @@ describe('gulp-eslint plugin', function() {
 
 	it('should configure an alternate parser', function(done) {
 		eslint({
-			configFile: 'test/fixtures/.eslintrc-babel',
-			globals: {
-				'$': true
-			}
+			parser: 'babel-eslint',
+			useEslintrc: false,
+			rules: {strict: [2, 'global']}
 		})
 		.on('error', done)
 		.on('data', function(file) {
@@ -38,7 +37,7 @@ describe('gulp-eslint plugin', function() {
 		})
 		.end(new File({
 			path: 'test/fixtures/es6.js',
-			contents: new Buffer('(() => {\n\t$.fn.foo = (a) => `${a}b`; }());')
+			contents: new Buffer('(() => {\n\treturn (a) => `${a}b`; }());')
 		}));
 	});
 
@@ -68,7 +67,7 @@ describe('gulp-eslint plugin', function() {
 	});
 
 	it('should produce expected message upon stream completion', function(done) {
-		eslint()
+		eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
@@ -101,7 +100,7 @@ describe('gulp-eslint plugin', function() {
 	it('should lint multiple streaming files', function(done) {
 		var fileCount = 0;
 
-		var lintStream = eslint()
+		var lintStream = eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
@@ -138,7 +137,7 @@ describe('gulp-eslint plugin', function() {
 	});
 
 	it('should ignore files with null content', function(done) {
-		eslint()
+		eslint({useEslintrc: false, rules: {'strict': 2}})
 		.on('error', done)
 		.on('data', function(file) {
 			should.exist(file);
@@ -155,7 +154,7 @@ describe('gulp-eslint plugin', function() {
 	describe('"warnFileIgnored" option', function() {
 
 		it('when true, should warn when a file is ignored by .eslintignore', function(done) {
-			eslint({warnFileIgnored: true})
+			eslint({useEslintrc: false, warnFileIgnored: true})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
@@ -174,14 +173,14 @@ describe('gulp-eslint plugin', function() {
 		});
 
 		it('when true, should warn when a "node_modules" file is ignored', function(done) {
-			eslint({warnFileIgnored: true})
+			eslint({useEslintrc: false, warnFileIgnored: true})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
 				should.exist(file.eslint);
 				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-				file.eslint.messages[0]
-				.should.have.property('message', 'File ignored because it has a node_modules/** path');
+				file.eslint.messages[0].should.have.property('message',
+					'File ignored because it has a node_modules/** path');
 				file.eslint.errorCount.should.equal(0);
 				file.eslint.warningCount.should.equal(1);
 				done();
@@ -193,7 +192,7 @@ describe('gulp-eslint plugin', function() {
 		});
 
 		it('when not true, should silently ignore files', function(done) {
-			eslint({warnFileIgnored: false})
+			eslint({useEslintrc: false, warnFileIgnored: false})
 			.on('error', done)
 			.on('data', function(file) {
 				should.exist(file);
@@ -211,7 +210,7 @@ describe('gulp-eslint plugin', function() {
 	describe('"quiet" option', function() {
 
 		it('when true, should remove warnings', function(done) {
-			eslint({quiet: true, rules: {'no-undef': 1, 'strict': 2}})
+			eslint({quiet: true, useEslintrc: false, rules: {'no-undef': 1, 'strict': 2}})
 			.on('data', function(file) {
 				should.exist(file);
 				should.exist(file.eslint);
@@ -230,7 +229,7 @@ describe('gulp-eslint plugin', function() {
 			function warningsOnly(message) {
 				return message.severity === 1;
 			}
-			eslint({quiet: warningsOnly, rules: {'no-undef': 1, 'strict': 2}})
+			eslint({quiet: warningsOnly, useEslintrc: false, rules: {'no-undef': 1, 'strict': 2}})
 			.on('data', function(file) {
 				should.exist(file);
 				should.exist(file.eslint);

@@ -11,9 +11,6 @@ gulp.task('quiet-lint', function() {
 			// only report errors
 			quiet: true
 		}))
-		.pipe(eslint.result(function(result) {
-
-		}))
 		.pipe(eslint.format());
 });
 
