@@ -16,7 +16,7 @@ describe('gulp-eslint plugin', function() {
 		eslint({
 			parser: 'babel-eslint',
 			useEslintrc: false,
-			rules: {strict: [2, 'global']}
+			rules: {'arrow-parens': 2}
 		})
 		.on('error', done)
 		.on('data', function(file) {
@@ -31,13 +31,13 @@ describe('gulp-eslint plugin', function() {
 
 			file.eslint.messages[0]
 			.should.have.properties('message', 'line', 'column')
-			.and.have.property('ruleId', 'strict');
+			.and.have.property('ruleId', 'arrow-parens');
 
 			done();
 		})
 		.end(new File({
 			path: 'test/fixtures/es6.js',
-			contents: new Buffer('(() => {\n\treturn (a) => `${a}b`; }());')
+			contents: new Buffer('(a=>`${a}b`)("a");')
 		}));
 	});
 
