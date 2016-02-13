@@ -1,8 +1,9 @@
 # Changelog
 
-## 2.0.0-rc
+## 2.0.0
 
-* Update ESLint dependency to "next"
+* Update to ESLint 2.0.0, along with other dependency updates
+* Replace JSCS with ESLint equivalent rules
 
 ## 1.1.1
 
