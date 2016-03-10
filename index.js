@@ -187,7 +187,7 @@ gulpEslint.formatEach = function(formatter, writable) {
  * Wait until all files have been linted and format all results at once.
  *
  * @param {(String|Function)} [formatter=stylish] - The name or function for a ESLint result formatter
- * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted ESLint results.
+ * @param {(Function|stream)} [writable=gulp-util.log] - A function or stream to write the formatted ESLint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.format = function(formatter, writable) {
@@ -200,6 +200,15 @@ gulpEslint.format = function(formatter, writable) {
 			util.writeResults(results, formatter, writable);
 		}
 	});
+};
+
+/**
+ * Utility method to test if file has been fixed by eslint
+ *
+ * @param {file} file - A streamed file instance
+ */
+gulpEslint.isFixed = gulpEslint.fixed = function(file) {
+	return file.eslint !== null && file.eslint.fixed;
 };
 
 module.exports = gulpEslint;

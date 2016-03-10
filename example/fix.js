@@ -6,11 +6,6 @@ var gulp = require('gulp');
 var gulpIf = require('gulp-if');
 var eslint = require('../');
 
-function isFixed(file) {
-	// Has ESLint fixed the file contents?
-	return file.eslint != null && file.eslint.fixed;
-}
-
 gulp.task('lint-n-fix', function() {
 
 	return gulp.src('../test/fixtures/*.js')
@@ -19,7 +14,7 @@ gulp.task('lint-n-fix', function() {
 		}))
 		.pipe(eslint.format())
 		// if fixed, write the file to dest
-		.pipe(gulpIf(isFixed, gulp.dest('../test/fixtures')));
+		.pipe(gulpIf(eslint.isFixed, gulp.dest('../test/fixtures')));
 });
 
 gulp.task('flag-n-fix', function() {
@@ -33,7 +28,7 @@ gulp.task('flag-n-fix', function() {
 		}))
 		.pipe(eslint.format())
 		// if fixed, write the file to dest
-		.pipe(gulpIf(isFixed, gulp.dest('../test/fixtures')));
+		.pipe(gulpIf(eslint.isFixed, gulp.dest('../test/fixtures')));
 });
 
 gulp.task('default', ['lint-n-fix']);
