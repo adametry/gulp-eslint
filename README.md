@@ -273,6 +273,13 @@ Format each linted file individually. This should be used in the stream after pi
 
 The arguments for `formatEach` are the same as the arguments for `format`.
 
+### eslint.isFixed(file)
+
+Helper method that returns true if current file has `eslint` property, and also has the `eslint.fixed` property. Usable particularly with `gulp-if`, like so:
+
+```javascript
+.pipe(gulpIf(eslint.isFixed, gulp.dest('some-dest')));
+```
 
 ##Configuration
 
