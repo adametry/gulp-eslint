@@ -292,4 +292,5 @@ ESLint will also detect an `.eslintignore` file at the cwd or a parent directory
 ESLint results are attached as an "eslint" property to the vinyl files that pass through a Gulp.js stream pipeline. This is available to streams that follow the initial `eslint` stream. The [eslint.result](#result) and [eslint.results](#results) methods are made available to support extensions and custom handling of ESLint results.
 
 #### Gulp-Eslint Extensions:
+* [gulp-eslint-if-fixed](https://github.com/lukeapage/gulp-eslint-if-fixed)
 * [gulp-eslint-threshold](https://github.com/krmbkt/gulp-eslint-threshold)
