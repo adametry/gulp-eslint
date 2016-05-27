@@ -2,6 +2,7 @@
 'use strict';
 
 var fs = require('fs'),
+	path = require('path'),
 	eslint = require('../'),
 	stream = require('stream'),
 	File = require('vinyl'),
@@ -23,7 +24,7 @@ describe('gulp-eslint plugin', function() {
 			should.exist(file);
 			should.exist(file.contents);
 			should.exist(file.eslint);
-			file.eslint.should.have.property('filePath', 'test/fixtures/es6.js');
+			file.eslint.should.have.property('filePath', path.resolve('test/fixtures/es6.js'));
 
 			file.eslint.messages
 			.should.be.instanceof(Array)
@@ -48,7 +49,7 @@ describe('gulp-eslint plugin', function() {
 			should.exist(file);
 			should.exist(file.contents);
 			should.exist(file.eslint);
-			file.eslint.should.have.property('filePath', 'test/fixtures/use-strict.js');
+			file.eslint.should.have.property('filePath', path.resolve('test/fixtures/use-strict.js'));
 
 			file.eslint.messages
 			.should.be.instanceof(Array)

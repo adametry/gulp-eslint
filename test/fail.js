@@ -2,6 +2,7 @@
 'use strict';
 
 var File = require('vinyl'),
+	path = require('path'),
 	should = require('should'),
 	eslint = require('../');
 
@@ -20,7 +21,7 @@ describe('gulp-eslint failOnError', function() {
 			this.removeListener('finish', endWithoutError);
 			should.exists(err);
 			err.message.should.equal('\'x\' is not defined.');
-			err.fileName.should.equal('test/fixtures/invalid.js');
+			err.fileName.should.equal(path.resolve('test/fixtures/invalid.js'));
 			err.plugin.should.equal('gulp-eslint');
 			done();
 		})
