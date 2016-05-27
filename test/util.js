@@ -380,7 +380,7 @@ describe('utility methods', function() {
 			function resolveMissingFormatter() {
 				util.resolveFormatter('missing-formatter');
 			}
-			resolveMissingFormatter.should.throw(TypeError, {message: 'Invalid Formatter'});
+			resolveMissingFormatter.should.throw(/There was a problem loading formatter/);
 
 		});
 

@@ -18,6 +18,7 @@ function gulpEslint(options) {
 
 	function verify(str, filePath) {
 		var result = linter.executeOnText(str, filePath).results[0];
+		result.filePath = path.relative(process.cwd(), result.filePath);
 		// Note: Fixes are applied as part of "executeOnText".
 		// Any applied fix messages have been removed from the result.
 

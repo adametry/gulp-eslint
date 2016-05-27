@@ -240,11 +240,6 @@ exports.resolveFormatter = function(formatter) {
 		formatter =	CLIEngine.getFormatter(formatter) || formatter;
 	}
 
-	if (typeof formatter !== 'function') {
-		// formatter not found
-		throw new TypeError('Invalid Formatter');
-	}
-
 	return formatter;
 };
 
