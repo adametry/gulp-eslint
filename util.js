@@ -116,7 +116,11 @@ exports.handleCallback = function(callback, value) {
 				showStack: (err.showStack !== false)
 			});
 		}
-		callback(err, value);
+		if (err) {
+			callback(err);
+		} else {
+			callback(null, value);
+		}
 	};
 };
 
