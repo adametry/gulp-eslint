@@ -3,8 +3,8 @@ git:
   depth: 2
 language: node_js
 node_js:
-  - iojs
   - node
+  - '4'
 script: npm run-script pretest && npm run-script coverage
 after_script:
   - npm install istanbul-coveralls
