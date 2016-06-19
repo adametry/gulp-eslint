@@ -5,5 +5,7 @@ language: node_js
 node_js:
   - iojs
   - node
+script: npm run-script pretest && npm run-script coverage
 after_script:
-  - npm run-script coveralls
+  - npm install istanbul-coveralls
+  - node node_modules/.bin/istanbul-coveralls

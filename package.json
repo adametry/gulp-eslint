@@ -16,8 +16,7 @@
     "test": "mocha",
     "gulp": "gulp",
     "gulp-example": "gulp --gulpfile=example/config.js",
-    "coverage": "istanbul cover _mocha",
-    "coveralls": "${npm_package_scripts_coverage} && istanbul-coveralls"
+    "coverage": "istanbul cover _mocha"
   },
   "keywords": [
     "gulpplugin",
@@ -50,7 +49,6 @@
     "babel-eslint": "^6.0.4",
     "gulp": "^3.9.0",
     "istanbul": "^0.4.0",
-    "istanbul-coveralls": "^1.0.3",
     "mocha": "^2.2.5",
     "should": "^9.0.2",
     "vinyl": "^1.0.0"
