@@ -44,8 +44,8 @@ Or use the plugin API to do things like:
 gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint({
 		extends: 'eslint:recommended',
-		ecmaFeatures: {
-		    'modules': true
+		parserOptions: {
+		    'sourceType': 'module',
 		},
 		rules: {
 			'my-custom-rule': 1,
