@@ -45,7 +45,7 @@ gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint({
 		extends: 'eslint:recommended',
 		parserOptions: {
-		    'sourceType': 'module'
+			sourceType: 'module'
 		},
 		rules: {
 			'my-custom-rule': 1,
