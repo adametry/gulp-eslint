@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.0
+
+* Remove now obsolete error handling for formatter loading
+  * It's gracefully done in ESLint >=v2.10.0. <https://github.com/eslint/eslint/pull/5978>
+
 ## 2.0.0
 
 * Update to ESLint 2.0.0, along with other dependency updates
