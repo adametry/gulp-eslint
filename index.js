@@ -13,7 +13,7 @@ const path = require('path');
  * @returns {stream} gulp file stream
  */
 function gulpEslint(options) {
-	options = util.migrateOptions(options);
+	options = util.migrateOptions(options) || {};
 	const linter = new CLIEngine(options);
 
 	function verify(str, filePath) {

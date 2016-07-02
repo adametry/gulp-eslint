@@ -43,18 +43,14 @@ Or use the plugin API to do things like:
 ```javascript
 gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint({
-		extends: 'eslint:recommended',
-		parserOptions: {
-			sourceType: 'module'
-		},
 		rules: {
 			'my-custom-rule': 1,
 			'strict': 2
 		},
-		globals: {
-			'jQuery':false,
-			'$':true
-		},
+		globals: [
+			'jQuery',
+			'$'
+		],
 		envs: [
 			'browser'
 		]
@@ -128,25 +124,11 @@ Type: `Array`
 
 Specify a list of [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments) to be applied.
 
-Type: `Object`
-
-Specify [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments). Each key must match an existing env definition, and the key determines whether the env’s rules are applied (`true`) or not (`false`).
-
-Note that setting an env to `false` will not override an env that is set to `true` in the _.eslintrc_ being extended.
-
-Alias: `env` *(deprecated)*
-
 #### options.rulePaths
 
 Type: `Array`
 
 This option allows you to specify additional directories from which to load rules files. This is useful when you have custom rules that aren't suitable for being bundled with ESLint. This option works much like the ESLint CLI's [rulesdir option](http://eslint.org/docs/user-guide/command-line-interface#rulesdir).
-
-Type: `String` *(deprecated)*
-
-Load a single rules file.
-
-Alias: `rulesdir` *(deprecated)*
 
 #### options.configFile
 
@@ -165,8 +147,6 @@ When `true`, add a result warning when ESLint ignores a file. This can be used t
 Type: `Boolean`
 
 When `false`, ESLint will not load [.eslintrc files](http://eslint.org/docs/user-guide/configuring#using-configuration-files).
-
-Alias: `eslintrc` *(deprecated)*
 
 ### eslint(configFilePath)
 

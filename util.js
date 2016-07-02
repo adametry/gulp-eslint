@@ -60,46 +60,6 @@ exports.migrateOptions = function migrateOptions(options) {
 		options = {
 			configFile: options
 		};
-	} else {
-		options = Object.assign({}, options);
-	}
-
-	if (options.extends || options.ecmaFeatures) {
-		// nest options as baseConfig, since it's basically an .eslintrc config file
-		options.baseConfig = Object.assign(options.baseConfig || {}, options, {baseConfig: null});
-	}
-
-	options.globals = options.globals || options.global;
-	if (options.globals != null && !Array.isArray(options.globals)) {
-		options.globals = Object.keys(options.globals).map(key => {
-			return options.globals[key] ? key + ':true' : key;
-		});
-	}
-
-	options.envs = options.envs || options.env;
-	if (options.envs != null && !Array.isArray(options.envs)) {
-		options.envs = Object.keys(options.envs).filter(key => {
-			return options.envs[key];
-		});
-	}
-
-	if (options.config != null) {
-		// The "config" option has been deprecated. Use "configFile".
-		options.configFile = options.config;
-	}
-
-	if (options.rulesdir != null) {
-		// The "rulesdir" option has been deprecated. Use "rulePaths".
-		if (typeof options.rulesdir === 'string') {
-			options.rulePaths = [options.rulesdir];
-		} else {
-			options.rulePaths = options.rulesdir;
-		}
-	}
-
-	if (options.eslintrc != null) {
-		// The "eslintrc" option has been deprecated. Use "useEslintrc".
-		options.useEslintrc = options.eslintrc;
 	}
 
 	return options;

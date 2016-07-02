@@ -4,6 +4,13 @@
 
 * Bump eslint dependency to ^3.0.0 <http://eslint.org/blog/2016/07/eslint-v3.0.0-released>
 * Use ES2015 syntax
+* Remove these deprecated option aliases:
+  * `global`
+  * `env`
+  * `config`
+  * `rulesdir`
+  * `eslintrc`
+* Drop support for non-array `globals` option
 
 ## 2.1.0
 
