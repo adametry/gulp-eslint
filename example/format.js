@@ -2,11 +2,11 @@
 
 // npm install gulp gulp-eslint
 
-var gulp = require('gulp');
-var eslint = require('../');
+const gulp = require('gulp');
+const eslint = require('..');
 
 
-gulp.task('eslint-formatter', function() {
+gulp.task('eslint-formatter', () => {
 	// lint each file, and format all files at once (mul)
 	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint())
@@ -18,19 +18,18 @@ gulp.task('eslint-formatter', function() {
 });
 
 
-gulp.task('custom-formatter', function() {
-
+gulp.task('custom-formatter', () => {
 	function embolden(text) {
-		return '\u001b[1m' + text + '\u001b[22m ';
+		return `\u001b[1m${text}\u001b[22m `;
 	}
 
 	function pluralish(count, text) {
-		return count + ' ' + text + (count === 1 ? '' : 's');
+		return `${count} ${text}${count === 1 ? '' : 's'}`;
 	}
 
 	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint())
-		.pipe(eslint.format(function(results) {
+		.pipe(eslint.format(results => {
 
 			// return formatted text to display
 			return embolden('[Custom ESLint Summary]')

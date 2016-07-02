@@ -40,15 +40,15 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "bufferstreams": "^1.1.0",
-    "eslint": "^2.10.0",
+    "bufferstreams": "^1.1.1",
+    "eslint": "^3.0.0",
     "gulp-util": "^3.0.6",
     "object-assign": "^4.1.0"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
+    "babel-eslint": "^6.1.0",
     "gulp": "^3.9.0",
-    "istanbul": "^0.4.0",
+    "istanbul": "^0.4.4",
     "mocha": "^2.2.5",
     "should": "^9.0.2",
     "vinyl": "^1.0.0"

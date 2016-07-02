@@ -1,7 +1,7 @@
 'use strict';
 
-var gulp = require('gulp'),
-	eslint = require('./');
+const gulp = require('gulp');
+const eslint = require('.');
 
 gulp.task('test', function() {
 	return gulp.src(['**/*.js', '!node_modules/**', '!coverage/**', '!test/fixtures/**'])

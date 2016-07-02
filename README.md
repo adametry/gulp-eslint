@@ -13,10 +13,10 @@ npm install gulp-eslint
 ## Usage
 
 ```javascript
-var gulp = require('gulp'),
-    eslint = require('gulp-eslint');
+const gulp = require('gulp');
+const eslint = require('gulp-eslint');
 
-gulp.task('lint', function () {
+gulp.task('lint', () => {
     // ESLint ignores files with "node_modules" paths.
     // So, it's best to have gulp ignore the directory as well.
     // Also, Be sure to return the stream from the task;
@@ -183,12 +183,12 @@ Call a function for each ESLint file result. No returned value is expected. If a
 ```javascript
 gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint())
-	.pipe(eslint.result(function (result) {
+	.pipe(eslint.result(result => {
 	    // Called for each ESLint result.
-	    console.log('ESLint result: ' + result.filePath);
-	    console.log('# Messages: ' + result.messages.length);
-	    console.log('# Warnings: ' + result.warningCount);
-	    console.log('# Errors: ' + result.errorCount);
+	    console.log(`ESLint result: ${result.filePath}`);
+	    console.log(`# Messages: ${result.messages.length}`);
+	    console.log(`# Warnings: ${result.warningCount}`);
+	    console.log(`# Errors: ${result.errorCount}`);
 	}));
 ```
 
@@ -208,11 +208,11 @@ The results list has a "warningCount" property that is the sum of warnings in al
 ```javascript
 gulp.src(['**/*.js','!node_modules/**'])
 	.pipe(eslint())
-	.pipe(eslint.results(function (results) {
+	.pipe(eslint.results(results => {
     	// Called once for all ESLint results.
-	    console.log('Total Results: ' + results.length);
-	    console.log('Total Warnings: ' + results.warningCount);
-	    console.log('Total Errors: ' + results.errorCount);
+	    console.log(`Total Results: ${results.length}`);
+	    console.log(`Total Warnings: ${results.warningCount}`);
+	    console.log(`Total Errors: ${results.errorCount}`);
 	}));
 ```
 
@@ -292,5 +292,6 @@ ESLint will also detect an `.eslintignore` file at the cwd or a parent directory
 ESLint results are attached as an "eslint" property to the vinyl files that pass through a Gulp.js stream pipeline. This is available to streams that follow the initial `eslint` stream. The [eslint.result](#result) and [eslint.results](#results) methods are made available to support extensions and custom handling of ESLint results.
 
 #### Gulp-Eslint Extensions:
+
 * [gulp-eslint-if-fixed](https://github.com/lukeapage/gulp-eslint-if-fixed)
 * [gulp-eslint-threshold](https://github.com/krmbkt/gulp-eslint-threshold)

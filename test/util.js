@@ -1,75 +1,68 @@
 /* global describe, it, afterEach */
 'use strict';
 
-var File = require('vinyl'),
-	stream = require('stream'),
-	should = require('should'),
-	util = require('../util');
+const File = require('vinyl');
+const stream = require('stream');
+const should = require('should');
+const util = require('../util');
 
 require('mocha');
 
-describe('utility methods', function() {
+describe('utility methods', () => {
+	describe('transform', () => {
+		it('should handle files in a stream', done => {
+			let passedFile = false;
+			const streamFile = new File({
+				path: 'test/fixtures/invalid.js',
+				contents: new Buffer('x = 1;')
+			});
+			const testStream = util.transform((file, enc, cb) => {
+				should.exist(file);
+				should.exist(cb);
+				passedFile = (streamFile === file);
+				cb();
+			})
+			.on('error', done)
+			.on('finish', () => {
+				passedFile.should.equal(true);
+				done();
+			});
 
-	describe('transform', function() {
+			testStream.end(streamFile);
+		});
 
-		it('should handle files in a stream', function(done) {
-
-			var passedFile = false,
-				streamFile = new File({
+		it('should flush when stream is ending', done => {
+			let count = 0;
+			let finalCount = 0;
+			const files = [
+				new File({
 					path: 'test/fixtures/invalid.js',
 					contents: new Buffer('x = 1;')
 				}),
-				testStream = util.transform(function(file, enc, cb) {
-					should.exist(file);
-					should.exist(cb);
-					passedFile = (streamFile === file);
-					cb();
+				new File({
+					path: 'test/fixtures/undeclared.js',
+					contents: new Buffer('x = 0;')
 				})
-				.on('error', done)
-				.on('finish', function() {
-					passedFile.should.equal(true);
-					done();
-				});
-
-			testStream.end(streamFile);
-
-		});
-
-		it('should flush when stream is ending', function(done) {
-
-			var count = 0,
-				finalCount = 0,
-				files = [
-					new File({
-						path: 'test/fixtures/invalid.js',
-						contents: new Buffer('x = 1;')
-					}),
-					new File({
-						path: 'test/fixtures/undeclared.js',
-						contents: new Buffer('x = 0;')
-					})
-				],
-				testStream = util.transform(function(file, enc, cb) {
-					should.exist(file);
-					should.exist(cb);
-					count += 1;
-					cb();
-				}, function(cb) {
-					should.exist(cb);
-					count.should.equal(files.length);
-					testStream._writableState.ending.should.equal(true);
-					finalCount = count;
-					cb();
-				})
-				.on('error', done)
-				.on('finish', function() {
-					finalCount.should.equal(files.length);
-					done();
-				});
-
-			files.forEach(function(file) {
-				testStream.write(file);
+			];
+			const testStream = util.transform((file, enc, cb) => {
+				should.exist(file);
+				should.exist(cb);
+				count += 1;
+				cb();
+			}, cb => {
+				should.exist(cb);
+				count.should.equal(files.length);
+				testStream._writableState.ending.should.equal(true);
+				finalCount = count;
+				cb();
+			})
+			.on('error', done)
+			.on('finish', () => {
+				finalCount.should.equal(files.length);
+				done();
 			});
+
+			files.forEach(file => testStream.write(file));
 
 			testStream.end();
 
@@ -77,15 +70,13 @@ describe('utility methods', function() {
 
 	});
 
-	describe('createIgnoreResult', function() {
-
-		it('should create a warning that the file is ignored by ".eslintignore"', function() {
-
-			var file = new File({
+	describe('createIgnoreResult', () => {
+		it('should create a warning that the file is ignored by ".eslintignore"', () => {
+			const file = new File({
 				path: 'test/fixtures/ignored.js',
 				contents: new Buffer('')
 			});
-			var result = util.createIgnoreResult(file);
+			const result = util.createIgnoreResult(file);
 			should.exist(result);
 			result.filePath.should.equal(file.path);
 			result.errorCount.should.equal(0);
@@ -95,13 +86,12 @@ describe('utility methods', function() {
 
 		});
 
-		it('should create a warning for paths that include "node_modules"', function() {
-
-			var file = new File({
+		it('should create a warning for paths that include "node_modules"', () => {
+			const file = new File({
 				path: 'node_modules/test/index.js',
 				contents: new Buffer('')
 			});
-			var result = util.createIgnoreResult(file);
+			const result = util.createIgnoreResult(file);
 			should.exist(result);
 			result.filePath.should.equal(file.path);
 			result.errorCount.should.equal(0);
@@ -115,19 +105,19 @@ describe('utility methods', function() {
 
 	});
 
-	describe('migrateOptions', function() {
+	describe('migrateOptions', () => {
 
-		it('should migrate a string config value to "configPath"', function() {
+		it('should migrate a string config value to "configPath"', () => {
 
-			var options = util.migrateOptions('Config/Path');
+			const options = util.migrateOptions('Config/Path');
 			should.exist(options.configFile);
 			options.configFile.should.equal('Config/Path');
 
 		});
 
-		it('should migrate a "config" value to "configPath"', function() {
+		it('should migrate a "config" value to "configPath"', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				config: 'Config/Path'
 			});
 			should.exist(options);
@@ -136,9 +126,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should convert a global(s) table to a list of set of CLI flags', function() {
+		it('should convert a global(s) table to a list of set of CLI flags', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				globals: {
 					a: false,
 					b: true
@@ -152,9 +142,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should convert a env table to a list of active env keys', function() {
+		it('should convert a env table to a list of active env keys', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				envs: {
 					node: false,
 					browser: true
@@ -167,9 +157,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate a "rulesdir" string to a "rulesPaths" array', function() {
+		it('should migrate a "rulesdir" string to a "rulesPaths" array', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				rulesdir: 'Rules/Dir'
 			});
 			should.exist(options);
@@ -179,9 +169,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate a "rulesdir" value to a "rulesPaths" value', function() {
+		it('should migrate a "rulesdir" value to a "rulesPaths" value', () => {
 
-			var rulePaths = ['Rules/Dir'],
+			const rulePaths = ['Rules/Dir'],
 				options = util.migrateOptions({
 					rulesdir: rulePaths
 				});
@@ -191,9 +181,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate an "eslintrc" value to "useEslintrc"', function() {
+		it('should migrate an "eslintrc" value to "useEslintrc"', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				eslintrc: true
 			});
 			should.exist(options);
@@ -202,9 +192,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate an "extends" value to "baseConfig" (w/o baseConfig)', function() {
+		it('should migrate an "extends" value to "baseConfig" (w/o baseConfig)', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				extends: 'eslint:recommended'
 			});
 			should.exist(options);
@@ -213,9 +203,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate an "extends" value to "baseConfig" (w/ baseConfig)', function() {
+		it('should migrate an "extends" value to "baseConfig" (w/ baseConfig)', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				extends: 'eslint:recommended',
 				baseConfig: {
 					parser: 'babel-eslint'
@@ -228,9 +218,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate an "ecmaFeatures" value to "baseConfig"', function() {
+		it('should migrate an "ecmaFeatures" value to "baseConfig"', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				ecmaFeatures: {
 					templateStrings: true
 				}
@@ -242,9 +232,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate "globals" to "baseConfig" in key-value format', function() {
+		it('should migrate "globals" to "baseConfig" in key-value format', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				// trigger migration to baseConfig
 				ecmaFeatures: {},
 
@@ -265,9 +255,9 @@ describe('utility methods', function() {
 
 		});
 
-		it('should migrate "envs" to "baseConfig" in key-value format', function() {
+		it('should migrate "envs" to "baseConfig" in key-value format', () => {
 
-			var options = util.migrateOptions({
+			const options = util.migrateOptions({
 				// trigger migration to baseConfig
 				ecmaFeatures: {},
 
@@ -290,32 +280,32 @@ describe('utility methods', function() {
 
 	});
 
-	describe('isErrorMessage', function() {
+	describe('isErrorMessage', () => {
 
-		it('should determine severity a "fatal" message flag', function() {
-			var errorMessage = {
+		it('should determine severity a "fatal" message flag', () => {
+			const errorMessage = {
 				fatal: true,
 				severity: 0
 			};
-			var isError = util.isErrorMessage(errorMessage);
+			const isError = util.isErrorMessage(errorMessage);
 			isError.should.equal(true);
 
 		});
 
-		it('should determine severity from an config array', function() {
-			var errorMessage = {
+		it('should determine severity from an config array', () => {
+			const errorMessage = {
 				severity: [2, 1]
 			};
-			var isError = util.isErrorMessage(errorMessage);
+			const isError = util.isErrorMessage(errorMessage);
 			isError.should.equal(true);
 
 		});
 
 	});
 
-	describe('filterResult', function() {
+	describe('filterResult', () => {
 
-		var result = {
+		const result = {
 			filePath: 'test/fixtures/invalid.js',
 			messages: [{
 				ruleId: 'error',
@@ -338,19 +328,19 @@ describe('utility methods', function() {
 			warningCount: 1
 		};
 
-		it('should filter messages', function() {
+		it('should filter messages', () => {
 			function warningsOnly(message) {
 				return message.severity === 1;
 			}
-			var quietResult = util.filterResult(result, warningsOnly);
+			const quietResult = util.filterResult(result, warningsOnly);
 			quietResult.filePath.should.equal('test/fixtures/invalid.js');
 			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 			quietResult.errorCount.should.equal(0);
 			quietResult.warningCount.should.equal(1);
 		});
 
-		it('should remove warning messages', function() {
-			var quietResult = util.filterResult(result, true);
+		it('should remove warning messages', () => {
+			const quietResult = util.filterResult(result, true);
 			quietResult.filePath.should.equal('test/fixtures/invalid.js');
 			quietResult.messages.should.be.instanceof(Array).and.have.lengthOf(1);
 			quietResult.errorCount.should.equal(1);
@@ -359,23 +349,23 @@ describe('utility methods', function() {
 
 	});
 
-	describe('resolveFormatter', function() {
+	describe('resolveFormatter', () => {
 
-		it('should default to the "stylish" formatter', function() {
+		it('should default to the "stylish" formatter', () => {
 
-			var formatter = util.resolveFormatter();
+			const formatter = util.resolveFormatter();
 			formatter.should.equal(require('eslint/lib/formatters/stylish'));
 
 		});
 
-		it('should resolve a formatter', function() {
+		it('should resolve a formatter', () => {
 
-			var formatter = util.resolveFormatter('tap');
+			const formatter = util.resolveFormatter('tap');
 			formatter.should.equal(require('eslint/lib/formatters/tap'));
 
 		});
 
-		it('should throw an error if a formatter cannot be resolved', function() {
+		it('should throw an error if a formatter cannot be resolved', () => {
 
 			function resolveMissingFormatter() {
 				util.resolveFormatter('missing-formatter');
@@ -388,21 +378,21 @@ describe('utility methods', function() {
 
 	});
 
-	describe('resolveWritable', function() {
+	describe('resolveWritable', () => {
 
-		it('should default to gutil.log', function() {
+		it('should default to gutil.log', () => {
 
-			var write = util.resolveWritable();
+			const write = util.resolveWritable();
 			write.should.equal(require('gulp-util').log);
 
 		});
 
 		it('should write to a (writable) stream', function(done) {
 
-			var written = false,
-				writable = new stream.Writable({objectMode: true}),
-				testValue = 'Formatted Output',
-				write = util.resolveWritable(writable);
+			let written = false;
+			const writable = new stream.Writable({objectMode: true});
+			const testValue = 'Formatted Output';
+			const write = util.resolveWritable(writable);
 
 			writable._write = function writeChunk(chunk, encoding, cb) {
 				should.exist(chunk);
@@ -413,7 +403,7 @@ describe('utility methods', function() {
 
 			writable
 			.on('error', done)
-			.on('finish', function() {
+			.on('finish', () => {
 				written.should.equal(true);
 				done();
 			});
@@ -424,17 +414,17 @@ describe('utility methods', function() {
 
 	});
 
-	describe('writeResults', function() {
+	describe('writeResults', () => {
 
-		var testConfig = {},
+		const testConfig = {},
 			testResult = {
 				config: testConfig
 			},
 			testResults = [testResult];
 
-		it('should pass the value returned from the formatter to the writer', function() {
+		it('should pass the value returned from the formatter to the writer', () => {
 
-			var testValue = {};
+			const testValue = {};
 
 			function testFormatter(results, config) {
 				should.exist(results);
@@ -454,7 +444,7 @@ describe('utility methods', function() {
 
 		});
 
-		it('should not write an empty or missing value', function() {
+		it('should not write an empty or missing value', () => {
 
 			function testFormatter(results, config) {
 				should.exist(results);
@@ -473,7 +463,7 @@ describe('utility methods', function() {
 
 		});
 
-		it('should default undefined results to an empty array', function() {
+		it('should default undefined results to an empty array', () => {
 
 			function testFormatter(results, config) {
 				should.exist(results);

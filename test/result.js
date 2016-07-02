@@ -1,18 +1,17 @@
 /* global describe, it, beforeEach */
 'use strict';
 
-var File = require('vinyl'),
-	PassThrough = require('stream').PassThrough,
-	should = require('should'),
-	eslint = require('../');
+const File = require('vinyl');
+const PassThrough = require('stream').PassThrough;
+const should = require('should');
+const eslint = require('..');
 
 require('mocha');
 
-describe('gulp-eslint result', function() {
-
-	it('should provide an ESLint result', function(done) {
-		var resultCount = 0;
-		var lintStream = eslint({
+describe('gulp-eslint result', () => {
+	it('should provide an ESLint result', done => {
+		let resultCount = 0;
+		const lintStream = eslint({
 			useEslintrc: false,
 			rules: {
 				'no-undef': 2,
@@ -21,14 +20,14 @@ describe('gulp-eslint result', function() {
 		});
 
 		lintStream
-		.pipe(eslint.result(function(result) {
+		.pipe(eslint.result(result => {
 			should.exists(result);
 			result.messages.should.be.instanceof(Array).with.a.lengthOf(2);
 			result.errorCount.should.equal(1);
 			result.warningCount.should.equal(1);
 			resultCount++;
 		}))
-		.on('finish', function() {
+		.on('finish', () => {
 			resultCount.should.equal(3);
 			done();
 		});
@@ -51,8 +50,8 @@ describe('gulp-eslint result', function() {
 		lintStream.end();
 	});
 
-	it('should catch thrown errors', function(done) {
-		var file = new File({
+	it('should catch thrown errors', done => {
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
@@ -62,7 +61,7 @@ describe('gulp-eslint result', function() {
 			done(new Error('Unexpected Finish'));
 		}
 
-		eslint.result(function() {
+		eslint.result(() => {
 			throw new Error('Expected Error');
 		})
 		.on('error', function(error) {
@@ -77,8 +76,8 @@ describe('gulp-eslint result', function() {
 		.end(file);
 	});
 
-	it('should catch thrown null', function(done) {
-		var file = new File({
+	it('should catch thrown null', done => {
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
@@ -88,7 +87,7 @@ describe('gulp-eslint result', function() {
 			done(new Error('Unexpected Finish'));
 		}
 
-		eslint.result(function() {
+		eslint.result(() => {
 			throw null;
 		})
 		.on('error', function(error) {
@@ -103,7 +102,7 @@ describe('gulp-eslint result', function() {
 		.end(file);
 	});
 
-	it('should throw an error if not provided a function argument', function() {
+	it('should throw an error if not provided a function argument', () => {
 
 		try {
 			eslint.result();
@@ -118,14 +117,14 @@ describe('gulp-eslint result', function() {
 
 	});
 
-	it('should ignore files without an ESLint result', function(done) {
+	it('should ignore files without an ESLint result', done => {
 
-		var file = new File({
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
 
-		eslint.result(function() {
+		eslint.result(() => {
 			throw new Error('Expected no call');
 		})
 		.on('error', function(error) {
@@ -136,13 +135,13 @@ describe('gulp-eslint result', function() {
 		.end(file);
 	});
 
-	it('should support an async result handler', function(done) {
-		var asyncComplete = false;
-		var file = new File({
+	it('should support an async result handler', done => {
+		let asyncComplete = false;
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
-		var resultStub = {};
+		const resultStub = {};
 		file.eslint = resultStub;
 
 		function ended() {
@@ -150,13 +149,13 @@ describe('gulp-eslint result', function() {
 			done();
 		}
 
-		var resultStream = eslint.result(function(result, callback) {
+		const resultStream = eslint.result((result, callback) => {
 			should.exists(result);
 			result.should.equal(resultStub);
 
 			(typeof callback).should.equal('function');
 
-			setTimeout(function() {
+			setTimeout(() => {
 				asyncComplete = true;
 				callback();
 			}, 10);
@@ -176,11 +175,11 @@ describe('gulp-eslint result', function() {
 
 });
 
-describe('gulp-eslint results', function() {
+describe('gulp-eslint results', () => {
 
-	it('should provide ESLint results', function(done) {
-		var resultsCalled = false;
-		var lintStream = eslint({
+	it('should provide ESLint results', done => {
+		let resultsCalled = false;
+		const lintStream = eslint({
 			useEslintrc: false,
 			rules: {
 				'no-undef': 2,
@@ -189,14 +188,14 @@ describe('gulp-eslint results', function() {
 		});
 
 		lintStream
-		.pipe(eslint.results(function(results) {
+		.pipe(eslint.results(results => {
 			should.exists(results);
 			results.should.be.instanceof(Array).with.a.lengthOf(3);
 			results.errorCount.should.equal(3);
 			results.warningCount.should.equal(3);
 			resultsCalled = true;
 		}))
-		.on('finish', function() {
+		.on('finish', () => {
 			resultsCalled.should.equal(true);
 			done();
 		});
@@ -219,8 +218,8 @@ describe('gulp-eslint results', function() {
 		lintStream.end();
 	});
 
-	it('should catch thrown errors', function(done) {
-		var file = new File({
+	it('should catch thrown errors', done => {
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
@@ -230,7 +229,7 @@ describe('gulp-eslint results', function() {
 			done(new Error('Unexpected Finish'));
 		}
 
-		eslint.results(function() {
+		eslint.results(() => {
 			throw new Error('Expected Error');
 		})
 		.on('error', function(error) {
@@ -245,7 +244,7 @@ describe('gulp-eslint results', function() {
 		.end(file);
 	});
 
-	it('should throw an error if not provided a function argument', function() {
+	it('should throw an error if not provided a function argument', () => {
 
 		try {
 			eslint.results();
@@ -260,9 +259,9 @@ describe('gulp-eslint results', function() {
 
 	});
 
-	it('should ignore files without an ESLint result', function(done) {
-		var resultsCalled = false;
-		var file = new File({
+	it('should ignore files without an ESLint result', done => {
+		let resultsCalled = false;
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
@@ -272,7 +271,7 @@ describe('gulp-eslint results', function() {
 			done();
 		}
 
-		eslint.results(function(results) {
+		eslint.results(results => {
 			should.exists(results);
 			results.should.be.instanceof(Array).with.a.lengthOf(0);
 			resultsCalled = true;
@@ -285,13 +284,13 @@ describe('gulp-eslint results', function() {
 		.end(file);
 	});
 
-	it('should support an async results handler', function(done) {
-		var asyncComplete = false;
-		var file = new File({
+	it('should support an async results handler', done => {
+		let asyncComplete = false;
+		const file = new File({
 			path: 'test/fixtures/invalid.js',
 			contents: new Buffer('#invalid!syntax}')
 		});
-		var resultStub = {};
+		const resultStub = {};
 		file.eslint = resultStub;
 
 		function ended() {
@@ -299,16 +298,16 @@ describe('gulp-eslint results', function() {
 			done();
 		}
 
-		var resultStream = eslint.results(function(results, callback) {
+		const resultStream = eslint.results((results, callback) => {
 			should.exists(results);
 			results.should.be.instanceof(Array).with.a.lengthOf(1);
 
-			var result = results[0];
+			const result = results[0];
 			result.should.equal(resultStub);
 
 			(typeof callback).should.equal('function');
 
-			setTimeout(function() {
+			setTimeout(() => {
 				asyncComplete = true;
 				callback();
 			}, 10);

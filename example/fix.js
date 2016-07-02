@@ -2,16 +2,16 @@
 
 // npm install gulp gulp-eslint gulp-if
 
-var gulp = require('gulp');
-var gulpIf = require('gulp-if');
-var eslint = require('../');
+const gulp = require('gulp');
+const gulpIf = require('gulp-if');
+const eslint = require('..');
 
 function isFixed(file) {
 	// Has ESLint fixed the file contents?
 	return file.eslint != null && file.eslint.fixed;
 }
 
-gulp.task('lint-n-fix', function() {
+gulp.task('lint-n-fix', () => {
 
 	return gulp.src('../test/fixtures/*.js')
 		.pipe(eslint({
@@ -22,10 +22,10 @@ gulp.task('lint-n-fix', function() {
 		.pipe(gulpIf(isFixed, gulp.dest('../test/fixtures')));
 });
 
-gulp.task('flag-n-fix', function() {
+gulp.task('flag-n-fix', () => {
 	// This is a *very* basic CLI flag check.
 	// For a more robust method, check out [yargs](https://www.npmjs.com/package/yargs)
-	var hasFixFlag = (process.argv.slice(2).indexOf('--fix') >= 0);
+	const hasFixFlag = (process.argv.slice(2).indexOf('--fix') >= 0);
 
 	return gulp.src('../test/fixtures/*.js')
 		.pipe(eslint({

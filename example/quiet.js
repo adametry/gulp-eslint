@@ -2,10 +2,10 @@
 
 // npm install gulp gulp-eslint
 
-var gulp = require('gulp');
-var eslint = require('../');
+const gulp = require('gulp');
+const eslint = require('..');
 
-gulp.task('quiet-lint', function() {
+gulp.task('quiet-lint', () => {
 	return gulp.src('../test/fixtures/*.js')
 		.pipe(eslint({
 			// only report errors
@@ -20,7 +20,7 @@ function isWarning(message) {
 	return message.severity === 1;
 }
 
-gulp.task('lint-warnings', function() {
+gulp.task('lint-warnings', () => {
 	return gulp.src('../test/fixtures/*.js')
 		.pipe(eslint({
 			quiet: isWarning
@@ -29,4 +29,3 @@ gulp.task('lint-warnings', function() {
 });
 
 gulp.task('default', ['quiet-lint','lint-warnings']);
-
