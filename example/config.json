@@ -13,7 +13,7 @@
 	"globals": {
 		"$": false
 	},
-	"env":{
+	"env": {
 		"browser": true,
 		"node": true
 	}

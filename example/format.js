@@ -17,7 +17,6 @@ gulp.task('eslint-formatter', () => {
 		.pipe(eslint.format('compact'));
 });
 
-
 gulp.task('custom-formatter', () => {
 	function embolden(text) {
 		return `\u001b[1m${text}\u001b[22m `;

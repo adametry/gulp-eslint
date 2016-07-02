@@ -26,15 +26,7 @@ gulp.task('basic', () => {
 gulp.task('inline-config', () => {
 	return gulp.src('../test/fixtures/**/*.js')
 		.pipe(eslint({
-			// gulp-eslint's config works much like .eslintrc with a dash of ESLint's CLI
-
-			'extends': 'eslint:recommended',
-
-			'ecmaFeatures': {
-				'modules': true
-			},
-
-			'rules': {
+			rules: {
 				'no-alert': 0,
 				'no-bitwise': 0,
 				'camelcase': 1,
@@ -61,11 +53,9 @@ gulp.task('inline-config', () => {
 				'no-unreachable': 2
 			},
 
-			'globals': {
-				'$': false
-			},
+			globals: ['$'],
 
-			'envs': {
+			envs: {
 				'node': true
 			}
 
