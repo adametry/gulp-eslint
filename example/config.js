@@ -55,10 +55,7 @@ gulp.task('inline-config', () => {
 
 			globals: ['$'],
 
-			envs: {
-				'node': true
-			}
-
+			envs: ['node']
 		}))
 		.pipe(eslint.format());
 });
