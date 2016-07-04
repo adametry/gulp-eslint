@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+* Remove unnecessary `object-assign` dependency
+
 ## 3.0.0
 
 * Bump eslint dependency to ^3.0.0 <http://eslint.org/blog/2016/07/eslint-v3.0.0-released>
