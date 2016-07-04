@@ -1,11 +1,11 @@
 /* global describe, it*/
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
-const eslint = require('..');
 const stream = require('stream');
+const eslint = require('..');
 const File = require('vinyl');
+const from2string = require('from2-string');
 const should = require('should');
 const BufferStreams = require('bufferstreams');
 
@@ -94,7 +94,7 @@ describe('gulp-eslint plugin', () => {
 			cwd: 'test/',
 			base: 'test/fixtures',
 			path: 'test/fixtures/use-strict.js',
-			contents: fs.createReadStream('test/fixtures/use-strict.js')
+			contents: from2string('(function () { void 0; })();')
 		}));
 	});
 
@@ -127,11 +127,11 @@ describe('gulp-eslint plugin', () => {
 
 		lintStream.write(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: fs.createReadStream('test/fixtures/use-strict.js')
+			contents: from2string('(function () { void 0; })();')
 		}));
 		lintStream.write(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: fs.createReadStream('test/fixtures/use-strict.js')
+			contents: from2string('(function () { void 0; })();')
 		}));
 
 		lintStream.end();
@@ -287,7 +287,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/fixable.js',
-				contents: fs.createReadStream('test/fixtures/fixable.js')
+				contents: from2string('var x = 0;;  ')
 			}));
 		});
 
