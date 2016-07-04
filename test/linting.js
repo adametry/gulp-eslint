@@ -41,6 +41,30 @@ describe('gulp-eslint plugin', () => {
 		}));
 	});
 
+	it('should support sharable config', done => {
+		eslint(path.resolve(__dirname, 'fixtures/eslintrc-sharable-config.js'))
+		.on('error', done)
+		.on('data', file => {
+			should.exist(file);
+			should.exist(file.contents);
+			should.exist(file.eslint);
+
+			file.eslint.messages
+			.should.be.instanceof(Array)
+			.and.have.lengthOf(1);
+
+			file.eslint.messages[0]
+			.should.have.properties('message', 'line', 'column')
+			.and.have.property('ruleId', 'eol-last');
+
+			done();
+		})
+		.end(new File({
+			path: 'test/fixtures/no-newline.js',
+			contents: new Buffer('console.log(\'Hi\');')
+		}));
+	});
+
 	it('should produce expected message via buffer', done => {
 		eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
 		.on('error', done)
