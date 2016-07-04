@@ -87,16 +87,16 @@ Set [configuration](http://eslint.org/docs/user-guide/configuring#configuring-ru
 
 #### options.globals
 
-Type: `Object`
+Type: `Array`
 
 Specify [globals](http://eslint.org/docs/user-guide/configuring#specifying-globals).
 
 ```javascript
 {
-	"globals":{
-		"jQuery": false,
-		"$": true
-	}
+	"globals":[
+		"jQuery",
+		"$"
+	]
 }
 ```
 
