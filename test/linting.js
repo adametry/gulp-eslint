@@ -12,19 +12,18 @@ const BufferStreams = require('bufferstreams');
 require('mocha');
 
 describe('gulp-eslint plugin', () => {
-
 	it('should configure an alternate parser', done => {
 		eslint({
 			parser: 'babel-eslint',
 			useEslintrc: false,
-			rules: {'arrow-parens': 2}
+			rules: {'prefer-template': 'error'}
 		})
 		.on('error', done)
 		.on('data', file => {
 			should.exist(file);
 			should.exist(file.contents);
 			should.exist(file.eslint);
-			file.eslint.should.have.property('filePath', path.resolve('test/fixtures/es6.js'));
+			file.eslint.should.have.property('filePath', path.resolve('test/fixtures/stage0-class-property.js'));
 
 			file.eslint.messages
 			.should.be.instanceof(Array)
@@ -32,13 +31,13 @@ describe('gulp-eslint plugin', () => {
 
 			file.eslint.messages[0]
 			.should.have.properties('message', 'line', 'column')
-			.and.have.property('ruleId', 'arrow-parens');
+			.and.have.property('ruleId', 'prefer-template');
 
 			done();
 		})
 		.end(new File({
-			path: 'test/fixtures/es6.js',
-			contents: new Buffer('(a=>`${a}b`)("a");')
+			path: 'test/fixtures/stage0-class-property.js',
+			contents: new Buffer('class MyClass {prop = a + "b" + c;}')
 		}));
 	});
 
