@@ -89,7 +89,7 @@ Set [configuration](http://eslint.org/docs/user-guide/configuring#configuring-ru
 
 Type: `Array`
 
-Specify [globals](http://eslint.org/docs/user-guide/configuring#specifying-globals).
+Specify global variables to declare.
 
 ```javascript
 {
