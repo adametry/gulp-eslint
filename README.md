@@ -257,11 +257,11 @@ Format each linted file individually. This should be used in the stream after pi
 The arguments for `formatEach` are the same as the arguments for `format`.
 
 
-##Configuration
+## Configuration
 
 ESLint may be configured explicity by using any of the following plugin options: `config`, `rules`, `globals`, or `env`. If the [useEslintrc option](#useEslintrc) is not set to `false`, ESLint will attempt to resolve a file by the name of `.eslintrc` within the same directory as the file to be linted. If not found there, parent directories will be searched until `.eslintrc` is found or the directory root is reached.
 
-##Ignore Files
+## Ignore Files
 
 ESLint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/contra/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
 
