@@ -106,12 +106,30 @@ describe('gulp-eslint plugin', () => {
 	it('should emit an error when it takes a steam content', done => {
 		eslint({useEslintrc: false, rules: {'strict': 'error'}})
 		.on('error', err => {
+			err.plugin.should.equal('gulp-eslint');
 			err.message.should.equal('gulp-eslint doesn\'t support vinyl files with Stream contents.');
 			done();
 		})
 		.end(new File({
 			path: 'test/fixtures/stream.js',
 			contents: stringToStream('')
+		}));
+	});
+
+	it('should emit an error when it fails to load a plugin', done => {
+		const pluginName = 'this-is-unknown-plugin';
+		eslint({plugins: [pluginName]})
+		.on('error', err => {
+			err.plugin.should.equal('gulp-eslint');
+			err.message.should.equal(`Failed to load plugin this-is-unknown-plugin: Cannot find module 'eslint-plugin-${
+				pluginName
+			}'`);
+
+			done();
+		})
+		.end(new File({
+			path: 'test/fixtures/file.js',
+			contents: Buffer.from('')
 		}));
 	});
 

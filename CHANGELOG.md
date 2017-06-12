@@ -7,6 +7,7 @@
 * Use [`Buffer.from(<string>)`](https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_string_encoding) instead of the deprecated [`new Buffer(<string>)`](https://nodejs.org/dist/latest-v8.x/docs/api/buffer.html#buffer_new_buffer_string_encoding)
   * Note that `Buffer.from` is only available on Node.js >= [4.5.0](https://nodejs.org/en/blog/release/v4.5.0/).
 * Bump [`eslint`](https://github.com/eslint/eslint) dependency to [`^4.0.0`](http://eslint.org/blog/2017/06/eslint-v4.0.0-released)
+* Emit a [`PluginError`](https://github.com/gulpjs/gulp-util#new-pluginerrorpluginname-message-options) when it fails to load an [ESLint plugin](http://eslint.org/docs/user-guide/configuring#configuring-plugins)
 
 ## 3.0.1
 

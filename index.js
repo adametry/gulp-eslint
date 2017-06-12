@@ -15,19 +15,6 @@ function gulpEslint(options) {
 	options = util.migrateOptions(options) || {};
 	const linter = new CLIEngine(options);
 
-	function verify(str, filePath) {
-		const result = linter.executeOnText(str, filePath).results[0];
-		// Note: Fixes are applied as part of "executeOnText".
-		// Any applied fix messages have been removed from the result.
-
-		if (options.quiet) {
-			// ignore warnings
-			return util.filterResult(result, options.quiet);
-		}
-
-		return result;
-	}
-
 	return util.transform((file, enc, cb) => {
 		const filePath = path.relative(process.cwd(), file.path);
 
@@ -57,7 +44,24 @@ function gulpEslint(options) {
 			return;
 		}
 
-		file.eslint = verify(file.contents.toString(), filePath);
+		let result;
+
+		try {
+			result = linter.executeOnText(file.contents.toString(), filePath).results[0];
+		} catch (e) {
+			cb(new PluginError('gulp-eslint', e));
+			return;
+		}
+		// Note: Fixes are applied as part of "executeOnText".
+		// Any applied fix messages have been removed from the result.
+
+		if (options.quiet) {
+			// ignore warnings
+			file.eslint =  util.filterResult(result, options.quiet);
+		} else {
+			file.eslint = result;
+		}
+
 		// Update the fixed output; otherwise, fixable messages are simply ignored.
 		if (file.eslint.hasOwnProperty('output')) {
 			file.contents = Buffer.from(file.eslint.output);
