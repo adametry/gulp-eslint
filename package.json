@@ -40,17 +40,17 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "eslint": "^3.0.0",
-    "gulp-util": "^3.0.6"
+    "eslint": "^4.0.0",
+    "gulp-util": "^3.0.8"
   },
   "devDependencies": {
-    "@shinnn/eslint-config-node": "^2.0.0",
-    "babel-eslint": "^6.1.0",
+    "@shinnn/eslint-config-node": "^3.0.0",
+    "babel-eslint": "^7.2.3",
     "from2-string": "^1.1.0",
     "gulp": "^3.9.0",
     "istanbul": "^0.4.4",
-    "mocha": "^2.2.5",
-    "should": "^9.0.2",
-    "vinyl": "^1.0.0"
+    "mocha": "^3.4.2",
+    "should": "^11.2.1",
+    "vinyl": "^2.0.2"
   }
 }
