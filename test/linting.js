@@ -35,12 +35,12 @@ describe('gulp-eslint plugin', () => {
 		})
 		.end(new File({
 			path: 'test/fixtures/stage0-class-property.js',
-			contents: new Buffer('class MyClass {prop = a + "b" + c;}')
+			contents: Buffer.from('class MyClass {prop = a + "b" + c;}')
 		}));
 	});
 
 	it('should support sharable config', done => {
-		eslint(path.resolve(__dirname, 'fixtures/eslintrc-sharable-config.js'))
+		eslint(path.resolve(__dirname, 'fixtures', 'eslintrc-sharable-config.js'))
 		.on('error', done)
 		.on('data', file => {
 			should.exist(file);
@@ -59,7 +59,7 @@ describe('gulp-eslint plugin', () => {
 		})
 		.end(new File({
 			path: 'test/fixtures/no-newline.js',
-			contents: new Buffer('console.log(\'Hi\');')
+			contents: Buffer.from('console.log(\'Hi\');')
 		}));
 	});
 
@@ -84,7 +84,7 @@ describe('gulp-eslint plugin', () => {
 		})
 		.end(new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('var x = 1;')
+			contents: Buffer.from('var x = 1;')
 		}));
 	});
 
@@ -132,7 +132,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/ignored.js',
-				contents: new Buffer('(function () {ignore = abc;}});')
+				contents: Buffer.from('(function () {ignore = abc;}});')
 			}));
 		});
 
@@ -151,7 +151,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'node_modules/test/index.js',
-				contents: new Buffer('(function () {ignore = abc;}});')
+				contents: Buffer.from('(function () {ignore = abc;}});')
 			}));
 		});
 
@@ -165,7 +165,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/ignored.js',
-				contents: new Buffer('(function () {ignore = abc;}});')
+				contents: Buffer.from('(function () {ignore = abc;}});')
 			}));
 		});
 
@@ -185,7 +185,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/invalid.js',
-				contents: new Buffer('function z() { x = 0; }')
+				contents: Buffer.from('function z() { x = 0; }')
 			}));
 		});
 
@@ -204,7 +204,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/invalid.js',
-				contents: new Buffer('function z() { x = 0; }')
+				contents: Buffer.from('function z() { x = 0; }')
 			}));
 		});
 
@@ -227,7 +227,7 @@ describe('gulp-eslint plugin', () => {
 			})
 			.end(new File({
 				path: 'test/fixtures/fixable.js',
-				contents: new Buffer('var x = 0; ')
+				contents: Buffer.from('var x = 0; ')
 			}));
 		});
 	});

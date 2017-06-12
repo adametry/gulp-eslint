@@ -17,15 +17,15 @@ function getFiles() {
 		}),
 		new File({
 			path: 'test/fixtures/use-strict.js',
-			contents: new Buffer('(function () {\n\n\tvoid 0;\n\n}());\n\n')
+			contents: Buffer.from('(function () {\n\n\tvoid 0;\n\n}());\n\n')
 		}),
 		new File({
 			path: 'test/fixtures/undeclared.js',
-			contents: new Buffer('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
+			contents: Buffer.from('(function () {\n\t"use strict";\n\n\tx = 0;\n\n}());\n')
 		}),
 		new File({
 			path: 'test/fixtures/passing.js',
-			contents: new Buffer('(function () {\n\n\t"use strict";\n\n}());\n')
+			contents: Buffer.from('(function () {\n\n\t"use strict";\n\n}());\n')
 		})
 	];
 }

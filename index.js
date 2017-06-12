@@ -60,7 +60,7 @@ function gulpEslint(options) {
 		file.eslint = verify(file.contents.toString(), filePath);
 		// Update the fixed output; otherwise, fixable messages are simply ignored.
 		if (file.eslint.hasOwnProperty('output')) {
-			file.contents = new Buffer(file.eslint.output);
+			file.contents = Buffer.from(file.eslint.output);
 			file.eslint.fixed = true;
 		}
 		cb(null, file);

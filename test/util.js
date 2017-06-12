@@ -14,7 +14,7 @@ describe('utility methods', () => {
 			let passedFile = false;
 			const streamFile = new File({
 				path: 'test/fixtures/invalid.js',
-				contents: new Buffer('x = 1;')
+				contents: Buffer.from('x = 1;')
 			});
 			const testStream = util.transform((file, enc, cb) => {
 				should.exist(file);
@@ -37,11 +37,11 @@ describe('utility methods', () => {
 			const files = [
 				new File({
 					path: 'test/fixtures/invalid.js',
-					contents: new Buffer('x = 1;')
+					contents: Buffer.from('x = 1;')
 				}),
 				new File({
 					path: 'test/fixtures/undeclared.js',
-					contents: new Buffer('x = 0;')
+					contents: Buffer.from('x = 0;')
 				})
 			];
 			const testStream = util.transform((file, enc, cb) => {
@@ -74,7 +74,7 @@ describe('utility methods', () => {
 		it('should create a warning that the file is ignored by ".eslintignore"', () => {
 			const file = new File({
 				path: 'test/fixtures/ignored.js',
-				contents: new Buffer('')
+				contents: Buffer.from('')
 			});
 			const result = util.createIgnoreResult(file);
 			should.exist(result);
@@ -89,7 +89,7 @@ describe('utility methods', () => {
 		it('should create a warning for paths that include "node_modules"', () => {
 			const file = new File({
 				path: 'node_modules/test/index.js',
-				contents: new Buffer('')
+				contents: Buffer.from('')
 			});
 			const result = util.createIgnoreResult(file);
 			should.exist(result);

@@ -29,7 +29,7 @@ describe('gulp-eslint failOnError', () =>  {
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 1;')
+			contents: Buffer.from('x = 1;')
 		}));
 
 		lintStream.end();
@@ -45,7 +45,7 @@ describe('gulp-eslint failOnError', () =>  {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0;')
+			contents: Buffer.from('x = 0;')
 		}));
 	});
 
@@ -53,7 +53,7 @@ describe('gulp-eslint failOnError', () =>  {
 
 		const file = new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('#invalid!syntax}')
+			contents: Buffer.from('#invalid!syntax}')
 		});
 		file.eslint = {};
 
@@ -90,7 +90,7 @@ describe('gulp-eslint failAfterError', () =>  {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 1;')
+			contents: Buffer.from('x = 1;')
 		}));
 	});
 
@@ -107,7 +107,7 @@ describe('gulp-eslint failAfterError', () =>  {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 1; a = false;')
+			contents: Buffer.from('x = 1; a = false;')
 		}));
 	});
 
@@ -120,14 +120,14 @@ describe('gulp-eslint failAfterError', () =>  {
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('x = 0;')
+			contents: Buffer.from('x = 0;')
 		}));
 	});
 
 	it('should handle ESLint reports without messages', done =>  {
 		const file = new File({
 			path: 'test/fixtures/invalid.js',
-			contents: new Buffer('#invalid!syntax}')
+			contents: Buffer.from('#invalid!syntax}')
 		});
 		file.eslint = {};
 
