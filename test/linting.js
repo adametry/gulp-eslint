@@ -2,12 +2,10 @@
 'use strict';
 
 const path = require('path');
-const stream = require('stream');
 const eslint = require('..');
 const File = require('vinyl');
-const from2string = require('from2-string');
+const stringToStream = require('from2-string');
 const should = require('should');
-const BufferStreams = require('bufferstreams');
 
 require('mocha');
 
@@ -90,76 +88,6 @@ describe('gulp-eslint plugin', () => {
 		}));
 	});
 
-	it('should produce expected message upon stream completion', done => {
-		eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
-		.on('error', done)
-		.on('data', file => {
-			should.exist(file);
-			should.ok(file.isStream());
-
-			file.contents
-			.on('error', done)
-			.on('data', () => {
-				should.exist(file.eslint);
-
-				file.eslint.messages
-				.should.be.instanceof(Array)
-				.and.have.lengthOf(1);
-
-				file.eslint.messages[0]
-				.should.have.properties('message', 'line', 'column')
-				.and.have.property('ruleId', 'strict');
-
-				done();
-			});
-		})
-		.end(new File({
-			cwd: 'test/',
-			base: 'test/fixtures',
-			path: 'test/fixtures/use-strict.js',
-			contents: from2string('(function () { void 0; })();')
-		}));
-	});
-
-	it('should lint multiple streaming files', done => {
-		let fileCount = 0;
-
-		const lintStream = eslint({useEslintrc: false, rules: {strict: [2, 'global']}})
-		.on('error', done)
-		.on('data', file => {
-			should.exist(file);
-			should.ok(file.isStream());
-
-			should.exist(file.contents);
-			should.ok(file.contents.readable);
-
-			should.exist(file.eslint);
-			file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(1);
-			file.eslint.messages[0]
-			.should.have.properties('message', 'line', 'column')
-			.and.have.property('ruleId', 'strict');
-
-			fileCount++;
-		});
-
-		lintStream.pipe(new stream.PassThrough({objectMode: true}))
-		.on('finish', () => {
-			fileCount.should.equal(2);
-			done();
-		});
-
-		lintStream.write(new File({
-			path: 'test/fixtures/use-strict.js',
-			contents: from2string('(function () { void 0; })();')
-		}));
-		lintStream.write(new File({
-			path: 'test/fixtures/use-strict.js',
-			contents: from2string('(function () { void 0; })();')
-		}));
-
-		lintStream.end();
-	});
-
 	it('should ignore files with null content', done => {
 		eslint({useEslintrc: false, rules: {'strict': 2}})
 		.on('error', done)
@@ -172,6 +100,18 @@ describe('gulp-eslint plugin', () => {
 		.end(new File({
 			path: 'test/fixtures',
 			isDirectory: true
+		}));
+	});
+
+	it('should emit an error when it takes a steam content', done => {
+		eslint({useEslintrc: false, rules: {'strict': 'error'}})
+		.on('error', err => {
+			err.message.should.equal('gulp-eslint doesn\'t support vinyl files with Stream contents.');
+			done();
+		})
+		.end(new File({
+			path: 'test/fixtures/stream.js',
+			contents: stringToStream('')
 		}));
 	});
 
@@ -290,30 +230,6 @@ describe('gulp-eslint plugin', () => {
 				contents: new Buffer('var x = 0; ')
 			}));
 		});
-
-		it('when true, should update stream contents', done => {
-			eslint({fix: true, useEslintrc: false, rules: {'no-trailing-spaces': 2}})
-			.on('error', done)
-			.on('data', (file) => {
-				should.exist(file);
-				should.exist(file.eslint);
-				file.eslint.messages.should.be.instanceof(Array).and.have.lengthOf(0);
-				file.eslint.errorCount.should.equal(0);
-				file.eslint.warningCount.should.equal(0);
-				file.eslint.output.should.equal('var x = 0;;');
-				file.contents = file.contents.pipe(new BufferStreams((err, buf, cb) => {
-					cb(err, buf);
-					buf.toString().should.equal('var x = 0;;');
-					done();
-				}));
-
-			})
-			.end(new File({
-				path: 'test/fixtures/fixable.js',
-				contents: from2string('var x = 0;;  ')
-			}));
-		});
-
 	});
 
 });

@@ -40,7 +40,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "bufferstreams": "^1.1.1",
     "eslint": "^3.0.0",
     "gulp-util": "^3.0.6"
   },

@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.0.0
+
+* Drop support for linting `Stream` contents
+  * Because almost all, at popular, tools to handle JavaScript files today doesn't support `Streams`. They only support either `String` or `Buffer`.
+*
+
 ## 3.0.1
 
 * Remove unnecessary `object-assign` dependency
@@ -195,4 +201,3 @@
 ## 0.1.0
 
 * initial plugin
-

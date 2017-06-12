@@ -1,6 +1,5 @@
 'use strict';
 
-const BufferStreams = require('bufferstreams');
 const PluginError = require('gulp-util').PluginError;
 const CLIEngine = require('eslint').CLIEngine;
 const util = require('./util');
@@ -37,6 +36,11 @@ function gulpEslint(options) {
 			return;
 		}
 
+		if (file.isStream()) {
+			cb(new PluginError('gulp-eslint', 'gulp-eslint doesn\'t support vinyl files with Stream contents.'));
+			return;
+		}
+
 		if (linter.isPathIgnored(filePath)) {
 			// Note:
 			// Vinyl files can have an independently defined cwd, but ESLint works relative to `process.cwd()`.
@@ -50,20 +54,6 @@ function gulpEslint(options) {
 				file.eslint = util.createIgnoreResult(file);
 			}
 			cb(null, file);
-			return;
-		}
-
-		if (file.isStream()) {
-			file.contents = file.contents.pipe(new BufferStreams((err, buf, done) => {
-				file.eslint = verify(String(buf), filePath);
-				// Update the fixed output; otherwise, fixable messages are simply ignored.
-				if (file.eslint.hasOwnProperty('output')) {
-					buf = new Buffer(file.eslint.output);
-					file.eslint.fixed = true;
-				}
-				done(null, buf);
-				cb(null, file);
-			}));
 			return;
 		}
 
