@@ -3,7 +3,7 @@
 ## 4.0.0
 
 * Drop support for linting [`Stream`](https://nodejs.org/api/stream.html#stream_stream) [contents](https://github.com/gulpjs/vinyl#optionscontents)
-  * Because almost all, at popular, tools to handle JavaScript files today doesn't support `Streams`. They only support either `String` or `Buffer`.
+  * Because almost all, at least widely used tools to handle JavaScript files don't support `Streams`. They only support either `String` or `Buffer`.
 * Use [`Buffer.from(<string>)`](https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_string_encoding) instead of the deprecated [`new Buffer(<string>)`](https://nodejs.org/dist/latest-v8.x/docs/api/buffer.html#buffer_new_buffer_string_encoding)
   * Note that `Buffer.from` is only available on Node.js >= [4.5.0](https://nodejs.org/en/blog/release/v4.5.0/).
 * Bump [`eslint`](https://github.com/eslint/eslint) dependency to [`^4.0.0`](http://eslint.org/blog/2017/06/eslint-v4.0.0-released)
