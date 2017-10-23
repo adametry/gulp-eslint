@@ -1,11 +1,8 @@
 sudo: false
-git:
-  depth: 2
 language: node_js
 node_js:
   - node
   - '4'
+before_install: npm install --global npm
 script: npm run-script pretest && npm run-script coverage
-after_script:
-  - npm install istanbul-coveralls
-  - node node_modules/.bin/istanbul-coveralls
+after_script: npx istanbul-coveralls
