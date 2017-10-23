@@ -146,7 +146,7 @@ exports.isErrorMessage = isErrorMessage;
  * @returns {Number} The number of errors, message included
  */
 function countErrorMessage(count, message) {
-	return count + isErrorMessage(message);
+	return count + Number(isErrorMessage(message));
 }
 
 /**
@@ -157,7 +157,29 @@ function countErrorMessage(count, message) {
  * @returns {Number} The number of warnings, message included
  */
 function countWarningMessage(count, message) {
-	return count + (message.severity === 1);
+	return count + Number(message.severity === 1);
+}
+
+/**
+ * Increment count if message is a fixable error
+ *
+ * @param {Number} count - count of errors
+ * @param {Object} message - an ESLint message
+ * @returns {Number} The number of errors, message included
+ */
+function countFixableErrorMessage(count, message) {
+	return count + Number(isErrorMessage(message) && message.fix !== undefined);
+}
+
+/**
+ * Increment count if message is a fixable warning
+ *
+ * @param {Number} count - count of errors
+ * @param {Object} message - an ESLint message
+ * @returns {Number} The number of errors, message included
+ */
+function countFixableWarningMessage(count, message) {
+	return count + Number(message.severity === 1 && message.fix !== undefined);
 }
 
 /**
@@ -172,12 +194,22 @@ exports.filterResult = (result, filter) => {
 		filter = isErrorMessage;
 	}
 	const messages = result.messages.filter(filter, result);
-	return {
+	const newResult = {
 		filePath: result.filePath,
 		messages: messages,
 		errorCount: messages.reduce(countErrorMessage, 0),
-		warningCount: messages.reduce(countWarningMessage, 0)
+		warningCount: messages.reduce(countWarningMessage, 0),
+		fixableErrorCount: messages.reduce(countFixableErrorMessage, 0),
+		fixableWarningCount: messages.reduce(countFixableWarningMessage, 0),
 	};
+
+  if (result.output !== undefined) {
+    newResult.output = result.output;
+  } else {
+    newResult.source = result.source;
+  }
+
+  return newResult;
 };
 
 /**

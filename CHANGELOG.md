@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1
+
+* Make `fix` option work even if `quiet` option is also enabled
+
 ## 4.0.0
 
 * Drop support for linting [`Stream`](https://nodejs.org/api/stream.html#stream_stream) [contents](https://github.com/gulpjs/vinyl#optionscontents)
