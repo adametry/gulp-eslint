@@ -1,6 +1,6 @@
 'use strict';
 
-const PluginError = require('gulp-util').PluginError;
+const PluginError = require('plugin-error');
 const CLIEngine = require('eslint').CLIEngine;
 const util = require('./util');
 const path = require('path');

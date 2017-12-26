@@ -216,7 +216,7 @@ describe('utility methods', () => {
 		it('should default to gutil.log', () => {
 
 			const write = util.resolveWritable();
-			write.should.equal(require('gulp-util').log);
+			write.should.equal(require('fancy-log'));
 
 		});
 
