@@ -2,7 +2,7 @@
 
 const Transform = require('stream').Transform;
 const PluginError = require('plugin-error');
-const log = require('fancy-log');
+const fancyLog = require('fancy-log');
 const CLIEngine = require('eslint').CLIEngine;
 
 /**
@@ -233,12 +233,12 @@ exports.resolveFormatter = (formatter) => {
 /**
  * Resolve writable
  *
- * @param {(Function|stream)} [writable=gulp-util.log] - A stream or function to resolve as a format writer
+ * @param {(Function|stream)} [writable=fancyLog] - A stream or function to resolve as a format writer
  * @returns {Function} A function that writes formatted messages
  */
 exports.resolveWritable = (writable) => {
 	if (!writable) {
-		writable = log;
+		writable = fancyLog;
 	} else if (typeof writable.write === 'function') {
 		writable = writable.write.bind(writable);
 	}
