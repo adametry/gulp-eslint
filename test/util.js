@@ -213,7 +213,7 @@ describe('utility methods', () => {
 
 	describe('resolveWritable', () => {
 
-		it('should default to gutil.log', () => {
+		it('should default to fancyLog', () => {
 
 			const write = util.resolveWritable();
 			write.should.equal(require('fancy-log'));
