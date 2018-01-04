@@ -2,7 +2,7 @@
 
 ## 4.0.2
 
-* Remove deprecated [`gulp-util`](https://github.com/gulpjs/gulp-util) dependency and use individual modules instead.
+* Remove deprecated [`gulp-util`](https://github.com/gulpjs/gulp-util) dependency and use individual modules instead
 
 ## 4.0.1
 
