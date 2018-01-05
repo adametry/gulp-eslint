@@ -1,7 +1,8 @@
 'use strict';
 
 const Transform = require('stream').Transform;
-const gutil = require('gulp-util');
+const PluginError = require('plugin-error');
+const fancyLog = require('fancy-log');
 const CLIEngine = require('eslint').CLIEngine;
 
 /**
@@ -74,8 +75,8 @@ exports.migrateOptions = function migrateOptions(options) {
  */
 exports.handleCallback = (callback, value) => {
 	return err => {
-		if (err != null && !(err instanceof gutil.PluginError)) {
-			err = new gutil.PluginError(err.plugin || 'gulp-eslint', err, {
+		if (err != null && !(err instanceof PluginError)) {
+			err = new PluginError(err.plugin || 'gulp-eslint', err, {
 				showStack: (err.showStack !== false)
 			});
 		}
@@ -232,12 +233,12 @@ exports.resolveFormatter = (formatter) => {
 /**
  * Resolve writable
  *
- * @param {(Function|stream)} [writable=gulp-util.log] - A stream or function to resolve as a format writer
+ * @param {(Function|stream)} [writable=fancyLog] - A stream or function to resolve as a format writer
  * @returns {Function} A function that writes formatted messages
  */
 exports.resolveWritable = (writable) => {
 	if (!writable) {
-		writable = gutil.log;
+		writable = fancyLog;
 	} else if (typeof writable.write === 'function') {
 		writable = writable.write.bind(writable);
 	}

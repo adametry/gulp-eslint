@@ -3,7 +3,7 @@
 // npm install gulp gulp-eslint
 
 const gulp = require('gulp');
-const gulpUtil = require('gulp-util');
+const fancyLog = require('fancy-log');
 const eslint = require('../');
 
 gulp.task('fail-immediately', () => {
@@ -15,7 +15,7 @@ gulp.task('fail-immediately', () => {
 		.pipe(eslint.failOnError())
 		// need to do something before the process exits? Try this:
 		.on('error', error => {
-			gulpUtil.log('Stream Exiting With Error: ' + error.message);
+			fancyLog('Stream Exiting With Error: ' + error.message);
 		});
 });
 

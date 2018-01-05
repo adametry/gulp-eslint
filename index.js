@@ -1,6 +1,6 @@
 'use strict';
 
-const PluginError = require('gulp-util').PluginError;
+const PluginError = require('plugin-error');
 const CLIEngine = require('eslint').CLIEngine;
 const util = require('./util');
 const path = require('path');
@@ -164,7 +164,7 @@ gulpEslint.failAfterError = () => {
  * Format the results of each file individually.
  *
  * @param {(String|Function)} [formatter=stylish] - The name or function for a ESLint result formatter
- * @param {(Function|Stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted ESLint results.
+ * @param {(Function|Stream)} [writable=fancy-log] - A funtion or stream to write the formatted ESLint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.formatEach = (formatter, writable) => {
@@ -178,7 +178,7 @@ gulpEslint.formatEach = (formatter, writable) => {
  * Wait until all files have been linted and format all results at once.
  *
  * @param {(String|Function)} [formatter=stylish] - The name or function for a ESLint result formatter
- * @param {(Function|stream)} [writable=gulp-util.log] - A funtion or stream to write the formatted ESLint results.
+ * @param {(Function|stream)} [writable=fancy-log] - A funtion or stream to write the formatted ESLint results.
  * @returns {stream} gulp file stream
  */
 gulpEslint.format = (formatter, writable) => {
