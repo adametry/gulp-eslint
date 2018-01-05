@@ -13,7 +13,7 @@ gulp.task('eslint-formatter', () => {
 		// use eslint's default formatter by default
 		.pipe(eslint.format())
 		// Name a built-in formatter or path load.
-		// http://eslint.org/docs/user-guide/command-line-interface#f-format
+		// https://eslint.org/docs/user-guide/command-line-interface#-f---format
 		.pipe(eslint.format('compact'));
 });
 

@@ -1,6 +1,6 @@
 # gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint.svg)](https://coveralls.io/r/adametry/gulp-eslint)
 
-> A [gulp](http://gulpjs.com/) plugin for [ESLint](http://eslint.org/).
+> A [gulp](https://gulpjs.com/) plugin for [ESLint](https://eslint.org/).
 
 ## Installation
 
@@ -67,13 +67,13 @@ For additional examples, look through the [example directory](https://github.com
 *No explicit configuration.* A `.eslintrc` file may be resolved relative to each linted file.
 
 ### eslint(options)
-See [ESlint CLIEngine options](http://eslint.org/docs/developer-guide/nodejs-api#cliengine).
+See [ESlint CLIEngine options](https://eslint.org/docs/developer-guide/nodejs-api#cliengine).
 
 #### options.rules
 
 Type: `Object`
 
-Set [configuration](http://eslint.org/docs/user-guide/configuring#configuring-rules) of [rules](http://eslint.org/docs/rules/).
+Set [configuration](https://eslint.org/docs/user-guide/configuring#configuring-rules) of [rules](https://eslint.org/docs/rules/).
 
 ```javascript
 {
@@ -104,7 +104,7 @@ Specify global variables to declare.
 
 Type: `Boolean`
 
-This option instructs ESLint to try to fix as many issues as possible. The fixes are applied to the gulp stream. The fixed content can be saved to file using `gulp.dest` (See [example/fix.js](https://github.com/adametry/gulp-eslint/blob/master/example/fix.js)). Rules that are fixable can be found in ESLint's [rules list](http://eslint.org/docs/rules/).
+This option instructs ESLint to try to fix as many issues as possible. The fixes are applied to the gulp stream. The fixed content can be saved to file using `gulp.dest` (See [example/fix.js](https://github.com/adametry/gulp-eslint/blob/master/example/fix.js)). Rules that are fixable can be found in ESLint's [rules list](https://eslint.org/docs/rules/).
 
 When fixes are applied, a "fixed" property is set to `true` on the fixed file's ESLint result.
 
@@ -112,7 +112,7 @@ When fixes are applied, a "fixed" property is set to `true` on the fixed file's 
 
 Type: `Boolean`
 
-When `true`, this option will filter warning messages from ESLint results. This mimics the ESLint CLI [quiet option](http://eslint.org/docs/user-guide/command-line-interface#quiet).
+When `true`, this option will filter warning messages from ESLint results. This mimics the ESLint CLI [quiet option](https://eslint.org/docs/user-guide/command-line-interface#quiet).
 
 Type: `function (message, index, list) { return Boolean(); }`
 
@@ -122,19 +122,19 @@ When provided a function, it will be used to filter ESLint result messages, remo
 
 Type: `Array`
 
-Specify a list of [environments](http://eslint.org/docs/user-guide/configuring#specifying-environments) to be applied.
+Specify a list of [environments](https://eslint.org/docs/user-guide/configuring#specifying-environments) to be applied.
 
 #### options.rulePaths
 
 Type: `Array`
 
-This option allows you to specify additional directories from which to load rules files. This is useful when you have custom rules that aren't suitable for being bundled with ESLint. This option works much like the ESLint CLI's [rulesdir option](http://eslint.org/docs/user-guide/command-line-interface#rulesdir).
+This option allows you to specify additional directories from which to load rules files. This is useful when you have custom rules that aren't suitable for being bundled with ESLint. This option works much like the ESLint CLI's [rulesdir option](https://eslint.org/docs/user-guide/command-line-interface#rulesdir).
 
 #### options.configFile
 
 Type: `String`
 
-Path to the ESLint rules configuration file. For more information, see the ESLint CLI [config option](http://eslint.org/docs/user-guide/command-line-interface#c-config) and [Using Configuration Files](http://eslint.org/docs/user-guide/configuring#using-configuration-files).
+Path to the ESLint rules configuration file. For more information, see the ESLint CLI [config option](https://eslint.org/docs/user-guide/command-line-interface#c-config) and [Using Configuration Files](https://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 #### options.warnFileIgnored
 
@@ -146,7 +146,7 @@ When `true`, add a result warning when ESLint ignores a file. This can be used t
 
 Type: `Boolean`
 
-When `false`, ESLint will not load [.eslintrc files](http://eslint.org/docs/user-guide/configuring#using-configuration-files).
+When `false`, ESLint will not load [.eslintrc files](https://eslint.org/docs/user-guide/configuring#using-configuration-files).
 
 ### eslint(configFilePath)
 
@@ -265,7 +265,7 @@ ESLint may be configured explicity by using any of the following plugin options:
 
 ESLint will ignore files that do not have a `.js` file extension at the point of linting ([some plugins](https://github.com/contra/gulp-coffee) may change file extensions mid-stream). This avoids unintentional linting of non-JavaScript files.
 
-ESLint will also detect an `.eslintignore` file at the cwd or a parent directory. See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#ignoring-files-and-directories) to learn how to construct this file.
+ESLint will also detect an `.eslintignore` file at the cwd or a parent directory. See the [ESLint docs](https://eslint.org/docs/user-guide/configuring#ignoring-files-and-directories) to learn how to construct this file.
 
 ## Extensions
 

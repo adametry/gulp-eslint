@@ -1,12 +1,9 @@
 # Changelog
 
-## 4.0.2
-
-* Remove deprecated [`gulp-util`](https://github.com/gulpjs/gulp-util) dependency and use individual modules instead
-
 ## 4.0.1
 
 * Make `fix` option work even if `quiet` option is also enabled
+* Remove deprecated [`gulp-util`](https://github.com/gulpjs/gulp-util) dependency and use individual modules instead
 
 ## 4.0.0
 
@@ -14,8 +11,8 @@
   * Because almost all, at least widely used tools to handle JavaScript files don't support `Streams`. They only support either `String` or `Buffer`.
 * Use [`Buffer.from(<string>)`](https://nodejs.org/api/buffer.html#buffer_class_method_buffer_from_string_encoding) instead of the deprecated [`new Buffer(<string>)`](https://nodejs.org/dist/latest-v8.x/docs/api/buffer.html#buffer_new_buffer_string_encoding)
   * Note that `Buffer.from` is only available on Node.js >= [4.5.0](https://nodejs.org/en/blog/release/v4.5.0/).
-* Bump [`eslint`](https://github.com/eslint/eslint) dependency to [`^4.0.0`](http://eslint.org/blog/2017/06/eslint-v4.0.0-released)
-* Emit a [`PluginError`](https://github.com/gulpjs/gulp-util#new-pluginerrorpluginname-message-options) when it fails to load an [ESLint plugin](http://eslint.org/docs/user-guide/configuring#configuring-plugins)
+* Bump [`eslint`](https://github.com/eslint/eslint) dependency to [`^4.0.0`](https://eslint.org/blog/2017/06/eslint-v4.0.0-released)
+* Emit a [`PluginError`](https://github.com/gulpjs/gulp-util#new-pluginerrorpluginname-message-options) when it fails to load an [ESLint plugin](https://eslint.org/docs/user-guide/configuring#configuring-plugins)
 
 ## 3.0.1
 
@@ -23,7 +20,7 @@
 
 ## 3.0.0
 
-* Bump eslint dependency to ^3.0.0 <http://eslint.org/blog/2016/07/eslint-v3.0.0-released>
+* Bump eslint dependency to ^3.0.0 <https://eslint.org/blog/2016/07/eslint-v3.0.0-released>
 * Use ES2015 syntax
 * Remove these deprecated option aliases:
   * `global`
