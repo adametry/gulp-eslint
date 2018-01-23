@@ -1,57 +1,57 @@
 {
-  "name": "gulp-eslint",
-  "version": "4.0.1",
-  "description": "A gulp plugin for processing files with ESLint",
-  "repository": "adametry/gulp-eslint",
-  "files": [
-    "index.js",
-    "util.js"
-  ],
-  "directories": {
-    "example": "example",
-    "test": "test"
-  },
-  "scripts": {
-    "pretest": "gulp test",
-    "test": "mocha",
-    "gulp": "gulp",
-    "gulp-example": "gulp --gulpfile=example/config.js",
-    "coverage": "istanbul cover _mocha"
-  },
-  "keywords": [
-    "gulpplugin",
-    "eslint",
-    "gulp",
-    "errors",
-    "warnings",
-    "check",
-    "source",
-    "code",
-    "formatter",
-    "js",
-    "javascript",
-    "task",
-    "lint",
-    "plugin"
-  ],
-  "author": "Adametry",
-  "contributors": [
-    "Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)"
-  ],
-  "license": "MIT",
-  "dependencies": {
-    "eslint": "^4.0.0",
-    "fancy-log": "^1.3.2",
-    "plugin-error": "^0.1.2"
-  },
-  "devDependencies": {
-    "@shinnn/eslint-config-node": "^5.0.0",
-    "babel-eslint": "^8.0.1",
-    "from2-string": "^1.1.0",
-    "gulp": "^3.9.0",
-    "istanbul": "^0.4.4",
-    "mocha": "^4.0.1",
-    "should": "^13.1.2",
-    "vinyl": "^2.0.2"
-  }
+	"name": "gulp-eslint",
+	"version": "4.0.1",
+	"description": "A gulp plugin for processing files with ESLint",
+	"repository": "adametry/gulp-eslint",
+	"files": [
+		"index.js",
+		"util.js"
+	],
+	"directories": {
+		"example": "example",
+		"test": "test"
+	},
+	"scripts": {
+		"pretest": "gulp test",
+		"test": "mocha",
+		"gulp": "gulp",
+		"gulp-example": "gulp --gulpfile=example/config.js",
+		"coverage": "istanbul cover _mocha"
+	},
+	"keywords": [
+		"gulpplugin",
+		"eslint",
+		"gulp",
+		"errors",
+		"warnings",
+		"check",
+		"source",
+		"code",
+		"formatter",
+		"js",
+		"javascript",
+		"task",
+		"lint",
+		"plugin"
+	],
+	"author": "Adametry",
+	"contributors": [
+		"Shinnosuke Watanabe <snnskwtnb@gmail.com> (https://github.com/shinnn)"
+	],
+	"license": "MIT",
+	"dependencies": {
+		"eslint": "^4.0.0",
+		"fancy-log": "^1.3.2",
+		"plugin-error": "^1.0.0"
+	},
+	"devDependencies": {
+		"@shinnn/eslint-config-node": "^5.0.0",
+		"babel-eslint": "^8.0.1",
+		"from2-string": "^1.1.0",
+		"gulp": "^3.9.0",
+		"istanbul": "^0.4.4",
+		"mocha": "^5.0.0",
+		"should": "^13.1.2",
+		"vinyl": "^2.0.2"
+	}
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.2
+
+* Update `plugin-error` to ^1.0.0
+
 ## 4.0.1
 
 * Make `fix` option work even if `quiet` option is also enabled
