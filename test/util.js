@@ -22,11 +22,11 @@ describe('utility methods', () => {
 				passedFile = (streamFile === file);
 				cb();
 			})
-			.on('error', done)
-			.on('finish', () => {
-				passedFile.should.equal(true);
-				done();
-			});
+				.on('error', done)
+				.on('finish', () => {
+					passedFile.should.equal(true);
+					done();
+				});
 
 			testStream.end(streamFile);
 		});
@@ -56,11 +56,11 @@ describe('utility methods', () => {
 				finalCount = count;
 				cb();
 			})
-			.on('error', done)
-			.on('finish', () => {
-				finalCount.should.equal(files.length);
-				done();
-			});
+				.on('error', done)
+				.on('finish', () => {
+					finalCount.should.equal(files.length);
+					done();
+				});
 
 			files.forEach(file => testStream.write(file));
 
@@ -235,11 +235,11 @@ describe('utility methods', () => {
 			};
 
 			writable
-			.on('error', done)
-			.on('finish', () => {
-				written.should.equal(true);
-				done();
-			});
+				.on('error', done)
+				.on('finish', () => {
+					written.should.equal(true);
+					done();
+				});
 			write(testValue);
 			writable.end();
 

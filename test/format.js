@@ -94,12 +94,12 @@ describe('gulp-eslint format', () => {
 			const formatStream = eslint.format(formatResults, outputWriter);
 
 			formatStream
-			.on('error', done)
-			.on('finish', () => {
-				formatCount.should.equal(1);
-				writeCount.should.equal(1);
-				done();
-			});
+				.on('error', done)
+				.on('finish', () => {
+					formatCount.should.equal(1);
+					writeCount.should.equal(1);
+					done();
+				});
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);
@@ -114,17 +114,17 @@ describe('gulp-eslint format', () => {
 			const files = getFiles();
 
 			const passthruStream = new stream.PassThrough({objectMode: true})
-			.on('error', done);
+				.on('error', done);
 
 			const formatStream = eslint.format(formatResults, outputWriter);
 
 			formatStream
-			.on('error', done)
-			.on('finish', () => {
-				formatCount.should.equal(0);
-				writeCount.should.equal(0);
-				done();
-			});
+				.on('error', done)
+				.on('finish', () => {
+					formatCount.should.equal(0);
+					writeCount.should.equal(0);
+					done();
+				});
 
 			should.exist(passthruStream.pipe);
 			passthruStream.pipe(formatStream);
@@ -155,19 +155,19 @@ describe('gulp-eslint format', () => {
 			const files = getFiles();
 
 			const lintStream = eslint({useEslintrc: false, rules: {'strict': 2}})
-			.on('error', done);
+				.on('error', done);
 
 			const formatStream = eslint.formatEach(formatResult, outputWriter)
-			.on('error', done)
-			.on('finish', function() {
+				.on('error', done)
+				.on('finish', function() {
 				// the stream should not have emitted an error
-				this._writableState.errorEmitted.should.equal(false);
+					this._writableState.errorEmitted.should.equal(false);
 
-				const fileCount = files.length - 1;// remove directory
-				formatCount.should.equal(fileCount);
-				writeCount.should.equal(fileCount);
-				done();
-			});
+					const fileCount = files.length - 1;// remove directory
+					formatCount.should.equal(fileCount);
+					writeCount.should.equal(fileCount);
+					done();
+				});
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);
@@ -183,21 +183,21 @@ describe('gulp-eslint format', () => {
 			const files = getFiles();
 
 			const lintStream = eslint({useEslintrc: false, rules: {'strict': 2}})
-			.on('error', done);
+				.on('error', done);
 
 			const formatStream = eslint.formatEach(formatResult, failWriter);
 
 			formatStream
-			.on('error', err => {
-				should.exists(err);
-				err.message.should.equal('Writer Test Error: 1 messages');
-				err.name.should.equal('TestError');
-				err.plugin.should.equal('gulp-eslint');
-				done();
-			})
-			.on('finish', () => {
-				done(new Error('Expected PluginError to fail stream'));
-			});
+				.on('error', err => {
+					should.exists(err);
+					err.message.should.equal('Writer Test Error: 1 messages');
+					err.name.should.equal('TestError');
+					err.plugin.should.equal('gulp-eslint');
+					done();
+				})
+				.on('finish', () => {
+					done(new Error('Expected PluginError to fail stream'));
+				});
 
 			should.exist(lintStream.pipe);
 			lintStream.pipe(formatStream);

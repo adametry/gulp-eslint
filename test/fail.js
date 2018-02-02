@@ -17,15 +17,15 @@ describe('gulp-eslint failOnError', () =>  {
 		}
 
 		lintStream.pipe(eslint.failOnError())
-		.on('error', function(err)  {
-			this.removeListener('finish', endWithoutError);
-			should.exists(err);
-			err.message.should.equal('\'x\' is not defined.');
-			err.fileName.should.equal(path.resolve('test/fixtures/invalid.js'));
-			err.plugin.should.equal('gulp-eslint');
-			done();
-		})
-		.on('finish', endWithoutError);
+			.on('error', function(err)  {
+				this.removeListener('finish', endWithoutError);
+				should.exists(err);
+				err.message.should.equal('\'x\' is not defined.');
+				err.fileName.should.equal(path.resolve('test/fixtures/invalid.js'));
+				err.plugin.should.equal('gulp-eslint');
+				done();
+			})
+			.on('finish', endWithoutError);
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid.js',
@@ -40,8 +40,8 @@ describe('gulp-eslint failOnError', () =>  {
 		const lintStream = eslint({useEslintrc: false, rules: {'no-undef': 1, 'strict': 0}});
 
 		lintStream.pipe(eslint.failOnError())
-		.on('error', done)
-		.on('finish', done);
+			.on('error', done)
+			.on('finish', done);
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
@@ -58,12 +58,12 @@ describe('gulp-eslint failOnError', () =>  {
 		file.eslint = {};
 
 		eslint.failOnError()
-		.on('error', (err) =>  {
-			this.removeListener('finish', done);
-			done(err);
-		})
-		.on('finish', done)
-		.end(file);
+			.on('error', (err) =>  {
+				this.removeListener('finish', done);
+				done(err);
+			})
+			.on('finish', done)
+			.end(file);
 	});
 
 });
@@ -78,15 +78,15 @@ describe('gulp-eslint failAfterError', () =>  {
 		}
 
 		lintStream.pipe(eslint.failAfterError())
-		.on('error', function(err)  {
-			this.removeListener('finish', endWithoutError);
-			should.exists(err);
-			err.message.should.equal('Failed with 1 error');
-			err.name.should.equal('ESLintError');
-			err.plugin.should.equal('gulp-eslint');
-			done();
-		})
-		.on('finish', endWithoutError);
+			.on('error', function(err)  {
+				this.removeListener('finish', endWithoutError);
+				should.exists(err);
+				err.message.should.equal('Failed with 1 error');
+				err.name.should.equal('ESLintError');
+				err.plugin.should.equal('gulp-eslint');
+				done();
+			})
+			.on('finish', endWithoutError);
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
@@ -115,8 +115,8 @@ describe('gulp-eslint failAfterError', () =>  {
 		const lintStream = eslint({useEslintrc: false, rules: {'no-undef': 1, strict: 0}});
 
 		lintStream.pipe(eslint.failAfterError())
-		.on('error', done)
-		.on('finish', done);
+			.on('error', done)
+			.on('finish', done);
 
 		lintStream.end(new File({
 			path: 'test/fixtures/invalid.js',
@@ -132,9 +132,9 @@ describe('gulp-eslint failAfterError', () =>  {
 		file.eslint = {};
 
 		eslint.failAfterError()
-		.on('error', done)
-		.on('finish', done)
-		.end(file);
+			.on('error', done)
+			.on('finish', done)
+			.end(file);
 	});
 
 });

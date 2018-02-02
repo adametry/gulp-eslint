@@ -201,16 +201,16 @@ exports.filterResult = (result, filter) => {
 		errorCount: messages.reduce(countErrorMessage, 0),
 		warningCount: messages.reduce(countWarningMessage, 0),
 		fixableErrorCount: messages.reduce(countFixableErrorMessage, 0),
-		fixableWarningCount: messages.reduce(countFixableWarningMessage, 0),
+		fixableWarningCount: messages.reduce(countFixableWarningMessage, 0)
 	};
 
-  if (result.output !== undefined) {
-    newResult.output = result.output;
-  } else {
-    newResult.source = result.source;
-  }
+	if (result.output !== undefined) {
+		newResult.output = result.output;
+	}	else {
+		newResult.source = result.source;
+	}
 
-  return newResult;
+	return newResult;
 };
 
 /**

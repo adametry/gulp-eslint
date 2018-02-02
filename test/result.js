@@ -20,17 +20,17 @@ describe('gulp-eslint result', () => {
 		});
 
 		lintStream
-		.pipe(eslint.result(result => {
-			should.exists(result);
-			result.messages.should.be.instanceof(Array).with.a.lengthOf(2);
-			result.errorCount.should.equal(1);
-			result.warningCount.should.equal(1);
-			resultCount++;
-		}))
-		.on('finish', () => {
-			resultCount.should.equal(3);
-			done();
-		});
+			.pipe(eslint.result(result => {
+				should.exists(result);
+				result.messages.should.be.instanceof(Array).with.a.lengthOf(2);
+				result.errorCount.should.equal(1);
+				result.warningCount.should.equal(1);
+				resultCount++;
+			}))
+			.on('finish', () => {
+				resultCount.should.equal(3);
+				done();
+			});
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-1.js',
@@ -64,16 +64,16 @@ describe('gulp-eslint result', () => {
 		eslint.result(() => {
 			throw new Error('Expected Error');
 		})
-		.on('error', function(error) {
-			this.removeListener('finish', finished);
-			should.exists(error);
-			error.message.should.equal('Expected Error');
-			error.name.should.equal('Error');
-			error.plugin.should.equal('gulp-eslint');
-			done();
-		})
-		.on('finish', finished)
-		.end(file);
+			.on('error', function(error) {
+				this.removeListener('finish', finished);
+				should.exists(error);
+				error.message.should.equal('Expected Error');
+				error.name.should.equal('Error');
+				error.plugin.should.equal('gulp-eslint');
+				done();
+			})
+			.on('finish', finished)
+			.end(file);
 	});
 
 	it('should catch thrown null', done => {
@@ -90,16 +90,16 @@ describe('gulp-eslint result', () => {
 		eslint.result(() => {
 			throw null;
 		})
-		.on('error', function(error) {
-			this.removeListener('finish', finished);
-			should.exists(error);
-			error.message.should.equal('Unknown Error');
-			error.name.should.equal('Error');
-			error.plugin.should.equal('gulp-eslint');
-			done();
-		})
-		.on('finish', finished)
-		.end(file);
+			.on('error', function(error) {
+				this.removeListener('finish', finished);
+				should.exists(error);
+				error.message.should.equal('Unknown Error');
+				error.name.should.equal('Error');
+				error.plugin.should.equal('gulp-eslint');
+				done();
+			})
+			.on('finish', finished)
+			.end(file);
 	});
 
 	it('should throw an error if not provided a function argument', () => {
@@ -127,12 +127,12 @@ describe('gulp-eslint result', () => {
 		eslint.result(() => {
 			throw new Error('Expected no call');
 		})
-		.on('error', function(error) {
-			this.removeListener('finish', done);
-			done(error);
-		})
-		.on('finish', done)
-		.end(file);
+			.on('error', function(error) {
+				this.removeListener('finish', done);
+				done(error);
+			})
+			.on('finish', done)
+			.end(file);
 	});
 
 	it('should support an async result handler', done => {
@@ -160,11 +160,11 @@ describe('gulp-eslint result', () => {
 				callback();
 			}, 10);
 		})
-		.on('error', function(error) {
-			this.removeListener('end', ended);
-			done(error);
-		})
-		.on('end', ended);
+			.on('error', function(error) {
+				this.removeListener('end', ended);
+				done(error);
+			})
+			.on('end', ended);
 
 		// drain result into pass-through stream
 		resultStream.pipe(new PassThrough({objectMode: true}));
@@ -188,17 +188,17 @@ describe('gulp-eslint results', () => {
 		});
 
 		lintStream
-		.pipe(eslint.results(results => {
-			should.exists(results);
-			results.should.be.instanceof(Array).with.a.lengthOf(3);
-			results.errorCount.should.equal(3);
-			results.warningCount.should.equal(3);
-			resultsCalled = true;
-		}))
-		.on('finish', () => {
-			resultsCalled.should.equal(true);
-			done();
-		});
+			.pipe(eslint.results(results => {
+				should.exists(results);
+				results.should.be.instanceof(Array).with.a.lengthOf(3);
+				results.errorCount.should.equal(3);
+				results.warningCount.should.equal(3);
+				resultsCalled = true;
+			}))
+			.on('finish', () => {
+				resultsCalled.should.equal(true);
+				done();
+			});
 
 		lintStream.write(new File({
 			path: 'test/fixtures/invalid-1.js',
@@ -232,16 +232,16 @@ describe('gulp-eslint results', () => {
 		eslint.results(() => {
 			throw new Error('Expected Error');
 		})
-		.on('error', function(error) {
-			this.removeListener('finish', finished);
-			should.exists(error);
-			error.message.should.equal('Expected Error');
-			error.name.should.equal('Error');
-			error.plugin.should.equal('gulp-eslint');
-			done();
-		})
-		.on('finish', finished)
-		.end(file);
+			.on('error', function(error) {
+				this.removeListener('finish', finished);
+				should.exists(error);
+				error.message.should.equal('Expected Error');
+				error.name.should.equal('Error');
+				error.plugin.should.equal('gulp-eslint');
+				done();
+			})
+			.on('finish', finished)
+			.end(file);
 	});
 
 	it('should throw an error if not provided a function argument', () => {
@@ -276,12 +276,12 @@ describe('gulp-eslint results', () => {
 			results.should.be.instanceof(Array).with.a.lengthOf(0);
 			resultsCalled = true;
 		})
-		.on('error', function(error) {
-			this.removeListener('finish', finished);
-			done(error);
-		})
-		.on('finish', finished)
-		.end(file);
+			.on('error', function(error) {
+				this.removeListener('finish', finished);
+				done(error);
+			})
+			.on('finish', finished)
+			.end(file);
 	});
 
 	it('should support an async results handler', done => {
@@ -312,11 +312,11 @@ describe('gulp-eslint results', () => {
 				callback();
 			}, 10);
 		})
-		.on('error', function(error) {
-			this.removeListener('end', ended);
-			done(error);
-		})
-		.on('end', ended);
+			.on('error', function(error) {
+				this.removeListener('end', ended);
+				done(error);
+			})
+			.on('end', ended);
 
 		// drain result into pass-through stream
 		resultStream.pipe(new PassThrough({objectMode: true}));
