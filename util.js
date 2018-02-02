@@ -4,6 +4,7 @@ const Transform = require('stream').Transform;
 const PluginError = require('plugin-error');
 const fancyLog = require('fancy-log');
 const CLIEngine = require('eslint').CLIEngine;
+const path = require('path');
 
 /**
  * Convenience method for creating a transform stream in object mode
@@ -40,7 +41,7 @@ exports.createIgnoreResult = file => {
 		messages: [{
 			fatal: false,
 			severity: 1,
-			message: file.path.indexOf('node_modules/') < 0 ?
+			message: file.path.indexOf('node_modules' + path.sep) < 0 ?
 				'File ignored because of .eslintignore file' :
 				'File ignored because it has a node_modules/** path'
 		}],
