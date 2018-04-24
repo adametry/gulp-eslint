@@ -126,7 +126,7 @@ Specify a list of [environments](https://eslint.org/docs/user-guide/configuring#
 
 #### options.rulePaths
 
-Type: `Array`
+Type: `Array | String`
 
 This option allows you to specify additional directories from which to load rules files. This is useful when you have custom rules that aren't suitable for being bundled with ESLint. This option works much like the ESLint CLI's [rulesdir option](https://eslint.org/docs/user-guide/command-line-interface#rulesdir).
 
