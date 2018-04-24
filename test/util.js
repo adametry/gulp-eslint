@@ -111,6 +111,11 @@ describe('utility methods', () => {
 			should.exist(options.configFile);
 			options.configFile.should.equal('Config/Path');
 		});
+
+		it('should convert a string value of "rulePaths" to array', () => {
+			const options = util.migrateOptions({rulePaths: "rules"});
+			options.rulePaths.should.be.instanceOf(Array).and.have.length(1);
+		});
 	});
 
 	describe('isErrorMessage', () => {

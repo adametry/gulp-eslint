@@ -63,6 +63,10 @@ exports.migrateOptions = function migrateOptions(options) {
 		};
 	}
 
+	if (options && typeof options.rulePaths === "string") {
+		options.rulePaths = [options.rulePaths];
+	}
+
 	return options;
 };
 
