@@ -1,9 +1,21 @@
 'use strict';
 
 const PluginError = require('plugin-error');
-const CLIEngine = require('eslint').CLIEngine;
-const util = require('./util');
-const path = require('path');
+const {CLIEngine} = require('eslint');
+const {
+	createIgnoreResult,
+	filterResult,
+	firstResultMessage,
+	handleCallback,
+	isErrorMessage,
+	migrateOptions,
+	resolveFormatter,
+	resolveWritable,
+	transform,
+	tryResultAction,
+	writeResults
+} = require('./util');
+const {relative} = require('path');
 
 /**
  * Append ESLint result to each file
@@ -12,11 +24,11 @@ const path = require('path');
  * @returns {stream} gulp file stream
  */
 function gulpEslint(options) {
-	options = util.migrateOptions(options) || {};
+	options = migrateOptions(options) || {};
 	const linter = new CLIEngine(options);
 
-	return util.transform((file, enc, cb) => {
-		const filePath = path.relative(process.cwd(), file.path);
+	return transform((file, enc, cb) => {
+		const filePath = relative(process.cwd(), file.path);
 
 		if (file.isNull()) {
 			cb(null, file);
@@ -38,7 +50,7 @@ function gulpEslint(options) {
 
 			if (linter.options.ignore && options.warnFileIgnored) {
 				// Warn that gulp.src is needlessly reading files that ESLint ignores
-				file.eslint = util.createIgnoreResult(file);
+				file.eslint = createIgnoreResult(file);
 			}
 			cb(null, file);
 			return;
@@ -57,7 +69,7 @@ function gulpEslint(options) {
 
 		if (options.quiet) {
 			// ignore warnings
-			file.eslint =  util.filterResult(result, options.quiet);
+			file.eslint =  filterResult(result, options.quiet);
 		} else {
 			file.eslint = result;
 		}
@@ -82,9 +94,9 @@ gulpEslint.result = action => {
 		throw new Error('Expected callable argument');
 	}
 
-	return util.transform((file, enc, done) => {
+	return transform((file, enc, done) => {
 		if (file.eslint) {
-			util.tryResultAction(action, file.eslint, util.handleCallback(done, file));
+			tryResultAction(action, file.eslint, handleCallback(done, file));
 		} else {
 			done(null, file);
 		}
@@ -106,7 +118,7 @@ gulpEslint.results = function(action) {
 	results.errorCount = 0;
 	results.warningCount = 0;
 
-	return util.transform((file, enc, done) => {
+	return transform((file, enc, done) => {
 		if (file.eslint) {
 			results.push(file.eslint);
 			// collect total error/warning count
@@ -116,7 +128,7 @@ gulpEslint.results = function(action) {
 		done(null, file);
 
 	}, done => {
-		util.tryResultAction(action, results, util.handleCallback(done));
+		tryResultAction(action, results, handleCallback(done));
 	});
 };
 
@@ -127,7 +139,7 @@ gulpEslint.results = function(action) {
  */
 gulpEslint.failOnError = () => {
 	return gulpEslint.result(result => {
-		const error = util.firstResultMessage(result, util.isErrorMessage);
+		const error = firstResultMessage(result, isErrorMessage);
 		if (!error) {
 			return;
 		}
@@ -168,10 +180,10 @@ gulpEslint.failAfterError = () => {
  * @returns {stream} gulp file stream
  */
 gulpEslint.formatEach = (formatter, writable) => {
-	formatter = util.resolveFormatter(formatter);
-	writable = util.resolveWritable(writable);
+	formatter = resolveFormatter(formatter);
+	writable = resolveWritable(writable);
 
-	return gulpEslint.result(result => util.writeResults([result], formatter, writable));
+	return gulpEslint.result(result => writeResults([result], formatter, writable));
 };
 
 /**
@@ -182,13 +194,13 @@ gulpEslint.formatEach = (formatter, writable) => {
  * @returns {stream} gulp file stream
  */
 gulpEslint.format = (formatter, writable) => {
-	formatter = util.resolveFormatter(formatter);
-	writable = util.resolveWritable(writable);
+	formatter = resolveFormatter(formatter);
+	writable = resolveWritable(writable);
 
 	return gulpEslint.results(results => {
 		// Only format results if files has been lint'd
 		if (results.length) {
-			util.writeResults(results, formatter, writable);
+			writeResults(results, formatter, writable);
 		}
 	});
 };
