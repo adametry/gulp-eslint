@@ -1,13 +1,13 @@
 'use strict';
 
-// npm install gulp gulp-eslint
+// npm install gulp@next gulp-eslint
 
-const gulp = require('gulp');
+const {src, task} = require('gulp');
 const fancyLog = require('fancy-log');
 const eslint = require('../');
 
-gulp.task('fail-immediately', () => {
-	return gulp.src('../test/fixtures/**/*.js')
+task('fail-immediately', () => {
+	return src('../test/fixtures/**/*.js')
 		.pipe(eslint())
 		// format one at time since this stream may fail before it can format them all at the end
 		.pipe(eslint.formatEach())
@@ -19,8 +19,8 @@ gulp.task('fail-immediately', () => {
 		});
 });
 
-gulp.task('fail-at-end', () => {
-	return gulp.src('../test/fixtures/**/*.js')
+task('fail-at-end', () => {
+	return src('../test/fixtures/**/*.js')
 		.pipe(eslint())
 		// Format all results at once, at the end
 		.pipe(eslint.format())
@@ -28,4 +28,4 @@ gulp.task('fail-at-end', () => {
 		.pipe(eslint.failAfterError());
 });
 
-gulp.task('default', ['fail-immediately']);
+task('default', ['fail-immediately']);

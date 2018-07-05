@@ -1,14 +1,13 @@
 'use strict';
 
-// npm install gulp gulp-eslint
+// npm install gulp@next gulp-eslint
 
-const gulp = require('gulp');
+const {src, task} = require('gulp');
 const eslint = require('..');
 
-
-gulp.task('eslint-formatter', () => {
+task('eslint-formatter', () => {
 	// lint each file, and format all files at once (mul)
-	return gulp.src('../test/fixtures/**/*.js')
+	return src('../test/fixtures/**/*.js')
 		.pipe(eslint())
 		// use eslint's default formatter by default
 		.pipe(eslint.format())
@@ -17,7 +16,7 @@ gulp.task('eslint-formatter', () => {
 		.pipe(eslint.format('compact'));
 });
 
-gulp.task('custom-formatter', () => {
+task('custom-formatter', () => {
 	function embolden(text) {
 		return `\u001b[1m${text}\u001b[22m `;
 	}
@@ -26,7 +25,7 @@ gulp.task('custom-formatter', () => {
 		return `${count} ${text}${count === 1 ? '' : 's'}`;
 	}
 
-	return gulp.src('../test/fixtures/**/*.js')
+	return src('../test/fixtures/**/*.js')
 		.pipe(eslint())
 		.pipe(eslint.format(results => {
 
@@ -38,4 +37,4 @@ gulp.task('custom-formatter', () => {
 		}));
 });
 
-gulp.task('default', ['eslint-formatter','custom-formatter']);
+task('default', ['eslint-formatter','custom-formatter']);

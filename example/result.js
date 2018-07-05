@@ -1,18 +1,17 @@
 'use strict';
 
-// npm install gulp gulp-eslint
+// npm install gulp@next gulp-eslint
 
-const gulp = require('gulp');
+const {src, task} = require('gulp');
 const eslint = require('..');
 
 const MAX_WARNINGS = 1;
 
-
-gulp.task('lint-result', () => {
+task('lint-result', () => {
 	const count = 0;
 
 	// Be sure to return the stream; otherwise, you may not get a proper exit code.
-	return gulp.src('../test/fixtures/*.js')
+	return src('../test/fixtures/*.js')
 		.pipe(eslint())
 		.pipe(eslint.formatEach())
 		.pipe(eslint.result(result => {
@@ -31,10 +30,10 @@ gulp.task('lint-result', () => {
 		}));
 });
 
-gulp.task('lint-resu1lt-async', () => {
-	const count = 0;
+task('lint-resu1lt-async', () => {
+	let count = 0;
 
-	return gulp.src('../test/fixtures/*.js')
+	return src('../test/fixtures/*.js')
 		.pipe(eslint())
 		.pipe(eslint.formatEach())
 		.pipe(eslint.result((result, done) => {
@@ -42,7 +41,7 @@ gulp.task('lint-resu1lt-async', () => {
 			process.nextTick(function asyncStub() {
 				count += result.warningCount;
 
-				const error = null;
+				let error = null;
 				if (count > MAX_WARNINGS) {
 					// Define the error. Any non-null/undefined value will work
 					error = {
@@ -53,14 +52,12 @@ gulp.task('lint-resu1lt-async', () => {
 					};
 				}
 				done(error);
-
 			}, 100);
-
 		}));
 });
 
-gulp.task('lint-results', () => {
-	return gulp.src('../test/fixtures/*.js')
+task('lint-results', () => {
+	return src('../test/fixtures/*.js')
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.results(results => {
@@ -73,8 +70,8 @@ gulp.task('lint-results', () => {
 		}));
 });
 
-gulp.task('lint-results-async', () => {
-	return gulp.src('../test/fixtures/*.js')
+task('lint-results-async', () => {
+	return src('../test/fixtures/*.js')
 		.pipe(eslint())
 		.pipe(eslint.format())
 		.pipe(eslint.results((results, done) => {
@@ -87,8 +84,7 @@ gulp.task('lint-results-async', () => {
 				done(error);
 
 			}, 100);
-
 		}));
 });
 
-gulp.task('default', ['lint-results']);
+task('default', ['lint-results']);

@@ -1,27 +1,23 @@
-# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint.svg)](https://coveralls.io/r/adametry/gulp-eslint)
+# gulp-eslint [![Build Status](https://travis-ci.org/adametry/gulp-eslint.svg)](https://travis-ci.org/adametry/gulp-eslint) [![Coverage Status](https://img.shields.io/coveralls/adametry/gulp-eslint.svg)](https://coveralls.io/github/adametry/gulp-eslint)
 
-> A [gulp](https://gulpjs.com/) plugin for [ESLint](https://eslint.org/).
+> A [gulp](https://gulpjs.com/) plugin for [ESLint](https://eslint.org/)
 
 ## Installation
 
-[Use npm](https://docs.npmjs.com/cli/install).
+[Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
-```sh
+```
 npm install gulp-eslint
 ```
 
 ## Usage
 
 ```javascript
-const gulp = require('gulp');
+const {src, task} = require('gulp');
 const eslint = require('gulp-eslint');
 
-gulp.task('lint', () => {
-    // ESLint ignores files with "node_modules" paths.
-    // So, it's best to have gulp ignore the directory as well.
-    // Also, Be sure to return the stream from the task;
-    // Otherwise, the task may end before the stream has finished.
-    return gulp.src(['**/*.js','!node_modules/**'])
+task('default', () => {
+    return src(['scripts/*.js'])
         // eslint() attaches the lint output to the "eslint" property
         // of the file object so it can be used by other modules.
         .pipe(eslint())
@@ -31,10 +27,6 @@ gulp.task('lint', () => {
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
         .pipe(eslint.failAfterError());
-});
-
-gulp.task('default', ['lint'], function () {
-    // This will only run if the lint task is successful...
 });
 ```
 
