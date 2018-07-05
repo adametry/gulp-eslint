@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0-0
+
+* Bump `eslint` dependency to ^5.0.0 <https://eslint.org/blog/2018/06/eslint-v5.0.0-released>
+
 ## 4.0.2
 
 * Update `plugin-error` to ^1.0.0
