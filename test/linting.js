@@ -121,7 +121,9 @@ describe('gulp-eslint plugin', () => {
 		eslint({plugins: [pluginName]})
 		.on('error', err => {
 			err.plugin.should.equal('gulp-eslint');
-			err.message.should.equal(`Failed to load plugin this-is-unknown-plugin: Cannot find module 'eslint-plugin-${
+			// Remove file path from error message as it's machine-dependent
+			const message = err.message.replace(/\/[^:]+/, '');
+			message.should.equal(`Failed to load plugin this-is-unknown-plugin from : Cannot find module 'eslint-plugin-${
 				pluginName
 			}'`);
 
