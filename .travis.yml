@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - node
-  - '6'
+  - '8.10.0'
 before_install: npm install --global npm
 script: npm run-script pretest && npm run-script coverage
 after_script: npx coveralls < coverage/lcov.info
