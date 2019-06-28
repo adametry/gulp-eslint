@@ -121,7 +121,9 @@ describe('gulp-eslint plugin', () => {
 		eslint({plugins: [pluginName]})
 		.on('error', err => {
 			err.plugin.should.equal('gulp-eslint');
-			err.message.should.equal(`Failed to load plugin this-is-unknown-plugin: Cannot find module 'eslint-plugin-${
+			// Remove stack trace from error message as it's machine-dependent
+			const message = err.message.split('\n')[0];
+			message.should.equal(`Failed to load plugin '${pluginName}' declared in 'CLIOptions': Cannot find module 'eslint-plugin-${
 				pluginName
 			}'`);
 

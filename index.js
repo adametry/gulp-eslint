@@ -48,7 +48,7 @@ function gulpEslint(options) {
 			// E.g., If ../.eslintignore has "foo/*.js", ESLint will ignore ./foo/*.js, instead of ../foo/*.js.
 			// Eslint rolls this into `CLIEngine.executeOnText`. So, gulp-eslint must account for this limitation.
 
-			if (linter.options.ignore && options.warnFileIgnored) {
+			if (linter.isPathIgnored(filePath) && options.warnFileIgnored) {
 				// Warn that gulp.src is needlessly reading files that ESLint ignores
 				file.eslint = createIgnoreResult(file);
 			}

@@ -187,14 +187,14 @@ describe('utility methods', () => {
 		it('should default to the "stylish" formatter', () => {
 
 			const formatter = util.resolveFormatter();
-			formatter.should.equal(require('eslint/lib/formatters/stylish'));
+			formatter.should.equal(require('eslint/lib/cli-engine/formatters/stylish'));
 
 		});
 
 		it('should resolve a formatter', () => {
 
 			const formatter = util.resolveFormatter('tap');
-			formatter.should.equal(require('eslint/lib/formatters/tap'));
+			formatter.should.equal(require('eslint/lib/cli-engine/formatters/tap'));
 
 		});
 
