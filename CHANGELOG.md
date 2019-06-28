@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0
+
+* Bump `eslint` dependency to ^6.0.0 <https://eslint.org/blog/2019/06/eslint-v6.0.0-released>
+* Drop support for Node 6 and 7
+
 ## 5.0.0
 
 * Bump `eslint` dependency to ^5.0.0 <https://eslint.org/blog/2018/06/eslint-v5.0.0-released>
