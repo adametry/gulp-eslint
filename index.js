@@ -28,7 +28,7 @@ function gulpEslint(options) {
 	const linter = new CLIEngine(options);
 
 	return transform((file, enc, cb) => {
-		const filePath = relative(process.cwd(), file.path);
+		const filePath = relative(file.cwd, file.path);
 
 		if (file.isNull()) {
 			cb(null, file);
@@ -59,7 +59,7 @@ function gulpEslint(options) {
 		let result;
 
 		try {
-			result = linter.executeOnText(file.contents.toString(), filePath).results[0];
+			result = linter.executeOnText(file.contents.toString(), file.path).results[0];
 		} catch (e) {
 			cb(new PluginError('gulp-eslint', e));
 			return;
