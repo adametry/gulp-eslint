@@ -1,3 +1,4 @@
 coverage
 *.sublime-*
 node_modules
+dist
